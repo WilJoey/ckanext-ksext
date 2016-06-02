@@ -1,38 +1,41 @@
-<div role="main" class="hero">
+import logging
+import ckan.plugins as plugins
+import ckan.plugins.toolkit as toolkit
+import action as a
+import constants
+import auth
 
-    <div class="container" style="height:277px;">
-        {% snippet 'home/snippets/search_geo.html' %}
-    </div>
-</div>
+log = logging.getLogger(__name__)
 
-<div role="main">
-    <div class="container" style="margin-top:15px;margin-bottom:15px;">
-        <div class="row row2">
-            <div class="span6 col1">
-                {% snippet 'home/snippets/news.html' %}
-            </div>
-            <div class="span6 col2">
-                {% snippet 'home/snippets/stats.html' %}
-            </div>
-
-        </div>
-    </div>
-
-    <div class="container" style="margin-top:15px;margin-bottom:15px;">
-        <div class="row row2">
-            <div class="span6 col1">
-                {% snippet 'home/snippets/ksext_latest.html' %}
-            </div>
-            <div class="span6 col2">
-                {#% snippet 'home/snippets/featured_organization.html' %#} {% snippet 'home/snippets/ksext_hots.html' %}
-            </div>
-        </div>
-    </div>
-
-</div>
+def ksext_hots(*args):
+    '''
+    result = {}
+    result['arg1'] = args[0] or 'Nothing'
+    result['status'] = 'success'
+    return result
+    '''
+    data_dict = {
+        'rows': 6,
+        'sort': args[0] or 'metadata_modified desc'
+    }
+    query = plugins.toolkit.get_action('package_search')(None, data_dict)
+    return query
 
 
-{% resource 'ksext_jscss/js/geo-tips.js' %}    ############################## IACTIONS ##############################
+# Joe Ksext Plug setup init #
+class KsextPlugin(plugins.SingletonPlugin):
+    '''tnod plugin.'''
+    
+    plugins.implements(plugins.IConfigurer)
+    plugins.implements(plugins.IRoutes)
+    plugins.implements(plugins.IPackageController, inherit=True)
+    plugins.implements(plugins.IActions)
+    plugins.implements(plugins.ITemplateHelpers, inherit=True)
+    plugins.implements(plugins.IAuthFunctions)
+
+
+    ######################################################################
+    ############################## IACTIONS ##############################
     ######################################################################
     def get_actions(self):
         return {
