@@ -62,9 +62,9 @@ def init_db(model):
             sa.Column('user_id', sa.types.UnicodeText, primary_key=False, default=u''),
             sa.Column('id', sa.types.UnicodeText, primary_key=True, default=uuid4),
             sa.Column('title', sa.types.UnicodeText(constants.NAME_MAX_LENGTH), primary_key=True, default=u''),
-            sa.Column('description', sa.types.UnicodeText(constants.DESCRIPTION_MAX_LENGTH), primary_key=False, default=u''),
-            sa.Column('dataset_name', sa.types.UnicodeText(constants.DATASET_NAME_MAX_LENGTH), primary_key=False, default=u''),
-            sa.Column('suggest_columns', sa.types.UnicodeText(constants.SUGGEST_COLUMNS_MAX_LENGTH), primary_key=False, default=u''),
+            sa.Column('description', sa.types.UnicodeText, primary_key=False, default=u''),
+            sa.Column('dataset_name', sa.types.UnicodeText, primary_key=False, default=u''),
+            sa.Column('suggest_columns', sa.types.UnicodeText, primary_key=False, default=u''),
             sa.Column('open_time', sa.types.DateTime, primary_key=False, default=None),
             sa.Column('views', sa.types.Integer, primary_key=False, default=0),
             sa.Column('close_time', sa.types.DateTime, primary_key=False, default=None),
@@ -107,7 +107,7 @@ def init_db(model):
             sa.Column('user_id', sa.types.UnicodeText, primary_key=False, default=u''),
             sa.Column('suggest_id', sa.types.UnicodeText, primary_key=True, default=uuid4),
             sa.Column('time', sa.types.DateTime, primary_key=True, default=u''),
-            sa.Column('comment', sa.types.UnicodeText(constants.COMMENT_MAX_LENGTH), primary_key=False, default=u'')
+            sa.Column('comment', sa.types.UnicodeText, primary_key=False, default=u'')
         )
 
         # Create the table only if it does not exist
