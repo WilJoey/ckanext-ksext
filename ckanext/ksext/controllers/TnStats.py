@@ -151,9 +151,6 @@ ORDER BY
         response.headers['Content-Type'] = 'application/json;charset=utf-8'
         return h.json.dumps(result)
 
-    def show(self):
-        return base.render('home/show.html')
-
     def specification(self):
         return base.render('home/specification.html')
     def specification_old(self):

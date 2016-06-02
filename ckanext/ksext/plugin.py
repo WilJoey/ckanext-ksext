@@ -109,9 +109,6 @@ class KsextPlugin(plugins.SingletonPlugin):
             controller = 'ckanext.ksext.controllers.Datasets:DatasetsController',
             action='index')
 
-        map.connect('home_show','/show', 
-            controller = 'ckanext.ksext.controllers.TnStats:TnStatsController', action='show')
-        
         map.connect('home_specification','/specification', 
             controller = 'ckanext.ksext.controllers.TnStats:TnStatsController', action='specification')
         map.connect('home_specification_old','/specification_old',
