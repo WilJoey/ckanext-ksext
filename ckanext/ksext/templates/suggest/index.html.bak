@@ -1,0 +1,71 @@
+{% extends "page.html" %}
+
+{% block breadcrumb_content %}
+  <li class="active">資料建議{{ h.nav_link('abc', controller='user', action='index') }}</li>
+{% endblock %}
+
+{% block primary_content %}
+  <article class="module">
+    {#
+    <div>joe: {{ c.suggests.__repr__() }}</div>
+    <div>joe: {{ c.page.__repr__() }}</div>
+    #}
+    <section id="stats-most-edited" class="module-content tab-content active">
+      <h2></h2>
+      <table class="table table-striped table-bordered table-hover">
+        <caption>caption</caption>
+        <thead>
+          <tr>
+            <th>日期</th>
+            <th>標題</th>
+            <th>建議人</th>
+            <th>瀏覽次數</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for suggest in c.suggests %}
+          <tr>
+            <td>{{ suggest.created.strftime('%Y-%m-%d') }}</td>
+            <td>{{ suggest.title }}</td>
+            <td>{{ suggest.suggester }}</td>
+            <td>{{ suggest.views }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+    </section>
+    {#
+    {% block page_pagination %}
+        {{ c.page.pager() }}  
+    {% endblock %}
+    #}
+  </article>
+  
+{% endblock %}
+
+{% block secondary_content %}
+  <section class="module module-narrow">
+    <h2 class="module-heading"><i class="icon-info-sign icon-medium"></i> 資料建議</h2>
+    <!--<nav data-module="stats-nav">
+      <ul class="unstyled nav nav-simple">
+        <li class="nav-item active"><a href="/tnstats/index">組織資料集瀏覽與下載統計</a></li>
+        <li class="nav-item"><a href="/tnstats/group">群組資料集瀏覽與下載統計</a></li>
+        <li class="nav-item"><a href="/tnstats/keyword">關鍵字統計</a></li>
+      </ul>
+    </nav>-->
+    <div class="module-content">
+      <p>
+        <p>您想要政府開放更多的資料集嗎？請在這裏告訴我們您要什麼？</p>
+        <p>您可以點選「新增討論主題」提出您想要政府開放資料集建議，也可以瀏覽其他民眾提出的資料集需求，並表達您的意見。我們會依據您提供的資訊請相關機關研議。您的寶貴建議是各機關推動資料開放的原動力!</p>
+      </p>
+    </div>
+  </section>
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  
+{% endblock %}
+
+

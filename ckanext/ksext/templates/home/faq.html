@@ -1,0 +1,60 @@
+{% extends "page.html" %} {% block subtitle %}{{ _('Guide') }}{% endblock %} {% block breadcrumb_content %}
+<li class="active">{% link_for '常見問答 FAQ', controller='ckanext.ksext.controllers.TnStats:TnStatsController', action='faq' %}</li>
+{% endblock %} {% block primary %}
+<style>
+    .module-content h2 {
+        font-size: 24px;
+    }
+    
+    .module-content h3 {
+        color: #c66;
+    }
+    
+    .module-content h4 {
+        color: #c66;
+        font-size: 18px;
+    }
+    
+    .module-content p {
+        line-height: 26px;
+        text-indent: 2em;
+    }
+    
+    .sm-heihgt p {
+        line-height: 16px;
+        text-indent: 2em;
+    }
+</style>
+<article class="module">
+
+    <header class="module-content page-header">
+        <ul class="nav nav-tabs">
+            <li><a href="/manual"><i class="icon-info-sign"></i> 使用說明</a></li>
+            <li><a href="/guide"><i class="icon-wrench"></i> 開發指南</a></li>
+            <li class="active"><a href="/faq"><i class="icon-question-sign"></i> 常見問答 FAQ</a></li>
+        </ul>
+    </header>
+
+    <div class="module-content" style="font-size:16px;padding:30px 70px;">
+
+        <h2>常見問答</h2>
+
+        <h3>一、政府資料開放應用和政府資訊公開有何不同？</h3>
+        <p>政府於民國94年頒定「政府資訊公開法」，明定與人民權益攸關之施政、措施及其它有關之政府資訊，以主動公開為原則並應適時為之，期透過施政之公開與透明，保障人民「知」的「權利」；然而，近年各國逐漸推動資料開放，將政府資料以資料集(dataset)為基本單位，提供開放格式、便於再利用的原始資料(raw data)，讓民眾在不受到限制的情形下，進行編輯、分析、公開傳輸或為其他利用方式，滿足民眾「用」的「權益」。</p>
+        <br/>
+        <h3>二、平台使用國外主流CKAN技術，所定義「資料集」和「資料」有何不同？</h3>
+        <p>有別於非CKAN技術之開放資料平台所定義，「資料集」定義為單一主題性資料項目之集合，而「資料集」底下可因應產製時間、檔案格式或類型不同之提供多筆「資料」檔案，促進使用者可在同一集合內更快速找到想取得的資料。</p>
+        <br/>
+        <h3>三、平台資料之取得是否免費使用？授權的方式為何？</h3>
+        <p>平台開放之資料集以免費為原則，以無償及非專屬授權方式授權使用者得不限時間及地域，重製、改作、編輯、公開傳輸或為其他利用方式，開發各種產品或服務，提供公眾使用，無須取得各資料提供機關之書面或其他方式授權。</p>
+        <br/>
+        <h3>四、為何下載的CSV檔案於Excel中開啟瀏覽為亂碼？</h3>
+        <p>有鑑於平台資料採用國際通用編碼格式「UTF-8」，因此使用Excel開啟瀏覽會出現亂碼現象，請使用文字編輯器開啟，或將編碼調整為「ANSI」格式即可。</p>
+        <br/>
+        <h3>五、平台提供地圖預覽主要以哪個坐標系統為主？</h3>
+        <p>國內常見空間坐標系統為TWD67、TWD97及WGS84，為讓使用者方便使用資料或直接介接空間化資料，故採以WGS84為主並可提供開放資料於平台即時於地圖顯示預覽。</p>
+        <br/>
+
+    </div>
+</article>
+{% endblock %} {% block secondary %}{% endblock %}

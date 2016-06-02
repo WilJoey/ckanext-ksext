@@ -1,0 +1,19 @@
+<div class="well">
+<h2 class="page-heading">
+  {% block page_heading %}
+    {{ '回應清單' }}
+  {% endblock %}
+</h2>
+
+{% if comments %}
+  <ul class="activity" data-module="activity-stream" data-module-more="False" data-module-context="user" data-module-id="" data-module-offset="0">
+    {% for comment in comments %}
+      {% snippet "suggest/snippets/comment_item.html", comment=comment, datarequest=datarequest %}
+    {% endfor %}
+  </ul>
+{% else %}
+  <p class="empty">
+    {{ '目前尚無任何的回應!' }}
+  </p>
+{% endif %}
+</div>

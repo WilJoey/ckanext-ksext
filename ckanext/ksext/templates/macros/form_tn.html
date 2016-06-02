@@ -1,0 +1,25 @@
+{% macro input_block(for, label="", error="", classes=[], control_classes=[], extra_html="", is_required=false) %}
+  <div class="control-group{{ " error" if error }}{{ " " ~ classes | join(' ') }}">
+    <label class="control-label" for="{{ for }}">{% if is_required %}<span title="{{ _("This field is required") }}" class="control-required">*</span> {% endif %}{{ label or _('Custom') }}</label>
+    <div class="controls{{ " " ~ control_classes | join(' ') }}">
+      {{ caller() }}
+      {% if error and error is iterable %}<span class="error-block">{{ error|join(', ') }}</span>{% endif %}
+      {{ extra_html }}
+    </div>
+  </div>
+{% endmacro %}
+
+
+{#
+  #JOE#
+  Port from custom, for coustom metadata fields
+#}
+{% macro custom_meta(name, id='', key='', value='', error="", classes=[], is_required=false) %}
+  {%- set extra_html = caller() if caller -%}
+  {% call input_block(id +'-value' or name, key or name, error, classes, extra_html=extra_html, is_required=is_required) %}
+    <input id="{{ id or name }}-value" type="text" name="{{ name }}value" value="{{ value | empty_and_escape }}" placeholder="{{ placeholder }}" />
+    <input id="{{ id or name }}-key" type="hidden" name="{{ name }}key" value="{{ key | empty_and_escape }}" />
+  {% endcall %}
+{% endmacro %}
+
+

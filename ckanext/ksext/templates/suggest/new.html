@@ -1,0 +1,22 @@
+{% extends "suggest/base.html" %}
+
+{% block subtitle %}{{ '新增建議' }}{% endblock %}
+
+{% block breadcrumb_content %}
+  <li>{% link_for '資料建議', controller='ckanext.ksext.controllers.Suggest:SuggestsController', action='index' %}</li>
+  <li class="active">{{ '新增建議' }}</li>
+{% endblock %}
+
+{% block primary_content_inner %}
+<div class="module-content">
+  <h1 class="{% block page_heading_class %}page-heading{% endblock %}">{% block page_heading %}{{ '新增建議' }}{% endblock %}</h1>
+  {% snippet "suggest/snippets/new_form.html", data=c.suggest, errors=c.errors, errors_summary=c.errors_summary, offering=c.offering %}
+  </div>
+
+{% endblock %}
+
+{% block secondary_content_additional_info %}
+
+{% endblock %}
+
+{% block page_header %}{% endblock %}

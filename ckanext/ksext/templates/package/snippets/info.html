@@ -1,0 +1,31 @@
+{#
+Displays a sidebard module with information for given package
+
+pkg    - The package dict that owns the resources.
+
+Example:
+
+  {% snippet "package/snippets/info.html", pkg=pkg %}
+
+#}
+{% if pkg %}
+  <section class="module module-narrow">
+    <div class="module context-info">
+      <div class="module-content">
+        <h1 class="heading">{{ pkg.title or pkg.name }}</h1>
+        <div class="nums">
+          {% set stats = h.get_action('tnstats_dataset_count', pkg.id) %}
+          <dl>
+            <dt>瀏覽次數</dt>
+            <dd>{{ stats.views }}</dd>
+          </dl>
+          <dl>
+            <dt>下載次數</dt>
+            <dd>{{ stats.downloads }}</dd>
+          </dl>
+        </div>
+        <div class="follow_button"></div>
+      </div>
+    </div>
+  </section>
+{% endif %}

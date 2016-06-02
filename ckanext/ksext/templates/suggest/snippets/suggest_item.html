@@ -1,0 +1,15 @@
+{% set truncate = truncate or 180 %}
+{% set truncate_title = truncate_title or 80 %}
+{% set title = suggest.get('title', '') %}
+{% set description = h.markdown_extract(suggest.get('description', ''), extract_length=truncate) %}
+
+
+  <tr>
+    <td>{{ suggest.open_time[:10]}}</td>
+    <td><a href="/suggest/{{ suggest.id }}" onclick="views_plus('{{ suggest.id }}')" >{{ title }}</a></td>
+    <td>{{ suggest.user_id }}</td>
+    <td style="text-align:right;">{{ suggest.views }}</td>
+    <td style="text-align:right;">{{ suggest.comments }}</td>
+  </tr>
+
+

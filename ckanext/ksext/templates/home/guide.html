@@ -1,0 +1,122 @@
+{% extends "page.html" %} {% block subtitle %}{{ _('Guide') }}{% endblock %} {% block breadcrumb_content %}
+<li class="active">{% link_for '開發指南', controller='ckanext.ksext.controllers.TnStats:TnStatsController', action='guide' %}</li>
+{% endblock %} {% block primary %}
+<style>
+    .module-content h2 {
+        font-size: 24px;
+    }
+    
+    .module-content h3 {
+        color: #c66;
+    }
+    
+    .module-content h4 {
+        color: #c66;
+        font-size: 18px;
+    }
+    
+    .module-content p {
+        line-height: 26px;
+        text-indent: 2em;
+    }
+    
+    .sm-heihgt p {
+        line-height: 16px;
+        text-indent: 2em;
+    }
+</style>
+<script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+
+<article class="module">
+    <header class="module-content page-header">
+        <ul class="nav nav-tabs">
+            <li><a href="/manual"><i class="icon-info-sign"></i> 使用說明</a></li>
+            <li class="active"><a href="/guide"><i class="icon-wrench"></i> 開發指南</a></li>
+            <li><a href="/faq"><i class="icon-question-sign"></i> 常見問答 FAQ</a></li>
+        </ul>
+    </header>
+
+    <div class="module-content" style="font-size:16px;padding:30px 70px;">
+
+        <h2>臺南市政府資料開放平台開發指南</h2>
+        <p>臺南市政府資料開放平台提供各式資料，民眾或機關可在網站下載或以API介接方式取得資料，俾供後續加值及應用，為方便開發人員取得及使用，本平台以較普及的檔案格式和業界一般的標準提供資料。每份資料均有詮釋資料，列出資料的格式及欄位定義，協助開發人員充分了解資料內容或應使用的介接技術，針對較複雜的API，並於平台點擊”資料API”時即提供相關使用說明。</p>
+        <p>本文件針對實體檔案、URL連結(JSON)及CKAN API的使用方式分別說明。</p>
+
+        <h3>一、實體檔案下載：</h3>
+        <p>直接於網站中的各資料頁面點擊”下載”即可下載該實體資料，為讓各界容易使用本府開放資料，實體資料提供原則將以結構化的CSV檔案為主，現階段檔案格式包含： CSV 、 Excel 、XML、KML、SHP、JPG、PDF等。</p>
+        <p>CKAN平台中結構化檔案可於各資料頁面點擊”預覽”線上預覽內容。</p>
+        <p>應用範例：臺南市藥局(資料格式:CSV)</p>
+        <p>URL：<a target="_blank" href="http://data.tainan.gov.tw/dataset/drugstore/resource/4245e5c8-d35c-46b8-8666-1607105138f0">http://data.tainan.gov.tw/dataset/drugstore/resource/4245e5c8-d35c-46b8-8666-1607105138f0</a><img src="guide-img.png" alt=""
+                style="border:1px solid #842f22" />
+        </p>
+        <br />
+
+        <h3>二、以URL存取資料：</h3>
+        <h4>1.JSON：</h4>
+        <div class="sm-heihgt">
+            <p>可直接以系統介接的方式連結該資料介接URL取得內容：</p>
+            <p>應用範例：台南市各級學校查詢(資料格式:JSON)</p>
+            <p>URL：<a target="_blank" href="http://odata.tn.edu.tw/schoolapi/api/getdata?schoolid=110302">http://odata.tn.edu.tw/schoolapi/api/getdata?schoolid=110302</a></p>
+            <p>參數說明：</p>
+            <p style="text-indent: 4em;">getdata：執行動作</p>
+            <p style="text-indent: 4em;">schoolid：學校代碼(教育部代碼)</p>
+            <p>範例查詢結果：</p>
+        </div>
+        <pre class="prettyprint "><code>[{
+    "schoolID":1,
+    "Edu_code":"110302",
+    "SchoolName":"國立新豐高中",
+    "SchoolType":"公立",
+    "SchoolType2":"國立",
+    "Stage":"高中",
+    "Region":"新豐 ",
+    "District":"歸仁區",
+    "Addr":"[711]臺南市歸仁區中正北路一段148號",
+    "Tel":"(06)2304082",
+    "Fax":"(06)239-2021",
+    "Merger":"",
+    "CountryName":"臺南市",
+    "Country":"tn"
+}]</code></pre>
+
+        <h4>2.CKAN資料API</h4>
+        <div class="sm-heihgt">
+            <p>CKAN平台查詢結果以Unicode編碼</p>
+            <p>應用範例：臺南市藥局</p>
+            <p>查詢之範例 (以limit查詢前5個結果)。</p>
+            <div style="padding:0 2em;"><a target="_blank" href="http://data.tainan.gov.tw/api/action/datastore_search?resource_id=4245e5c8-d35c-46b8-8666-1607105138f0&limit=5">http://data.tainan.gov.tw/api/action/datastore_search?resource_id=4245e5c8-d35c-46b8-8666-1607105138f0&limit=5</a></div>
+            <br />
+            <p>查詢之範例 (包含欄位內容等於字串’台南藥局’的結果)。</p>
+            <div style="padding:0 2em;"><a target="_blank" href="http://data.tainan.gov.tw/api/action/datastore_search?resource_id=4245e5c8-d35c-46b8-8666-1607105138f0&q=台南藥局">http://data.tainan.gov.tw/api/action/datastore_search?resource_id=4245e5c8-d35c-46b8-8666-1607105138f0&q=台南藥局</a></div>
+            <br />
+            <p>查詢之範例 (透過SQL指令敘述查詢欄位’鄉鎮市區’為’新營區’)。</p>
+            <div style="padding:0 2em;"><a target="_blank" href="http://data.tainan.gov.tw/api/action/datastore_search_sql?sql=SELECT%20*%20from%20%224245e5c8-d35c-46b8-8666-1607105138f0%22%20where%20%E9%84%89%E9%8E%AE%E5%B8%82%E5%8D%80%20LIKE%20%27%E6%96%B0%E7%87%9F%E5%8D%80%27">http://data.tainan.gov.tw/api/action/datastore_search_sql?sql=SELECT * from "4245e5c8-d35c-46b8-8666-1607105138f0" where 鄉鎮市區 LIKE '新營區'</a></div>
+
+        </div>
+        <br />
+
+        <h5>範例：Javascript</h5>
+        <p>使用jQuery對資料API發出一個簡單的ajax(JSONP)請求。</p>
+        <pre class="prettyprint"><code>var data = {
+    resource_id: '4245e5c8-d35c-46b8-8666-1607105138f0', // the resource id
+    limit: 5, // get 5 results
+    q: '台南藥局' // query for '台南藥局'
+};
+$.ajax({
+    url: 'http://data.tainan.gov.tw/api/action/datastore_search',
+    data: data,
+    dataType: 'jsonp',
+    success: function(data) {
+        alert('Total results found: ' + data.result.total)
+    }
+});</code></pre>
+
+        <h5>範例：Python</h5>
+        <pre class="prettyprint lang-python"><code>import urllib
+url = 'http://data.tainan.gov.tw/api/action/datastore_search? resource_id=4245e5c8-d35c-46b8-8666-1607105138f0&limit=5&q=開業'
+fileobj = urllib.urlopen(url)
+print fileobj.read()</code></pre>
+
+    </div>
+</article>
+{% endblock %} {% block secondary %}{% endblock %}

@@ -1,0 +1,34 @@
+{% ckan_extends %}
+
+{% block header_account_logged %}
+  <li>
+    <a href="/tnstats" title="123">
+      <i class="icon-info"></i>
+    </a>
+  </li>
+  {{ super() }}
+{% endblock %}
+
+
+{#('suggests_index', '資料建議'),#}
+
+{% block header_site_navigation %}
+    <nav class="section navigation">
+      <ul class="nav nav-pills">
+      	{% block header_site_navigation_tabs %}
+          {{ h.build_nav_main(
+            ('suggests_index', '資料建議'),
+            ('search', _('Datasets')),
+
+            ('group_index', _('Groups')),
+            ('home_manual', '使用說明'),
+            ('home_specification', '使用規範'),
+            
+            ('home_show', '應用展示'),
+            
+            ('about', _('About'))
+          ) }}
+        {% endblock %}
+      </ul>
+    </nav>
+  {% endblock %}

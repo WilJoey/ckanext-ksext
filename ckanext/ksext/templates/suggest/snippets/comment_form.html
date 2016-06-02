@@ -1,0 +1,28 @@
+{% import 'macros/form.html' as form %}
+
+<form class="dataset-form form-horizontal" method="post" data-module="basic-form" 
+  action="/suggest/{{ suggest_id }}/comment" enctype="multipart/form-data">
+
+  <input type="hidden" id="suggest_id" name="suggest_id" value="{{ suggest_id }}" />
+
+ 
+
+  {% block offering_comment_content %}
+    {{ form.markdown('comment', id='field-comment', label='建議資料回應', placeholder='', value=comment,  classes=['control-full'], is_required=true) }}
+  {% endblock %}
+
+    {% block form_actions %}
+    <div class="text-right">
+      <button class="btn btn-primary" type="submit" name="save">
+        {% block save_button_text %}
+          {{ '新增回應' }}
+        {% endblock %}
+      </button>
+    </div>
+  {% endblock %}
+
+  {#
+   error=errors['Comment'],
+  #}
+
+</fom>

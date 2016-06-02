@@ -1,0 +1,110 @@
+{% import 'macros/form_tn.html' as form_tn %}
+
+{% ckan_extends %}
+{% set extras=data.extras %}
+
+{% block package_metadata_fields %}
+  
+  
+
+  {% if (metacache) %}
+    <div style="display:none;">
+      {% for extra in extras if extra['key']=='資料集類型' %}
+        {{ form_tn.custom_meta('extras__0__', id='field-extras-0', key=extra.key, value=extra.value, is_required=true) }}
+      {% else %}
+        {{ form_tn.custom_meta('extras__0__', id='field-extras-0', key='資料集類型', value=' ', is_required=true) }}
+      {% endfor %}
+
+      {% for extra in extras if extra['key']=='資料量' %}
+        {{ form_tn.custom_meta('extras__1__', id='field-extras-1', key=extra.key, value=extra.value, is_required=true) }}
+      {% else %}
+        {{ form_tn.custom_meta('extras__1__', id='field-extras-1', key='資料量', value=' ', is_required=true) }}
+      {% endfor %}
+
+      {% for extra in extras if extra['key']=='授權說明網址' %}
+        {{ form_tn.custom_meta('extras__2__', id='field-extras-2', key=extra.key, value=extra.value, is_required=true, classes=['control-medium'])}}
+      {% else %}
+        {{ form_tn.custom_meta('extras__2__', id='field-extras-2', key='授權說明網址', value=' ', is_required=true, classes=['control-medium']) }}
+      {% endfor %}
+
+      {% for extra in extras if extra['key']=='計費方式' %}
+        {{ form_tn.custom_meta('extras__3__', id='field-extras-3', key=extra.key, value=extra.value, is_required=true)}}
+      {% else %}
+        {{ form_tn.custom_meta('extras__3__', id='field-extras-3', key='計費方式', value=' ', is_required=true) }}
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  {% for extra in extras if extra['key']=='更新頻率' %}
+    {{ form_tn.custom_meta('extras__4__', id='field-extras-4', key=extra.key, value=extra.value) }}
+  {% else %}
+    {{ form_tn.custom_meta('extras__4__', id='field-extras-4', key='更新頻率', value=' ') }}
+  {% endfor %}
+  {% for extra in extras if extra['key']=='收錄期間（起）' %}
+    {{ form_tn.custom_meta('extras__5__', id='field-extras-5', key=extra.key, value=extra.value, classes=['dpicker']) }}
+  {% else %}
+    {{ form_tn.custom_meta('extras__5__', id='field-extras-5', key='收錄期間（起）', value=' ', classes=['dpicker']) }}
+  {% endfor %}
+  {% for extra in extras if extra['key']=='收錄期間（迄）' %}
+    {{ form_tn.custom_meta('extras__6__', id='field-extras-6', key=extra.key, value=extra.value, classes=['dpicker']) }}
+  {% else %}
+    {{ form_tn.custom_meta('extras__6__', id='field-extras-6', key='收錄期間（迄）', value=' ', classes=['dpicker']) }}
+  {% endfor %}
+
+    
+
+
+  {% block package_metadata_fields_url %}
+    {{ form.input('url', label='資料集說明網址', id='field-url', placeholder=_('http://example.com/dataset.json'), value=data.url, error=errors.url, classes=['control-medium']) }}
+  {% endblock %}
+
+  <div style="display:none;">
+  {% block package_metadata_fields_version %}
+    {{ form.input('version', label=_('Version'), id='field-version', placeholder=_('1.0'), value=data.version, error=errors.version, classes=['control-medium']) }}
+  {% endblock %}
+  
+  {% block package_metadata_author %}
+    {{ form.input('author', label=_('Author'), id='field-author', placeholder=_('Joe Bloggs'), value=data.author, error=errors.author, classes=['control-medium']) }}
+    {{ form.input('author_email', label=_('Author Email'), id='field-author-email', placeholder=_('joe@example.com'), value=data.author_email, error=errors.author_email, classes=['control-medium']) }}
+  {% endblock %}
+  </div>
+
+  {% block package_metadata_fields_maintainer %}
+    {{ form.input('maintainer', label='提供機關聯絡人', id='field-maintainer', placeholder=_('Joe Bloggs'), value=data.maintainer, error=errors.maintainer, classes=['control-medium'], is_required=true) }}
+
+    {% set extras=data.extras %}
+    {% for extra in extras if extra['key']=='提供機關聯絡人電話' %}
+      {{ form_tn.custom_meta('extras__7__', id='field-extras-7', key=extra.key, value=extra.value, is_required=true) }}
+    {% else %}
+       {{ form_tn.custom_meta('extras__7__', id='field-extras-7', key='提供機關聯絡人電話', value=' ', is_required=true) }}
+    {% endfor %}
+
+    {% for extra in extras if extra['key']=='提供機關地址' %}
+      {{ form_tn.custom_meta('extras__8__', id='field-extras-8', key=extra.key, value=extra.value, is_required=true, classes=['control-medium']) }}
+    {% else %}
+      {{ form_tn.custom_meta('extras__8__', id='field-extras-8', key='提供機關地址', value=' ', is_required=true, classes=['control-medium']) }}
+    {% endfor %}
+    
+{% block package_old_import_hidden %}
+  <div style="display:none;">
+  {% for extra in extras if extra['key']=='oldimport2' %}
+    {{ form_tn.custom_meta('extras__10__', id='field-extras-10', key=extra.key, value=extra.value, is_required=false)}}
+  {% else %}
+    {{ form_tn.custom_meta('extras__10__', id='field-extras-10', key='oldimport2', value=' ', is_required=false) }}
+  {% endfor %}
+</div>
+
+{% endblock %}
+
+    {{ form.input('maintainer_email', label='提供機關聯絡人電子郵件', id='field-maintainer-email', placeholder=_('joe@example.com'), value=data.maintainer_email, error=errors.maintainer_email, classes=[]) }}
+  {% endblock %}
+
+
+
+
+  {% block dataset_fields %}
+  {% endblock %}
+
+{% endblock %}
+
+

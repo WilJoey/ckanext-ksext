@@ -1,0 +1,83 @@
+{% extends "page.html" %}
+
+{% block breadcrumb_content %}
+  <li class="active">{{ 'Statistics' }}</li>
+{% endblock %}
+
+{% block primary_content %}
+  <article class="module">
+    
+     {#
+      <div>joe: {{ c.keyword_count.__repr__() }}</div>
+       查詢次數
+     #}
+    
+
+    <section id="stats-most-edited" class="module-content tab-content active">
+      <h2>關鍵字統計</h2>
+      <div style="margin:10px; padding:10px 20px;">
+
+        {#<span style="margin-right:20px;">日期篩選</span>#}
+          <lable class="control-label" for="txtStart">起始日期：</label>
+          <input id="txtStart" type="text" class="dpicker" name="txtStart" style="width:90px; margin-top:10px;" />
+          
+          <lable class="control-label" for="txtEnd" style="margin-left:10px;">結束日期：</label>
+          <input id="txtEnd" type="text" class="dpicker" name="txtEnd" style="width:90px;; margin-top:10px;"/>
+
+          <button id="btnFilter" class="btn btn-primary" name="keyword-filter" >日期篩選</button>
+          <span style="margin-right:10px;">，</span>
+          <button id="btnAll" class="btn btn-primary" name="keyword-all" >所有關鍵字</button>
+
+      </div>
+
+ 
+
+
+      {% if c.keyword_count %}
+        <table class="table table-chunky table-bordered table-striped">
+          <thead>
+            <tr>
+              <th class="metric">關鍵字</th>
+              <th style="width:200px;">查詢次數</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for package in c.keyword_count %}
+              <tr>
+                <td class="metric">{{ package.content }}</td>
+                <td class="metric">{{ package.count }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <p class="empty">{{ _('No edited datasets') }}</p>
+      {% endif %}
+    </section>
+
+
+
+
+
+  </article>
+{% endblock %}
+
+{% block secondary_content %}
+  <section class="module module-narrow">
+    <h2 class="module-heading"><i class="icon-bar-chart icon-medium"></i> {{ _('Statistics Menu') }}</h2>
+    <nav data-module="stats-nav">
+      <ul class="unstyled nav nav-simple">
+        <li class="nav-item"><a href="/tnstats/index"><b>組織</b>資料集瀏覽與下載統計</a></li>
+        <li class="nav-item"><a href="/tnstats/group">群組資料集瀏覽與下載統計</a></li>
+        <li class="nav-item active"><a href="/tnstats/keyword">關鍵字統計</a></li>
+      </ul>
+    </nav>
+  </section>
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  {% resource 'ksext_jscss/css/datepicker.css' %}
+  {% resource 'ksext_jscss/js/bootstrap-datepicker.js' %}
+  {% resource 'ksext_jscss/js/keyword-filter.js' %}
+{% endblock %}

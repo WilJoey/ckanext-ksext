@@ -1,0 +1,15 @@
+{% set hots = h.ksexthots('views_recent desc') %}
+
+{% set list_class = "unstyled dataset-list" %}
+{% set item_class = "dataset-item module-content" %}
+
+<div class="box">
+  <header class="module-heading">
+    <h2>熱門資料集</h2>
+  </header>
+  <ul class="dataset-list unstyled" style="margin-bottom:30px;">
+    {% for hot in hots.results %}
+      {% snippet 'snippets/package_item.html', package=hot, item_class=item_class, hide_resources=hide_resources, banner=banner, truncate=truncate, truncate_title=truncate_title %}
+    {% endfor %}
+  </ul>
+</div>

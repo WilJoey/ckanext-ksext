@@ -1,0 +1,112 @@
+
+{% set servicetypes = [ 
+  { "value":"000","text":"==請選擇=="},
+  { "value":"100","text":"生育保健"},
+  { "value":"200","text":"出生及收養"}, 
+  { "value":"300","text":"求學及進修"},
+  { "value":"400","text":"服兵役"},
+  { "value":"500","text":"求職及就業"},
+  { "value":"600","text":"開創事業"},
+  { "value":"700","text":"婚姻"},
+  { "value":"800","text":"投資理財"},
+  { "value":"900","text":"休閒旅遊"},
+  { "value":"A00","text":"交通及通訊"},
+  { "value":"B00","text":"就醫"},
+  { "value":"C00","text":"購屋及遷徙"},
+  { "value":"D00","text":"選舉及投票"},
+  { "value":"E00","text":"生活安全及品質"},
+  { "value":"F00","text":"退休"},
+  { "value":"G00","text":"老年安養"},
+  { "value":"H00","text":"生命禮儀"},
+  { "value":"I00","text":"公共資訊"}
+] %}
+
+
+<section class="additional-info">
+  <h3>{{ _('Additional Info') }}</h3>
+  <table class="table table-striped table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th scope="col">{{ _('Field') }}</th>
+        <th scope="col">{{ _('Value') }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% block package_additional_info %}
+        {% if pkg_dict.url %}
+          <tr>
+            <th scope="row" class="dataset-label">{{ _('Source') }}</th>
+            <td class="dataset-details" property="foaf:homepage">{{ h.link_to(pkg_dict.url, pkg_dict.url, rel='foaf:homepage', target='_blank') }}</td>
+          </tr>
+        {% endif %}
+
+        {% if pkg_dict.author_email %}
+          <tr>
+            <th scope="row" class="dataset-label">{{ _("Author") }}</th>
+            <td class="dataset-details" property="dc:creator">{{ h.mail_to(email_address=pkg_dict.author_email, name=pkg_dict.author) }}</td>
+          </tr>
+        {% elif pkg_dict.author %}
+          <tr>
+            <th scope="row" class="dataset-label">{{ _("Author") }}</th>
+            <td class="dataset-details" property="dc:creator">{{ pkg_dict.author }}</td>
+          </tr>
+        {% endif %}
+
+        {% if pkg_dict.maintainer_email %}
+          <tr>
+            <th scope="row" class="dataset-label">{{ _('Maintainer') }}</th>
+            <td class="dataset-details" property="dc:contributor">{{ h.mail_to(email_address=pkg_dict.maintainer_email, name=pkg_dict.maintainer) }}</td>
+          </tr>
+        {% elif pkg_dict.maintainer %}
+          <tr>
+            <th scope="row" class="dataset-label">{{ _('Maintainer') }}</th>
+            <td class="dataset-details" property="dc:contributor">{{ pkg_dict.maintainer }}</td>
+          </tr>
+        {% endif %}
+
+        {% if pkg_dict.version %}
+          <tr>
+            <th scope="row" class="dataset-label">{{ _("Version") }}</th>
+            <td class="dataset-details">{{ pkg_dict.version }}</td>
+          </tr>
+        {% endif %}
+
+        {% if h.check_access('package_update',{'id':pkg_dict.id}) %}
+          <tr>
+            <th scope="row" class="dataset-label">{{ _("State") }}</th>
+            <td class="dataset-details">{{ pkg_dict.state }}</td>
+          </tr>
+        {% endif %}
+
+      {% block extras scoped %}
+
+        {% for extra in h.sorted_extras(pkg_dict.extras) %}
+          {% set key, value = extra %}
+          {% if not key.startswith('oldimport') %}
+            {% if key=='服務分類' %}
+              {% for st in servicetypes if st['value']==value %}
+                <tr rel="dc:relation" resource="_:extra{{ i }}">
+                  <th scope="row" class="dataset-label" property="rdfs:label">{{ _(key) }}</th>
+                  <td class="dataset-details" property="rdf:value">{{ st['text'] }}</td>
+                </tr>
+              {% else%}
+                <tr rel="dc:relation" resource="_:extra{{ i }}">
+                  <th scope="row" class="dataset-label" property="rdfs:label">{{ _(key) }}</th>
+                  <td class="dataset-details" property="rdf:value"></td>
+                </tr>
+              {% endfor %}
+            {% else%}
+              <tr rel="dc:relation" resource="_:extra{{ i }}">
+                <th scope="row" class="dataset-label" property="rdfs:label">{{ _(key) }}</th>
+                <td class="dataset-details" property="rdf:value">{{ value }}</td>
+              </tr>    
+            {% endif %}
+          {% endif %}
+        {% endfor %}
+
+      {% endblock %}
+
+      {% endblock %}
+    </tbody>
+  </table>
+</section>

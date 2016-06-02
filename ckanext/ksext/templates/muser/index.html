@@ -1,0 +1,61 @@
+{% extends "admin/base.html" %}
+{% import "macros/form.html" as form %}
+
+{% block primary_content_inner %}
+
+  
+    
+  <article class="module">
+    {# <h3>使用者列表</h3> #}
+    <div class="module-content">
+      <div class="content_action" style="margin-bottom:10px;">
+        <a class="btn btn-primary" href="/muser/new"><i class="icon-wrench">  新增使用者</i></a>
+      </div>
+      {% block users_list %}
+        <table class="table table-chunky table-bordered table-striped">
+          <thead>
+            <tr>
+              <th class="metric">{{ _("Username") }}</th>
+              <th>{{ _("Full Name") }}</th>
+              <th class="metric">{{ _("Email") }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% set notin = ['default','logged_in','visitor']%}
+            {% for user in c.page.items %}
+              {% if user.name not in notin %}
+              <tr >
+                <td class="metric">{{ user.name }}</td>
+                <td class="metric"><a href="/muser/edit/{{ user.name }}">{{ user.fullname }}</a></td>
+                <td class="metric">{{ user[0].email }}</td>
+                </tr>
+              {% endif %}
+            {% endfor %}
+          </tbody>
+        </table>
+      {% endblock %}
+    </div>
+    {% block page_pagination %}
+      {{ c.page.pager(q=c.q, order_by=c.order_by) }}
+    {% endblock %}
+  </article>
+{% endblock %}
+
+
+{% block secondary_content %}
+  <div class="module module-narrow module-shallow">
+    <h2 class="module-heading">
+      <i class="icon-info-sign"></i>
+      {{ _('What are sysadmins?') }}
+    </h2>
+    <div class="module-content">
+      {% set docs_url = "http://docs.ckan.org/en/{0}/paster.html#sysadmin-give-sysadmin-rights".format(g.ckan_doc_version) %}
+      {% trans %}
+        <p>A sysadmin is someone that has full control over a CKAN instance.
+          You can only add CKAN sysadmins via the <code>sysadmin</code> paster
+          command.</p>
+      {% endtrans %}
+      <p><a href="{{ docs_url }}" target="_blank">{{ _('Read the documentation') }}</a></p>
+    </div>
+  </div>
+{% endblock %}

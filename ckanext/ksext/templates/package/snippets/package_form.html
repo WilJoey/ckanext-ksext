@@ -1,0 +1,88 @@
+{% ckan_extends %}
+
+{% block basic_fields %}
+
+  {% snippet 'package/snippets/package_basic_fields.html', data=data, errors=errors, licenses=c.licenses, groups_available=c.groups_available, metacache=false %}
+{% endblock %}
+
+  {% block form_actions %}
+
+    <div class="form-actions">
+      {% block disclaimer %}
+        <p class="action-info small">
+          {%- trans -%}
+          Important: By submitting content, you
+          agree to release your contributions under the Open Database
+          License.
+          {%- endtrans -%}
+        </p>
+        
+      {% endblock %}
+      {% block delete_button %}
+        {% if h.check_access('package_delete', {'id': data.id}) and not data.state == 'deleted' %}
+          {% set locale = h.dump_json({'confirm':'222','content': _('Are you sure you want to delete this dataset?')}) %}
+          <a class="btn btn-danger pull-left" href="{% url_for controller='package', action='delete', id=data.id %}" data-module="confirm-action" data-module-i18n="{{ locale }}">{% block delete_button_text %}{{ _('Delete') }}{% endblock %}</a>
+        {% endif %}
+      {% endblock %}
+      <button class="btn btn-primary" type="submit" name="save">{% block save_button_text %}{{ _('Next: Add Data') }}{% endblock %}</button>
+      {{ form.required_message() }}
+    </div>
+
+  {#% block ds_import_select%}
+<!-- Modal -->
+<div id="importModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">資料匯入</h3>
+  </div>
+  <div class="modal-body">
+    {% set orgs = h.organizations_available('create_dataset') %}
+    
+    
+    <div class="control-group">
+      <label for="selOrgs" class="control-label">組織機關</label>
+      <div class="controls">
+        <select id="selOrgs">
+          {% for org in orgs %}
+            <option value="{{ org.id }}">{{ org.title }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label for="selDatasets" class="control-label">資料集範本</label>
+      <div class="controls">
+        <select id="selDatasets" class="span3">
+        </select>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <div class="controls">
+        <button type="button" class="btn btn-info" onclick="_dsImport()" >匯入</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">關閉</button>
+    
+  </div>
+</div>
+  {% endblock %#}
+
+
+  {% resource 'ksext_jscss/css/datepicker.css' %}
+  {% resource 'ksext_jscss/js/favorite.js' %}
+  {% resource 'ksext_jscss/js/bootstrap-datepicker.js' %}
+  
+  {% if form_style == 'edit' %}
+    {% resource 'ksext_jscss/js/package-require-all.js' %}
+  {% else %}
+    {% resource 'ksext_jscss/js/package-require-step1.js' %}  
+  {% endif %}
+
+  {% resource 'ksext_jscss/js/package-old-import.js' %}  
+
+
+  {% endblock %}

@@ -1,0 +1,40 @@
+{% set title= '目前尚無任何資料建議!' if suggest_count == 0 else '目前計有【%s】筆資料建議' % suggest_count %}
+
+{% block datarequest_search_results_list %}
+  {% if suggests %}
+
+     <section id="stats-most-edited" class="module-content tab-content active">
+      
+      <table class="table table-striped table-bordered table-hover">
+        <caption><h2>{{ title }}</h2></caption>
+        <thead>
+          <tr>
+            <th>日期</th>
+            <th style="width:200px;">標題</th>
+            <th>建議人</th>
+            <th>瀏覽次數</th>
+            <th>回應數</th>
+          </tr>
+        </thead>
+        <tbody>
+      {% for suggest in suggests %}
+        {{ h.snippet('suggest/snippets/suggest_item.html', suggest=suggest, facet_titles=facet_titles) }}
+      {% endfor %}
+        </tbody>
+      </table>
+
+    </section>
+  {% else %}
+    <p class="empty">
+      {{ '目前尚無任何資料建議!' }}
+      {# % if h.check_access('datarequest_create') %}
+        {% link_for _('How about creating one?'), controller='ckanext.datarequests.controllers.ui_controller:DataRequestsUI', action='new' %}</a>.
+      {% endif %#}
+    </p>
+  {% endif %}
+{% endblock %}
+{% block page_pagination %}
+{#
+  {{ page.pager(q='') }}
+  #}
+{% endblock %}

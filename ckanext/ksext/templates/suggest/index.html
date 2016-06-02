@@ -1,0 +1,48 @@
+{% extends "suggest/base.html" %}
+
+{% block primary_content %}
+  <article class="module">
+    {#
+    <div>joe: {{ c.suggests.__repr__() }}</div>
+    #}
+
+
+        {% if h.check_access('suggest_create') %}
+          <div class="module-content clearfix">
+          <div class="page_primary_action pull-right">
+            {% link_for '新增建議', controller='ckanext.ksext.controllers.Suggest:SuggestsController', action='new', class_='btn btn-primary', icon='plus-sign-alt' %}
+          </div>
+          </div>
+        {% endif %}
+        {{ h.snippet('suggest/snippets/suggest_list.html', suggest_count=c.suggest_count, suggests=c.suggests, page=c.page)}}
+    
+   
+    {% block page_pagination %}
+        {{ c.page.pager() }}  
+    {% endblock %}
+    
+  </article>
+  
+{% endblock %}
+
+
+{% block secondary_content %}
+  {{ super() }}
+  {#
+  {% for facet in c.facet_titles %}
+    {{ h.snippet('snippets/facet_list.html', title=c.facet_titles[facet], name=facet) }}
+  {% endfor %}
+  #}
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  <script>
+    function views_plus(id){
+      $.post('/suggest/view/'+id, function(data){});
+      return true;
+    }
+  </script>
+{% endblock %}
+
+
