@@ -1,5 +1,5 @@
 {% extends "page.html" %} {% block subtitle %}{{ _('Guide') }}{% endblock %} {% block breadcrumb_content %}
-<li class="active">{% link_for '常見問答 FAQ', controller='ckanext.ksext.controllers.TnStats:TnStatsController', action='faq' %}</li>
+<li class="active">{% link_for '常見問答 FAQ', controller='ckanext.ksext.controllers.HomeExt:HomeExtController', action='faq' %}</li>
 {% endblock %} {% block primary %}
 <style>
     .module-content h2 {

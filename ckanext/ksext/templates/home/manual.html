@@ -1,33 +1,34 @@
-{% extends "page.html" %}
-
-{% block subtitle %}{{ _('Guide') }}{% endblock %}
-
-{% block breadcrumb_content %}
-  <li class="active">{% link_for '使用說明', controller='ckanext.ksext.controllers.TnStats:TnStatsController', action='manual' %}</li>
-{% endblock %}
-
-{% block primary %}
-<style> 
-.module-content h2{
-  font-size: 24px;
-}
-.module-content h3{
-  color:#c66; 
-}
-.module-content h4{
-  color:#c66; font-size: 18px;
-}
-.module-content p{
-  line-height:26px; text-indent: 2em;
-}
-.sm-heihgt p{
-  line-height:16px; text-indent: 2em;
-}
+{% extends "page.html" %} {% block subtitle %}{{ _('Guide') }}{% endblock %} {% block breadcrumb_content %}
+<li class="active">{% link_for '使用說明', controller='ckanext.ksext.controllers.HomeExt:HomeExtController', action='manual' %}</li>
+{% endblock %} {% block primary %}
+<style>
+    .module-content h2 {
+        font-size: 24px;
+    }
+    
+    .module-content h3 {
+        color: #c66;
+    }
+    
+    .module-content h4 {
+        color: #c66;
+        font-size: 18px;
+    }
+    
+    .module-content p {
+        line-height: 26px;
+        text-indent: 2em;
+    }
+    
+    .sm-heihgt p {
+        line-height: 16px;
+        text-indent: 2em;
+    }
 </style>
-<script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>   
+<script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
 
-  <article class="module"> 
-  
+<article class="module">
+
     <header class="module-content page-header">
         <ul class="nav nav-tabs">
             <li class="active"><a href="/manual"><i class="icon-info-sign"></i> 使用說明</a></li>
@@ -35,38 +36,36 @@
             <li><a href="/faq"><i class="icon-question-sign"></i> 常見問答 FAQ</a></li>
         </ul>
     </header>
-    
+
     <div class="module-content" style="font-size:16px;padding:30px 70px;">
-      <h2>使用說明</h2>
-      
+        <h2>使用說明</h2>
+
         <h3>一、針對局處、類別、標籤及檔案類型直覺式篩選查詢開放資料集</h3>
-        <p><img src="manual-1.png" alt="" style="border:1px solid #842f22"/></p>
+        <p><img src="manual-1.png" alt="" style="border:1px solid #842f22" /></p>
         <br/>
 
         <h3>二、平台提供關鍵字查詢功能，於首頁或資料目錄頁皆可登打目標關鍵字進行查詢</h3>
-        <p><img src="manual-2.png" alt="" style="border:1px solid #842f22"/></p>
+        <p><img src="manual-2.png" alt="" style="border:1px solid #842f22" /></p>
         <br/>
 
         <h3>三、「資料集」瀏覽功能說明：檢視「資料集」簡介頁面，平台提供資料集描述資訊給予使用者初步了解資料集內容及熱門瀏覽次數，亦可進入「資料」進行預覽</h3>
-        <p><img src="manual-3.png" alt="" style="border:1px solid #842f22"/></p>
+        <p><img src="manual-3.png" alt="" style="border:1px solid #842f22" /></p>
         <br/>
 
         <h3>四、「資料」預覽功能說明：</h3>
-        
+
         <p>1.表格預覽：預覽窗框中的表格頁籤將以表格的方式呈現資料集內容，資料內容預設以每頁100筆顯示，民眾可自行調整每頁顯示之筆數與範圍，亦可點擊欄位名稱進行排序顯示。
-        <br/><img src="manual-41.png" alt="" style="border:1px solid #842f22"/></p>
+            <br/><img src="manual-41.png" alt="" style="border:1px solid #842f22" /></p>
         <br/>
 
         <p>2.圖表預覽：預覽窗框中的圖表頁籤將以圖表的方式呈現資料集內容，民眾可自行設定產製圖表之資料欄位，平台即可針對欄位資料顯示相對應統計圖表。
-        <br/><img src="manual-42.png" alt="" style="border:1px solid #842f22"/></p>
-        
+            <br/><img src="manual-42.png" alt="" style="border:1px solid #842f22" /></p>
+
         <br/>
         <p>3.地圖預覽：預覽窗框中的地圖頁籤將以地圖平台方式呈現資料集內容，民眾可自行設定相對應之坐標資訊欄位，平台即可針對坐標資訊繪製資料空間點位地圖，方便民眾了解資料空間分布。
-        <br/><img src="manual-43.png" alt="" style="border:1px solid #842f22"/></p>
-        
+            <br/><img src="manual-43.png" alt="" style="border:1px solid #842f22" /></p>
+
         <br/>
     </div>
-  </article>
-{% endblock %}
-
-{% block secondary %}{% endblock %}
+</article>
+{% endblock %} {% block secondary %}{% endblock %}

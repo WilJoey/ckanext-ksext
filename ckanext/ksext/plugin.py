@@ -61,14 +61,8 @@ class KsextPlugin(plugins.SingletonPlugin):
             constants.SUGGEST_INDEX: auth.suggest_index,
             constants.SUGGEST_CREATE: auth.suggest_create,
             constants.SUGGEST_SHOW: auth.suggest_show,
-            # constants.SUGGEST_UPDATE: auth.suggest_update,
-            # constants.SUGGEST_DELETE: auth.suggest_delete,
-            # constants.SUGGEST_CLOSE: auth.suggest_close,
             constants.SUGGEST_COMMENT: auth.suggest_comment,
-            # constants.SUGGEST_COMMENT_LIST: auth.suggest_comment_list,
-            # constants.SUGGEST_COMMENT_SHOW: auth.suggest_comment_show,
             constants.SUGGEST_COMMENT_UPDATE: auth.suggest_comment_update,
-            # constants.SUGGEST_COMMENT_DELETE: auth.suggest_comment_delete
         }
 
     def update_config(self, config):
@@ -106,18 +100,18 @@ class KsextPlugin(plugins.SingletonPlugin):
         map.connect('datasetlist','/datasetlist', 
             controller = 'ckanext.ksext.controllers.Datasets:DatasetsController',
             action='index')
-
+        
+        # HomeExt
         map.connect('home_specification','/specification', 
-            controller = 'ckanext.ksext.controllers.TnStats:TnStatsController', action='specification')
+            controller = 'ckanext.ksext.controllers.HomeExt:HomeExtController', action='specification')
         map.connect('home_specification_old','/specification_old',
-            controller = 'ckanext.ksext.controllers.TnStats:TnStatsController', action='specification_old')
-
+            controller = 'ckanext.ksext.controllers.HomeExt:HomeExtController', action='specification_old')
         map.connect('home_guide','/guide', 
-            controller = 'ckanext.ksext.controllers.TnStats:TnStatsController', action='guide')
+            controller = 'ckanext.ksext.controllers.HomeExt:HomeExtController', action='guide')
         map.connect('home_faq','/faq', 
-            controller = 'ckanext.ksext.controllers.TnStats:TnStatsController', action='faq')
+            controller = 'ckanext.ksext.controllers.HomeExt:HomeExtController', action='faq')
         map.connect('home_manual','/manual', 
-            controller = 'ckanext.ksext.controllers.TnStats:TnStatsController', action='manual')
+            controller = 'ckanext.ksext.controllers.HomeExt:HomeExtController', action='manual')
   
         ## suggests ##
         # Data Requests index

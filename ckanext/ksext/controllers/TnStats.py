@@ -150,17 +150,4 @@ ORDER BY
 
         response.headers['Content-Type'] = 'application/json;charset=utf-8'
         return h.json.dumps(result)
-
-    def specification(self):
-        return base.render('home/specification.html')
-    def specification_old(self):
-        return base.render('home/specification_old.html')
-
-    def guide(self):
-        return base.render('home/guide.html')
-
-    def manual(self):
-        return base.render('home/manual.html')
-    
-    def faq(self):
-        return base.render('home/faq.html')
+        
