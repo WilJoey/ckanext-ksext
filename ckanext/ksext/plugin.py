@@ -39,8 +39,6 @@ class KsextPlugin(plugins.SingletonPlugin):
     ######################################################################
     def get_actions(self):
         return {
-            'tnstats_dataset_count': a.tnstats_dataset_count,
-
             constants.SUGGEST_INDEX: a.suggest_index,
             constants.SUGGEST_CREATE: a.suggest_create,
             constants.SUGGEST_SHOW: a.suggest_show,
