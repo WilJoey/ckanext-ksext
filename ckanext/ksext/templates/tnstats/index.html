@@ -1,5 +1,26 @@
 {% extends "page.html" %}
 
+{% block styles %}
+  {{ super() }}
+  <style>
+    @media print 
+    {
+      header,footer,aside,section,div.toolbar { 
+        display:none; 
+      }
+      .primary {
+        float: left;
+      }
+      .span9 {
+        width: auto;
+      }
+    }
+    .lbl-org{
+      display:inline-block; vertical-align: middle; font-size: 1em; margin-bottom: 12px;
+    }
+  </style>
+{% endblock %}
+
 {% block breadcrumb_content %}
   <li class="active">{{ 'Statistics' }}</li>
 {% endblock %}
@@ -14,6 +35,19 @@
 
     <section id="stats-most-edited" class="module-content tab-content active">
       <h2>組織資料集瀏覽與下載統計</h2>
+
+
+ {% set orgs = h.organizations_available('create_dataset') %}
+      <div class="control-group">
+        <label for="field-organizations" class="control-label lbl-org">{{ _('Organization') }}</label>
+          <select id="field-organizations" name="owner_org">
+            <option value="" selected="selected">==所有組織==</option>
+            {% for organization in orgs %}
+              <option value="{{ organization.id }}">{{ organization.display_name }}</option>
+            {% endfor %}
+          </select>
+      </div>
+
       {% if c.datasets_count %}
         <table class="table table-chunky table-bordered table-striped">
           <thead>

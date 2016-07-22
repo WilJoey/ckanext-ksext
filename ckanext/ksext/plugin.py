@@ -112,7 +112,12 @@ class KsextPlugin(plugins.SingletonPlugin):
             controller = 'ckanext.ksext.controllers.HomeExt:HomeExtController', action='faq')
         map.connect('home_manual','/manual', 
             controller = 'ckanext.ksext.controllers.HomeExt:HomeExtController', action='manual')
-  
+        map.connect('home_licenses','/licenses', 
+            controller = 'ckanext.ksext.controllers.HomeExt:HomeExtController', action='licenses') 
+        map.connect('home_csv','/csv', 
+            controller = 'ckanext.ksext.controllers.HomeExt:HomeExtController', action='csv')
+
+
         ## suggests ##
         # Data Requests index
         map.connect('suggests_index', "/suggest",
