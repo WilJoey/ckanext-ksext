@@ -179,7 +179,7 @@ ORDER BY
 
     def csvTest(self):
         result = self._groupApiResult()
-        data = u'群組,資料集,資料集編碼,資料集瀏覽次數,資料瀏覽次數,資料下載次數\r\n'
+        data = u'\ufeff群組,資料集,資料集編碼,資料集瀏覽次數,資料瀏覽次數,資料下載次數\r\n'
         csvFormatter = u'"{0}","{1}","{2}",{3},{4},{5}\r\n'
         for item in result:
             #data += csvFormatter.format(*item)
@@ -187,19 +187,7 @@ ORDER BY
         return data
 
     def orgCsv(self):
-        '''
-        base.response.headers['Content-type'] ='text/csv; charset=utf-8'
-        base.response.headers['Content-disposition'] ='attachment;filename=statistics.csv'
-
-        result = self._orgApiResult()
-        data = u'組織,資料集,資料集編碼,資料集瀏覽次數,資料瀏覽次數,資料下載次數\r\n'
-        csvFormatter = u'"{0}","{1}","{2}",{3},{4},{5}\r\n'
-        for item in result:
-            #data += csvFormatter.format(*item)
-            data += csvFormatter.format(item[3],item[1],item[2],item[4],item[5],item[6])
-        return data
-        '''
-        head = u'組織,資料集,資料集編碼,資料集瀏覽次數,資料瀏覽次數,資料下載次數\r\n'
+        head = u'\ufeff組織,資料集,資料集編碼,資料集瀏覽次數,資料瀏覽次數,資料下載次數\r\n'
         data = self._orgApiResult()
         return self._csv(head, data)
 
