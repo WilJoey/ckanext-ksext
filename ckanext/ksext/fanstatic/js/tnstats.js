@@ -1,22 +1,43 @@
+var config = { };
+
 $(document).ready(function (){
+    config = getConfig($('#hidConfig').val());
+
     mainColumnMerge();
 
-    $('#selOrg').change(orgChanged);
+    $(config.selectId).change(orgChanged);
     $('#btnDownload').click(function (){
-        //alert(12345);
-        console.log($('#selOrg').val());    
-        window.open('/tnstats/orgCsv?id='+$('#selOrg').val());
+        window.open(config.windowOpenUrl + $(config.selectId).val());
     });
 });
-    
+
+function getConfig(val){
+    if(val === 'org'){
+        return {
+            selectId:'#selOrg',
+            title: 'org_name',
+            dataUrl: '/tnstats/orgApi?id=',
+            windowOpenUrl :'/tnstats/orgCsv?id='
+        }
+    }else{
+        return {
+            selectId:'#selGroup',
+            title: 'group_name',
+            dataUrl: '/tnstats/groupApi?id=',
+            windowOpenUrl :'/tnstats/groupCsv?id='
+        }
+    }
+}
+
 function orgChanged(evt){
-    var url = '/tnstats/orgApi?id=' + evt.target.value;
+    var url = config.dataUrl + evt.target.value;
         $.post(url, function (res){
+            console.log(res);
             RemoveTr();
             var tb = $("#dtStat");
             $(res).each(function (i, d){
                 var aps = '<tr>';
-                aps += '<td class="metric">' + d.org_name + '</td>';
+                aps += '<td class="metric">' + d[config.title] + '</td>';
                 aps += '<td><a href="/dataset/' + d.name + '">'+ d.title + '</a></td>';
                 aps += '<td class="metric">' + d.dataset_views + '</td>';
                 aps += '<td class="metric">' + d.resource_views + '</td>';
@@ -29,7 +50,7 @@ function orgChanged(evt){
 }
 
 function RemoveTr(){
-    $(".table tr").each(function (i, d) {
+    $("#dtStat tr").each(function (i, d) {
         if(i==0) return;
         $(d).remove();
     });
@@ -41,7 +62,7 @@ function mainColumnMerge(){
         rowCount = 1,
         checkTd = null;
 
-    $('.table tr').each(function(i, d) {
+    $('#dtStat tr').each(function(i, d) {
         if (i == 0) return;
         var td = $(d).children().first();
         if (td.html() != checkName) {
@@ -56,6 +77,7 @@ function mainColumnMerge(){
             rowCount++;
         }
     });
-    
-    checkTd.attr("rowspan", rowCount);
+    if(checkTd){
+        checkTd.attr("rowspan", rowCount);
+    }
 }

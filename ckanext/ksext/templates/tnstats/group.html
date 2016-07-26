@@ -1,5 +1,11 @@
 {% extends "page.html" %}
 
+{% block styles %}
+  {{ super() }}
+  {% resource 'ksext_jscss/css/tnstat.css' %}
+{% endblock %}
+
+
 {% block breadcrumb_content %}
   <li class="active">{{ 'Statistics' }}</li>
 {% endblock %}
@@ -11,11 +17,25 @@
       <div>joe: {{ c.datasets_count.__repr__() }}</div>
     #}
     
-
     <section id="stats-most-edited" class="module-content tab-content active">
       <h2>群組資料集瀏覽與下載統計</h2>
+      <input type="hidden" id="hidConfig" value="group" /> 
+
+      {% set groups = h.groups_available(am_member=False) %}
+      <div class="control-group">
+        <label for="field-organizations" class="control-label lbl-org">{{ _('Group') }}</label>
+          <select id="selGroup" name="owner_org">
+            <option value="" selected="selected">==所有群組==</option>
+            {% for gp in groups %}
+              <option value="{{ gp.id }}">{{ gp.display_name }}</option>
+            {% endfor %}
+          </select>
+          <button onclick="print();" class="btn btn-primary btn-print">列印</button>
+          <button id="btnDownload" class="btn btn-primary btn-print">下載</button>
+
+      </div>
       {% if c.datasets_count %}
-        <table class="table table-chunky table-bordered table-striped">
+        <table id="dtStat" class="table table-chunky table-bordered table-striped">
           <thead>
             <tr>
               <th class="metric">群組</th>

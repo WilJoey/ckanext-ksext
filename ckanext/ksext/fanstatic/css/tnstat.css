@@ -1,0 +1,20 @@
+@media print 
+{
+  header,footer,aside,section,div.toolbar { 
+    display:none; 
+  }
+  .primary {
+    float: left;
+  }
+  .span9 {
+    width: auto;
+  }
+}
+
+.lbl-org{
+  display:inline-block; vertical-align: middle; font-size: 1em; margin-bottom: 12px;
+}
+
+.btn-print{
+  margin-bottom: 7px;
+}
