@@ -18,6 +18,9 @@
     .lbl-org{
       display:inline-block; vertical-align: middle; font-size: 1em; margin-bottom: 12px;
     }
+    .btn-print{
+      margin-bottom: 7px;
+    }
   </style>
 {% endblock %}
 
@@ -40,16 +43,19 @@
  {% set orgs = h.organizations_available('create_dataset') %}
       <div class="control-group">
         <label for="field-organizations" class="control-label lbl-org">{{ _('Organization') }}</label>
-          <select id="field-organizations" name="owner_org">
+          <select id="selOrg" name="owner_org">
             <option value="" selected="selected">==所有組織==</option>
             {% for organization in orgs %}
               <option value="{{ organization.id }}">{{ organization.display_name }}</option>
             {% endfor %}
           </select>
+          <button onclick="print();" class="btn btn-primary btn-print">列印</button>
+          <button id="btnDownload" class="btn btn-primary btn-print">下載</button>
+
       </div>
 
       {% if c.datasets_count %}
-        <table class="table table-chunky table-bordered table-striped">
+        <table id="dtStat" class="table table-chunky table-bordered table-striped">
           <thead>
             <tr>
               <th class="metric">組織</th>

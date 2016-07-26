@@ -61,24 +61,7 @@ class HomeExtController(BaseController):
 
         return h.json.dumps(result)
 
-    def csv(self):
-        header = "text/javascript; charset=utf-8"
-        #base.response.headers['Content-type'] ='text/csv'
-        #base.response.headers['Content-disposition'] ='attachment;filename=statistics.csv'
-
-        result = [{"id":11, "name":"joe1"},{"id":22, "name":"jet2"}]
-        columns = {"id":{"pattern":"^id$"}, "name":{"pattern":"^name$"}}
-
-        return losser.table(result, columns, csv=True, pretty=False )
-
-        '''
-        context = self._get_context()
-        data_dict = {
-            'id': 'road-toponym-translation'
-        }
-        query = toolkit.get_action('package_show')(context, data_dict)
-        return h.json.dumps(query)
-        '''
+    
 
     def _get_context(self):
         return {'model': model, 'session': model.Session,

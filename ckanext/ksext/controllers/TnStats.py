@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import ckan.plugins as p
 from ckan.lib.base import BaseController, config
 import ckan.lib.helpers as h
@@ -6,6 +8,10 @@ import collections
 import sqlalchemy
 from ckan.common import response, request, json
 import ckan.lib.base as base
+import losser.losser as losser
+import ckan.plugins.toolkit as toolkit
+
+
 
 class TnStatsController(BaseController):
 
@@ -106,9 +112,9 @@ GROUP BY content ORDER BY count DESC, content ASC; '''
         response.headers['Content-Type'] = 'application/json;charset=utf-8'
         return h.json.dumps(result)
 
-    def orgApi (self):
-        _ViewCount = collections.namedtuple("ViewCount", "id title name org_name dataset_views resource_views resource_downloads")
-
+    def orgApiResult(self):
+        
+        
         engine = model.meta.engine
         sql = '''
 SELECT p.id, p.title, p.name,
@@ -116,13 +122,26 @@ SELECT p.id, p.title, p.name,
     COALESCE(SUM(s.count), 0) AS dataset_views, 
     COALESCE((SELECT SUM(resource_count) FROM v_dataset_count WHERE dataset_id=p.id), 0) AS resource_views,
     COALESCE((SELECT SUM(resource_count) FROM v_dataset_download WHERE dataset_id=p.id), 0) AS resource_downloads
-FROM package AS p
-    LEFT OUTER JOIN tracking_summary AS s ON s.package_id = p.id
-WHERE p.state='active'
+FROM package AS p 
+LEFT OUTER JOIN tracking_summary AS s ON s.package_id = p.id
+WHERE p.state='active' '''
+        pid = request.params.get('id', None)
+
+        if(pid):
+            sql += ' and p.owner_org=%s '
+
+        sql += '''
 GROUP BY p.id, p.title
 ORDER BY org_name ASC; '''
-        result = [_ViewCount(*t) for t in engine.execute(sql).fetchall()]
-        
+
+        result = engine.execute(sql, pid).fetchall()
+        #result = [_ViewCount(*t) for t in engine.execute(sql, pid).fetchall()]
+        return result
+
+    def orgApi (self):
+        _ViewCount = collections.namedtuple("ViewCount", "id title name org_name dataset_views resource_views resource_downloads")
+        data = self.orgApiResult()
+        result = [_ViewCount(*t) for t in data]
         response.headers['Content-Type'] = 'application/json;charset=utf-8'
         return h.json.dumps(result)
 
@@ -150,4 +169,37 @@ ORDER BY
 
         response.headers['Content-Type'] = 'application/json;charset=utf-8'
         return h.json.dumps(result)
+
+    def csvTest(self):
+        result = self.orgApiResult()
+        data = u'組織,資料集,資料集編碼,資料集瀏覽次數,資料瀏覽次數,資料下載次數\r\n'
+        csvFormatter = u'"{0}","{1}","{2}",{3},{4},{5}\r\n'
+        for item in result:
+            #data += csvFormatter.format(*item)
+            data += csvFormatter.format(item[3],item[1],item[2],item[4],item[5],item[6])
+        return data
+
+    def orgCsv(self):
+
+        base.response.headers['Content-type'] ='text/csv; charset=utf-8'
+        base.response.headers['Content-disposition'] ='attachment;filename=statistics.csv'
+        '''
         
+        #base.response.headers['Content-type'] ='text/csv'
+        #base.response.headers['Content-disposition'] ='attachment;filename=statistics.csv'
+
+        result = [{"id":11, "name":"joe1"},{"id":22, "name":"jet2"}]
+        columns = {"id":{"pattern":"^id$"}, "name":{"pattern":"^name$"}}
+
+        return losser.table(result, columns, csv=True, pretty=False )
+        '''
+        result = self.orgApiResult()
+        data = u'組織,資料集,資料集編碼,資料集瀏覽次數,資料瀏覽次數,資料下載次數\r\n'
+        csvFormatter = u'"{0}","{1}","{2}",{3},{4},{5}\r\n'
+        for item in result:
+            #data += csvFormatter.format(*item)
+            data += csvFormatter.format(item[3],item[1],item[2],item[4],item[5],item[6])
+        return data
+
+
+

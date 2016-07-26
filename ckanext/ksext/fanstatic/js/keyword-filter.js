@@ -43,10 +43,9 @@ function AppendResult(data){
 }
 
 function KeywordApi(url){
-    console.log(url);
+    
     $.ajax(url).done(function(data){
-        console.log(data.status);
-        console.log(data.data);
+        
         if(data.status){
             RemoveTr();
             AppendResult(data.data);
