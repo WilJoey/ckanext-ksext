@@ -172,7 +172,7 @@ ORDER BY
 
     def csvTest(self):
         result = self.orgApiResult()
-        data = u'組織,資料集,資料集編碼,資料集瀏覽次數,資料瀏覽次數,資料下載次數\r\n'
+        data = u'\ufeff組織,資料集,資料集編碼,資料集瀏覽次數,資料瀏覽次數,資料下載次數\r\n'
         csvFormatter = u'"{0}","{1}","{2}",{3},{4},{5}\r\n'
         for item in result:
             #data += csvFormatter.format(*item)
@@ -194,7 +194,7 @@ ORDER BY
         return losser.table(result, columns, csv=True, pretty=False )
         '''
         result = self.orgApiResult()
-        data = u'組織,資料集,資料集編碼,資料集瀏覽次數,資料瀏覽次數,資料下載次數\r\n'
+        data = u'\ufeff組織,資料集,資料集編碼,資料集瀏覽次數,資料瀏覽次數,資料下載次數\r\n'
         csvFormatter = u'"{0}","{1}","{2}",{3},{4},{5}\r\n'
         for item in result:
             #data += csvFormatter.format(*item)
