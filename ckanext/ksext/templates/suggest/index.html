@@ -4,9 +4,10 @@
   <article class="module">
     {#
     <div>joe: {{ c.suggests.__repr__() }}</div>
+    {% set oo = h.get_organization('eco') %}
+    <h2>joe: {{ oo.__repr__() }}</h2>
     #}
-
-
+    
         {% if h.check_access('suggest_create') %}
           <div class="module-content clearfix">
           <div class="page_primary_action pull-right">
@@ -37,12 +38,7 @@
 
 {% block scripts %}
   {{ super() }}
-  <script>
-    function views_plus(id){
-      $.post('/suggest/view/'+id, function(data){});
-      return true;
-    }
-  </script>
-{% endblock %}
+  {% resource 'ksext_jscss/js/suggest.js' %}
 
+{% endblock %}
 

@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import ckan.plugins as plugins
 import ckan.lib.helpers as h
 import ckan.logic as logic
@@ -70,14 +72,22 @@ def _dictize_suggest_list(suggest):
     open_time = str(suggest.open_time)
     close_time = suggest.close_time
     close_time = str(close_time) if close_time else close_time
-
+    
+    gg = model.Session.query(model.Group) \
+        .filter(model.Group.id == suggest.org_id).first()
+    if(gg != None):
+        log.warn(gg.title.encode('utf8'))
+    
     data_dict = {
         'id': suggest.id,
         'title': suggest.title,
         'user_id': _star_id(suggest.user_id),
         'open_time': open_time,
         'views': suggest.views,
-        'comments' : db.Comment.get_count_by_suggest(suggest_id=suggest.id)
+        'comments' : db.Comment.get_count_by_suggest(suggest_id=suggest.id),
+        'org_id': suggest.org_id ,
+        'org': '' if gg is None else gg.title,
+        'send_mail': suggest.send_mail
     }
     return data_dict
 
@@ -136,7 +146,8 @@ def _dictize_suggest(suggest):
         
         'close_time': close_time,
         'closed': suggest.closed,
-        'views': suggest.views
+        'views': suggest.views,
+        'org_id':suggest.org_id
     }
     return data_dict
 
@@ -148,6 +159,7 @@ def _undictize_suggest_basic(suggest, data_dict):
     suggest.user_id = data_dict['user_id']
     suggest.dataset_name = data_dict['dataset_name']
     suggest.suggest_columns = data_dict['suggest_columns']
+    suggest.org_id = data_dict['org_id']
     
 def suggest_show(context, data_dict):
     model = context['model']
@@ -186,7 +198,17 @@ def suggest_show(context, data_dict):
 def suggest_views(context, data_dict):
     model = context['model']
     suggest_id = data_dict.get('id', '')
+    
     db.Suggest.views_plus(suggest_id)
+    
+
+def suggest_mailed(context, data_dict):
+    model = context['model']
+    suggest_id = data_dict.get('id', '')
+    
+    db.Suggest.suggest_mailed(suggest_id)
+    
+
 
 
 def suggest_comment(context, data_dict):
@@ -234,3 +256,5 @@ def _dictize_comment(comment):
         'time': str(comment.time)
         
     }
+
+

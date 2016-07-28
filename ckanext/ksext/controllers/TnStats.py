@@ -192,7 +192,7 @@ ORDER BY
         return self._csv(head, data)
 
     def groupCsv(self):
-        head = u'群組,資料集,資料集編碼,資料集瀏覽次數,資料瀏覽次數,資料下載次數\r\n'
+        head = u'\ufeff群組,資料集,資料集編碼,資料集瀏覽次數,資料瀏覽次數,資料下載次數\r\n'
         data = self._groupApiResult()
         return self._csv(head, data)
 

@@ -14,8 +14,10 @@
     
     {#
       <div>joe: {{ c.datasets_count.__repr__() }}</div>
-    #}
     
+      {% set user_is_sysadmin = h.check_access('sysadmin')%}
+      <h2>joe: {{ user_is_sysadmin.__repr__() }}</h2>
+    #}
 
     <section id="stats-most-edited" class="module-content tab-content active">
       <h2>組織資料集瀏覽與下載統計</h2>

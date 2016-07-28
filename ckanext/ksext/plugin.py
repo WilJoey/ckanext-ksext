@@ -51,6 +51,7 @@ class KsextPlugin(plugins.SingletonPlugin):
             # constants.SUGGEST_COMMENT_SHOW: a.suggest_comment_show,
             # constants.SUGGEST_COMMENT_UPDATE: a.suggest_comment_update,
             # constants.SUGGEST_COMMENT_DELETE: a.suggest_comment_delete
+            constants.SUGGEST_MAILED: a.suggest_mailed,
         }
 
     ######################################################################
@@ -63,6 +64,8 @@ class KsextPlugin(plugins.SingletonPlugin):
             constants.SUGGEST_SHOW: auth.suggest_show,
             constants.SUGGEST_COMMENT: auth.suggest_comment,
             constants.SUGGEST_COMMENT_UPDATE: auth.suggest_comment_update,
+            constants.SUGGEST_MAILED: auth.suggest_mailed,
+
         }
 
     def update_config(self, config):
@@ -133,11 +136,15 @@ class KsextPlugin(plugins.SingletonPlugin):
                   action='show', conditions=dict(method=['GET']), ckan_icon='question-sign')
         map.connect('suggest_view', '/%s/view/{id}' % constants.SUGGESTS_MAIN_PATH,
                   controller='ckanext.ksext.controllers.Suggest:SuggestsController',
-                  action='views', conditions=dict(method=['POST']), ckan_icon='question-sign')
+                  action='views', conditions=dict(method=['GET','POST']), ckan_icon='question-sign')
        # Comment, update and view comments (of) a Data Request
         map.connect('suggest_comment', '/%s/{id}/comment' % constants.SUGGESTS_MAIN_PATH,
                   controller='ckanext.ksext.controllers.Suggest:SuggestsController',
                   action='suggest_comment', conditions=dict(method=['GET', 'POST']), ckan_icon='comment')
+
+        map.connect('suggest_domail', '/%s/domail/{id}' % constants.SUGGESTS_MAIN_PATH,
+                  controller='ckanext.ksext.controllers.Suggest:SuggestsController',
+                  action='domail', conditions=dict(method=['GET','POST']), ckan_icon='question-sign')
 
     	return map
 

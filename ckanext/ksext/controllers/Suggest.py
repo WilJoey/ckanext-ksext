@@ -1,21 +1,17 @@
 # -*- coding: utf-8 -*-
-import logging
 
+import logging
 import ckan.lib.base as base
 import ckan.model as model
 import ckan.plugins as plugins
 import ckan.lib.helpers as helpers
 import ckanext.ksext.constants as constants
 import functools
+import requests
 
-
-from ckan.common import request
+from ckan.common import response, request, json
 from urllib import urlencode
-
-
-
-
-
+from sqlalchemy import text
 
 log = logging.getLogger(__name__)
 tk = plugins.toolkit
@@ -53,6 +49,8 @@ class SuggestsController(base.BaseController):
 
     def index(self):
         return self._show_index( search_url, 'suggest/index.html')
+
+    
 
     def _get_context(self):
         return {'model': model, 'session': model.Session,
@@ -134,7 +132,8 @@ class SuggestsController(base.BaseController):
             data_dict['user_id'] = request.POST.get('user_id', '')
             data_dict['dataset_name'] = request.POST.get('dataset_name', '')
             data_dict['suggest_columns'] = request.POST.get('suggest_columns', '')
-    
+            data_dict['org_id'] = request.POST.get('org_id', '')
+            
             if action == constants.SUGGEST_UPDATE:
                 data_dict['id'] = request.POST.get('id', '')
 
@@ -184,7 +183,21 @@ class SuggestsController(base.BaseController):
         tk.get_action('suggest_views')(context, data_dict)
         return 'abc'
         
+    def domail(self, id):
+        data_dict = {'id': id}
+        context = self._get_context()
+        url = u'http://demo2.geo.com.tw/ksod/api/domail/' + id
+        resp = requests.get(url, stream=True)
         
+        result = helpers.json.loads(resp.text)
+        if result['Success']:
+            sql = 'UPDATE suggests SET send_mail=1 WHERE id= :id;'
+            model.meta.engine.execute(text(sql), id=id)
+            model.Session.commit()
+
+        response.headers['Content-Type'] = 'application/json;charset=utf-8'
+        #return u'domail: ' + str(data_dict['Success'])
+        return helpers.json.dumps(result)
 
     def suggest_comment(self, id):
         if request.GET:

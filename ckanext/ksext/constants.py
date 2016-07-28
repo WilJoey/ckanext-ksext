@@ -11,6 +11,7 @@ SUGGEST_COMMENT_SHOW = 'suggest_comment_show'
 SUGGEST_COMMENT_UPDATE = 'suggest_comment_update'
 SUGGEST_COMMENT_DELETE = 'suggest_comment_delete'
 SUGGEST_VIEWS = 'suggest_views'
+SUGGEST_MAILED = 'suggest_mailed'
 
 NAME_MAX_LENGTH = 100
 DESCRIPTION_MAX_LENGTH = 1000

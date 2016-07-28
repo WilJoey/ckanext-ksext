@@ -25,7 +25,24 @@ then itself be extended to add/remove blocks of functionality. #}
   {% block offering_dataset_name %}
     {{ form.input('dataset_name', id='field-dataset_name', label='建議資料集名稱', placeholder='', value=dataset_name, error=errors['DatasetName'], classes=['control-full'], is_required=false) }}
   {% endblock %}
-  
+ 
+
+
+  {% block offering_orgs %}
+    {% set orgs = h.organizations_available('create_dataset') %}
+    <div class="control-group control-full">
+      <label class="control-label" for="field-org_id">建議業務單位</label>
+      <div class="controls ">
+        <select id="field-org_id" name="org_id">
+            <option value="" selected="selected">==無建議業務單位==</option>
+            {% for organization in orgs %}
+              <option value="{{ organization.id }}">{{ organization.display_name }}</option>
+            {% endfor %}
+          </select>
+      </div>
+  </div>
+  {% endblock %}
+
   {% block offering_suggest_columns %}
     {{ form.input('suggest_columns', id='field-suggest_columns', label='建議開放的欄位', placeholder='', value=suggest_columns, error=errors['SuggestColumns'], classes=['control-full'], is_required=false) }}
   {% endblock %}
