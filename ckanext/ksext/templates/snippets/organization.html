@@ -1,0 +1,20 @@
+{% ckan_extends %}  
+
+{% block info %}
+  {{ super() }}
+  
+  {% block dataset_ranking %}
+    {% if c.pkg_dict %}
+      <div class="module module-narrow module-shallow context-info">
+        <h2 class="module-heading"><i class="icon-star"></i>  評分</h2>
+        <section class="module-content">
+          org test content
+          </br>
+        </section>
+      </div>
+    {% endif %}
+  {% endblock %}
+
+{% endblock %}
+
+
