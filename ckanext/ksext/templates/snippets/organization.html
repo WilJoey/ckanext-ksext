@@ -8,9 +8,12 @@
       <div class="module module-narrow module-shallow context-info">
         <h2 class="module-heading"><i class="icon-star"></i>  資料集評分</h2>
         <section class="module-content">
-          <div id="dsRate"></div>
+
+          {% snippet "rank/index.html", dataset=c.pkg_dict, userobj=c.userobj %} <br>
+
         </section>
       </div>
+
 
     {% endif %}
   {% endblock %}

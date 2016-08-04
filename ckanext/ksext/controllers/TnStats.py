@@ -10,10 +10,32 @@ from ckan.common import response, request, json
 import ckan.lib.base as base
 import losser.losser as losser
 import ckan.plugins.toolkit as toolkit
+import logging
 
+log = logging.getLogger(__name__)
 
 
 class TnStatsController(BaseController):
+
+    def ranking(self):
+        dataset_id = request.params.get('dataset_id',None)
+        dataset_name = request.params.get('dataset_name', None)
+        user_star = request.params.get('user_star', None)
+        user_id = toolkit.c.userobj.id
+
+        log.error('JJOOEE,dataset_id: ' + dataset_id)
+        log.error('JJOOEE,dataset_name: ' + dataset_name)
+        log.error('JJOOEE,user_star: ' + user_star)
+        log.error('JJOOEE,user_id: ' + toolkit.c.userobj.id)
+        '''
+        cnt = _get_user_star(dataset_id, user_id)
+        if (cnt==0):
+            _ranking_insert(dataset_id, user_id, user_star)
+        else:
+            _ranking_update(dataset_id, user_id, user_star)
+
+        h.redirect_to(controller='package', action='read', id=dataset_name)
+        '''
 
     def index (self):
         c = p.toolkit.c
@@ -205,6 +227,5 @@ ORDER BY
             #data += csvFormatter.format(*item)
             head += csvFormatter.format(item[3],item[1],item[2],item[4],item[5],item[6])
         return head
-
 
 

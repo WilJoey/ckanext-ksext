@@ -5,6 +5,8 @@ import action as a
 import constants
 import auth
 
+from ckanext.ksext import helpers
+
 log = logging.getLogger(__name__)
 
 def ksext_hots(*args):
@@ -154,5 +156,10 @@ class KsextPlugin(plugins.SingletonPlugin):
 
     def get_helpers(self):
         return {
-            'ksexthots': ksext_hots
+            'ksexthots': ksext_hots,
+            'rank_user_star': helpers.rank_user_star,
+            'rank_dataset_ranking': helpers.rank_dataset_ranking
         } 
+
+
+

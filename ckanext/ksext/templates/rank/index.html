@@ -1,0 +1,33 @@
+{% set ranking = h.rank_dataset_ranking(dataset['id']) %}
+
+<input id="hidRateAvg" type="hidden" value="{{ ranking or 0}}" />
+<div id="dsRate"></div>
+<h4>平均評分：<span id="lblRateAvg"></span> 顆星</h4>
+<hr/>
+
+{% if userobj %}
+
+  <form id="frmRanking" class="" method="post" action="/tnstats/ranking">
+    <input id="hidDatasetId" type="hidden" name="dataset_id" value="{{ dataset['id'] }}" />
+    <input id="hidDatasetName" type="hidden" name="dataset_name" value="{{ dataset['name'] }}" />
+
+    {% set user_star = h.rank_user_star(dataset['id'], userobj.id) %}
+    <input id="hidUserRate" type="hidden" name="user_star" value="{{ user_star }}" />
+    {% if user_star == -1 %}
+      <span id="userRate"></span>
+      <button type="submit" class="btn btn-primary">評分</button>
+      <div id="lblInfo">尚未評分</div>
+    {% else %}
+      <div id="userRate"></div>
+      <h4>您的評分：<span id="lblUserRate">{{ user_star }}</span> 顆星</h4>
+    {% endif%}
+  </form>
+
+{% else %}
+  <div>
+    您尚未登入，<a href="{{ h.url_for(controller='user', action='login') }}">{{ _('Login') }}</a>
+    後才能對資料集進行評分。
+  </div>
+{% endif %}
+
+
