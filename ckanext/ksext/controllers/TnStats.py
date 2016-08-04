@@ -22,20 +22,46 @@ class TnStatsController(BaseController):
         dataset_name = request.params.get('dataset_name', None)
         user_star = request.params.get('user_star', None)
         user_id = toolkit.c.userobj.id
-
+        '''
         log.error('JJOOEE,dataset_id: ' + dataset_id)
         log.error('JJOOEE,dataset_name: ' + dataset_name)
         log.error('JJOOEE,user_star: ' + user_star)
         log.error('JJOOEE,user_id: ' + toolkit.c.userobj.id)
         '''
-        cnt = _get_user_star(dataset_id, user_id)
+        cnt = self._get_user_star(dataset_id, user_id)
         if (cnt==0):
-            _ranking_insert(dataset_id, user_id, user_star)
+            self._ranking_insert(dataset_id, user_id, user_star)
         else:
-            _ranking_update(dataset_id, user_id, user_star)
+            self._ranking_update(dataset_id, user_id, user_star)
 
         h.redirect_to(controller='package', action='read', id=dataset_name)
+
+    def _get_user_star(self, dataset_id, user_id):
+        engine = model.meta.engine
+        sql = '''
+SELECT count(*) FROM ranking WHERE package_id=%s AND user_id=%s;
         '''
+        result = engine.execute(sql, dataset_id, user_id).fetchall()
+        if (len(result) == 0):
+            return 0
+        else :
+            return result[0][0]
+
+    def _ranking_insert(self, dataset_id, user_id, user_star):
+        engine = model.meta.engine
+        sql = '''
+INSERT INTO ranking (package_id, user_id, stars) 
+VALUES (%s, %s, %s);
+        '''
+        engine.execute(sql, dataset_id, user_id, user_star)
+
+    def _ranking_update(self, dataset_id, user_id, user_star):
+        engine = model.meta.engine
+        sql = '''
+UPDATE ranking SET stars=%s
+WHERE  package_id=%s, user_id=%s
+        '''
+        engine.execute(sql, user_star, dataset_id, user_id)
 
     def index (self):
         c = p.toolkit.c
