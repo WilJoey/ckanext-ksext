@@ -31,6 +31,7 @@ class KsextPlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IConfigurer)
     plugins.implements(plugins.IRoutes)
     plugins.implements(plugins.IPackageController, inherit=True)
+    plugins.implements(plugins.IResourceController, inherit=True)
     plugins.implements(plugins.IActions)
     plugins.implements(plugins.ITemplateHelpers, inherit=True)
     plugins.implements(plugins.IAuthFunctions)
@@ -162,4 +163,13 @@ class KsextPlugin(plugins.SingletonPlugin):
         } 
 
 
+
+    #IResourceController
+
+    def after_update(self, context, data_dict):
+        if 'type' in data_dict and data_dict['type']== 'dataset':
+            log.warn('ksext plugin: PACKAGE!')
+        else if 'package_id' in data_dict:
+            log.warn('ksext plugin: RESOURCE!')
+            
 
