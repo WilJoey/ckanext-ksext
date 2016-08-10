@@ -4,8 +4,10 @@ import ckan.plugins.toolkit as toolkit
 import action as a
 import constants
 import auth
+import ckanext.ksext.controllers.twod as twod
 
 from ckanext.ksext import helpers
+#from ckanext.ksext.controllers.twod.metapublish import metapublish as publisher
 
 log = logging.getLogger(__name__)
 
@@ -37,6 +39,21 @@ class KsextPlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IAuthFunctions)
 
 
+    #IResourceController
+
+    def after_update(self, context, data_dict):
+        if 'type' in data_dict and data_dict['type']== 'dataset':
+            log.warn('ksext plugin: PACKAGE!')
+            twod.meta_dataset_publish(context, data_dict['id'])
+
+        elif 'package_id' in data_dict:
+            log.warn('ksext plugin: RESOURCE!')
+            #twod.meta_resouce_serial_update(data_dict)
+
+    def after_create(self, context, resource):
+        if 'package_id' in data_dict:
+            twod.meta_resouce_serial_update(data_dick['id'], data_dick['package_id'])
+            
     ######################################################################
     ############################## IACTIONS ##############################
     ######################################################################
@@ -162,14 +179,4 @@ class KsextPlugin(plugins.SingletonPlugin):
             'rank_dataset_ranking': helpers.rank_dataset_ranking
         } 
 
-
-
-    #IResourceController
-
-    def after_update(self, context, data_dict):
-        if 'type' in data_dict and data_dict['type']== 'dataset':
-            log.warn('ksext plugin: PACKAGE!')
-        else if 'package_id' in data_dict:
-            log.warn('ksext plugin: RESOURCE!')
-            
 
