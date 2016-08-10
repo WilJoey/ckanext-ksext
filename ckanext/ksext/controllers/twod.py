@@ -37,6 +37,7 @@ def meta_dataset_publish(context, package_id):
 將資料集 package_dict 轉換為詮釋資料格式 
 '''
 def _meta_get_metadata(package):
+    package_id = package['id']
     site_url = config.get('ckan.site_url', '')
     tags = package['tags']
     extras = package['extras']
