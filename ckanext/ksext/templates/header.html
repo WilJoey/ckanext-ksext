@@ -1,11 +1,13 @@
 {% ckan_extends %}
 
 {% block header_account_logged %}
+  {% if h.check_access('sysadmin') %}
   <li>
     <a href="/tnstats" title="統計">
       <i class="icon-info"></i>
     </a>
   </li>
+  {% endif%}
   {{ super() }}
 {% endblock %}
 

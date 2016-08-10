@@ -24,13 +24,13 @@ UPDATE resource set meta_no=(
     model.meta.engine.execute(sql, id, package_id)
 
 '''
-資料集或資料新增(OR 修改後)，將詮釋資料同步至中央資料開放平台
+資料集或資料新增(OR 修改後)，將詮釋資料同步至國發會資料開放平台
 '''
 def meta_dataset_publish(context, package_id):
     package = logic.get_action('package_show')(context, {'id': package_id})
     metadata = _meta_get_metadata(package)
 
-    #將 metadata 資料同步至開放平台
+    #將 metadata 資料同步至國發會平台
 
 
 '''
