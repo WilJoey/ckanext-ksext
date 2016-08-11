@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import logging
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
@@ -41,25 +43,40 @@ class KsextPlugin(plugins.SingletonPlugin):
 
     #IResourceController
 
+    def after_create(self, context, data_dict):
+        try:
+            if 'type' in data_dict and data_dict['type']== 'dataset':
+                twod.meta_dataset_publish_create(context, data_dict['id'])
+
+            elif 'package_id' in data_dict:
+                twod.meta_resouce_serial_update(data_dick['id'], data_dick['package_id'])
+                twod.meta_dataset_publish_create(context, data_dict['package_id'])
+            
+        except Exception as e:
+            log.warn("KSEXT EXCEPTION: after_create")
+            log.warn(e)
+
     def after_update(self, context, data_dict):
         try:
             if 'type' in data_dict and data_dict['type']== 'dataset':
-                #log.warn('ksext plugin: PACKAGE!')
-                twod.meta_dataset_publish(context, data_dict['id'])
+                twod.meta_dataset_publish_update(context, data_dict['id'])
 
             elif 'package_id' in data_dict:
-                #log.warn('ksext plugin: RESOURCE!')
-                twod.meta_dataset_publish(context, data_dict['package_id'])
+                twod.meta_dataset_publish_update(context, data_dict['package_id'])
 
         except Exception as e:
             log.warn("KSEXT EXCEPTION: after_update")
             log.warn(e)
 
-
-    def after_create(self, context, resource):
+    '''
+    只有dataset需要REMOVE
+    '''
+    def after_delete(self, context, data_dict):
         try:
-            if 'package_id' in data_dict:
-                twod.meta_resouce_serial_update(data_dick['id'], data_dick['package_id'])
+            if 'type' in data_dict and data_dict['type']== 'dataset':
+                twod.meta_dataset_publish_remove(context, data_dict['id'])
+            elif 'package_id' in data_dict:
+                twod.meta_dataset_publish_update(context, data_dict['package_id'])
                 
         except Exception as e:
             log.warn("KSEXT EXCEPTION: after_create")

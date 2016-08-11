@@ -13,7 +13,8 @@ from ckan.plugins import toolkit as toolkit
 c = toolkit.c
 log = logging.getLogger(__name__)
 PUBLISH_CITY_CODE = '397000000A'
-
+_API_KEY = '9899f8af-78ed-4278-9048-641821337cde'
+_headers = {'Authorization': _API_KEY}
 '''
 資料新增後，更新 meta_no 序號
 '''
@@ -29,18 +30,35 @@ UPDATE resource set meta_no=(
 '''
 資料集或資料新增(OR 修改後)，將詮釋資料同步至國發會資料開放平台
 '''
-def meta_dataset_publish(context, package_id):
+def meta_dataset_publish_create(context, package_id):
     package = logic.get_action('package_show')(context, {'id': package_id})
     metadata = _meta_get_metadata(package)
 
     #將 metadata 資料同步至國發會平台
     json = h.json.dumps(metadata)
     url = 'http://data.nat.gov.tw/api/v1/rest/dataset'
-    headers = {'Authorization': '9899f8af-78ed-4278-9048-641821337cde'}
-    r = requests.post(url, data=json, headers=headers)
-    log.warn('meta response:' + r.text)
+    r = requests.post(url, data=json, headers=_headers)
+    log.warn('meta response create:' + r.text)
 
-    
+def meta_dataset_publish_update(context, package_id):
+    package = logic.get_action('package_show')(context, {'id': package_id})
+    metadata = _meta_get_metadata(package)
+
+    #將 metadata 資料同步至國發會平台
+    json = h.json.dumps(metadata)
+    url = 'http://data.nat.gov.tw/api/v1/rest/dataset/' + metadata['identifier']
+    r = requests.put(url, data=json, headers=_headers)
+    log.warn('meta response update:' + r.text)
+
+def meta_dataset_publish_remove(context, package_id):
+    meta_no = _meta_get_package_meta_no(package_id)
+    identifier = "%s-%s" % (PUBLISH_CITY_CODE, str(meta_no).zfill(6) )
+
+    #將 metadata 資料同步至國發會平台
+    url = 'http://data.nat.gov.tw/api/v1/rest/dataset' + identifier
+    r = requests.delete(url, headers=_headers)
+    log.warn('meta response remove:' + r.text)
+
 '''
 將資料集 package_dict 轉換為詮釋資料格式 
 '''
