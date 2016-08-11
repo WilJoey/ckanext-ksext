@@ -42,18 +42,30 @@ class KsextPlugin(plugins.SingletonPlugin):
     #IResourceController
 
     def after_update(self, context, data_dict):
-        if 'type' in data_dict and data_dict['type']== 'dataset':
-            #log.warn('ksext plugin: PACKAGE!')
-            twod.meta_dataset_publish(context, data_dict['id'])
+        try:
+            if 'type' in data_dict and data_dict['type']== 'dataset':
+                #log.warn('ksext plugin: PACKAGE!')
+                twod.meta_dataset_publish(context, data_dict['id'])
 
-        elif 'package_id' in data_dict:
-            #log.warn('ksext plugin: RESOURCE!')
-            twod.meta_dataset_publish(context, data_dict['package_id'])
+            elif 'package_id' in data_dict:
+                #log.warn('ksext plugin: RESOURCE!')
+                twod.meta_dataset_publish(context, data_dict['package_id'])
+
+        except Exception as e:
+            log.warn("KSEXT EXCEPTION: after_update")
+            log.warn(e)
+
 
     def after_create(self, context, resource):
-        if 'package_id' in data_dict:
-            twod.meta_resouce_serial_update(data_dick['id'], data_dick['package_id'])
-            
+        try:
+            if 'package_id' in data_dict:
+                twod.meta_resouce_serial_update(data_dick['id'], data_dick['package_id'])
+                
+        except Exception as e:
+            log.warn("KSEXT EXCEPTION: after_create")
+            log.warn(e)
+
+
     ######################################################################
     ############################## IACTIONS ##############################
     ######################################################################

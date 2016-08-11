@@ -3,7 +3,10 @@
 import logging
 import ckan.model as model
 import ckan.logic as logic
+import ckan.lib.helpers as h
+import requests
 
+#from ckan.common import response, request
 from pylons import config
 from ckan.plugins import toolkit as toolkit
 
@@ -31,8 +34,13 @@ def meta_dataset_publish(context, package_id):
     metadata = _meta_get_metadata(package)
 
     #將 metadata 資料同步至國發會平台
+    json = h.json.dumps(metadata)
+    url = 'http://data.nat.gov.tw/api/v1/rest/dataset'
+    headers = {'Authorization': '9899f8af-78ed-4278-9048-641821337cde'}
+    r = requests.post(url, data=json, headers=headers)
+    log.warn('meta response:' + r.text)
 
-
+    
 '''
 將資料集 package_dict 轉換為詮釋資料格式 
 '''
