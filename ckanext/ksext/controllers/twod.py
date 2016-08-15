@@ -5,6 +5,7 @@ import ckan.model as model
 import ckan.logic as logic
 import ckan.lib.helpers as h
 import requests
+import pylons.config as config
 
 #from ckan.common import response, request
 from pylons import config
@@ -13,8 +14,8 @@ from ckan.plugins import toolkit as toolkit
 c = toolkit.c
 log = logging.getLogger(__name__)
 PUBLISH_CITY_CODE = '397000000A'
-_API_KEY = '9899f8af-78ed-4278-9048-641821337cde'
-_headers = {'Authorization': _API_KEY}
+_headers = {'Authorization': config.get('ckan.metadata_apikey', '')}
+
 '''
 資料新增後，更新 meta_no 序號
 '''
