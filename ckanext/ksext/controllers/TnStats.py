@@ -16,6 +16,11 @@ log = logging.getLogger(__name__)
 
 
 class TnStatsController(BaseController):
+    
+    def meta(self):
+        result ={'success':false,'message':'error'}
+        response.headers['Content-Type'] = 'application/json;charset=utf-8'
+        return h.json.dumps(result)
 
     def ranking(self):
         dataset_id = request.params.get('dataset_id',None)

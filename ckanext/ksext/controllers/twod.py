@@ -13,8 +13,8 @@ from ckan.plugins import toolkit as toolkit
 
 c = toolkit.c
 log = logging.getLogger(__name__)
-PUBLISH_CITY_CODE = '397000000A'
-
+PUBLISHER_ORG_CODE = '397000000A'
+PUBLISHER_OID = '2.16.886.101.90029.20002''
 
 '''
 資料新增後，更新 meta_no 序號
@@ -55,7 +55,7 @@ def meta_dataset_publish_update(context, package_id):
 
 def meta_dataset_publish_remove(context, package_id):
     meta_no = _meta_get_package_meta_no(package_id)
-    identifier = "%s-%s" % (PUBLISH_CITY_CODE, str(meta_no).zfill(6) )
+    identifier = "%s-%s" % (PUBLISHER_ORG_CODE, str(meta_no).zfill(6) )
 
     #將 metadata 資料同步至國發會平台
     url = 'http://data.nat.gov.tw/api/v1/rest/dataset' + identifier
@@ -76,6 +76,8 @@ def _meta_get_metadata(package):
     resources = package['resources']
 
     meta = {
+        'publisherOID': PUBLISHER_OID,
+        'publisherOrgCode': PUBLISHER_ORG_CODE, 
         'organization': '高雄市政府',
         'organizationContactName': '高雄市政府',
         'organizationContactPhone': '07-3368333',
@@ -88,7 +90,7 @@ def _meta_get_metadata(package):
         'notes': ''
     }
     meta['categoryCode']=_meta_get_extras_key(extras, u'服務分類')
-    meta['identifier'] ="%s-%s" % (PUBLISH_CITY_CODE, package_code, )
+    meta['identifier'] ="%s-%s" % (PUBLISHER_ORG_CODE, package_code, )
     meta['title']=package['title']
     meta['description']=package['notes']
     if (len(resources)>0):
@@ -124,7 +126,7 @@ def _meta_get_resources(package, package_code, site_url):
     for resource in package['resources']:
         data = {}
         resource_code = _meta_get_resource_code(rmetas, resource['id'])
-        data['resourceID'] = "%s-%s-%s" % (PUBLISH_CITY_CODE, package_code, str(resource_code).zfill(3))
+        data['resourceID'] = "%s-%s-%s" % (PUBLISHER_ORG_CODE, package_code, str(resource_code).zfill(3))
         data['resourceDescription'] = resource['description']
         data['format'] = resource['format']
         data['characterSetCode'] = resource['extras0']
