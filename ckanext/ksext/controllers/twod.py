@@ -14,7 +14,7 @@ from ckan.plugins import toolkit as toolkit
 c = toolkit.c
 log = logging.getLogger(__name__)
 PUBLISHER_ORG_CODE = '397000000A'
-PUBLISHER_OID = '2.16.886.101.90029.20002''
+PUBLISHER_OID = '2.16.886.101.90029.20002'
 
 '''
 資料新增後，更新 meta_no 序號
@@ -33,6 +33,8 @@ UPDATE resource set meta_no=(
 '''
 def meta_dataset_publish_create(context, package_id):
     package = logic.get_action('package_show')(context, {'id': package_id})
+    if package['private'] == True: 
+        log.warn('meta response create: private return.')
     metadata = _meta_get_metadata(package)
 
     #將 metadata 資料同步至國發會平台
@@ -44,14 +46,19 @@ def meta_dataset_publish_create(context, package_id):
 
 def meta_dataset_publish_update(context, package_id):
     package = logic.get_action('package_show')(context, {'id': package_id})
-    metadata = _meta_get_metadata(package)
+    if package['private'] == True: 
+        log.warn('meta response update: private return.')
 
-    #將 metadata 資料同步至國發會平台
-    json = h.json.dumps(metadata)
-    url = 'http://data.nat.gov.tw/api/v1/rest/dataset/' + metadata['identifier']
-    _headers = {'Authorization': config.get('ckan.metadata_apikey', '')}
-    r = requests.put(url, data=json, headers=_headers)
-    log.warn('meta response update:' + r.text)
+    if package['state'] == 'deleted':
+        meta_dataset_publish_remove(context, package_id)
+    else:
+        metadata = _meta_get_metadata(package)
+        #將 metadata 資料同步至國發會平台
+        json = h.json.dumps(metadata)
+        url = 'http://data.nat.gov.tw/api/v1/rest/dataset/' + metadata['identifier']
+        _headers = {'Authorization': config.get('ckan.metadata_apikey', '')}
+        r = requests.put(url, data=json, headers=_headers)
+        log.warn('meta response update:' + r.text)
 
 def meta_dataset_publish_remove(context, package_id):
     meta_no = _meta_get_package_meta_no(package_id)

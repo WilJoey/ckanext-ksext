@@ -50,7 +50,7 @@ class KsextPlugin(plugins.SingletonPlugin):
 
             elif 'package_id' in data_dict:
                 twod.meta_resouce_serial_update(data_dick['id'], data_dick['package_id'])
-                twod.meta_dataset_publish_create(context, data_dict['package_id'])
+                twod.meta_dataset_publish_update(context, data_dict['package_id'])
             
         except Exception as e:
             log.warn("KSEXT EXCEPTION: after_create")
