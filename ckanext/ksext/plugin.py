@@ -204,6 +204,7 @@ class KsextPlugin(plugins.SingletonPlugin):
     def get_helpers(self):
         return {
             'ksexthots': ksext_hots,
+            'suggest_org_list': helpers.suggest_org_list,
             'rank_user_star': helpers.rank_user_star,
             'rank_dataset_ranking': helpers.rank_dataset_ranking
         } 

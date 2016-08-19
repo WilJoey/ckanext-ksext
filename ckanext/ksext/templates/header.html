@@ -11,20 +11,21 @@
   {{ super() }}
 {% endblock %}
 
+{% block header_account_notlogged %}
+    <li>{% link_for _('Log in'), controller='user', action='login' %}</li>
+{% endblock %}
+
 {% block header_site_navigation %}
     <nav class="section navigation">
       <ul class="nav nav-pills">
       	{% block header_site_navigation_tabs %}
           {{ h.build_nav_main(
             ('suggests_index', '資料建議'),
-            ('search', _('Datasets')),
-
-            ('group_index', _('Groups')),
+            ('search', '資料集'),
+            ('organizations_index', '組織'),
+            ('ckanext_showcase_index', '應用展示'),
             ('home_manual', '使用說明'),
             ('home_specification', '使用規範'),
-            
-         
-            
             ('about', _('About'))
           ) }}
         {% endblock %}

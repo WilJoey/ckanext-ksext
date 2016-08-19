@@ -2,6 +2,7 @@
 
 import logging
 import ckan.model as model
+import ckan.logic as logic
 
 from ckan.plugins import toolkit as tk
 
@@ -42,7 +43,9 @@ SELECT stars FROM ranking WHERE package_id=%s AND user_id=%s;
     else :
         return result[0][0]
 
-
+def suggest_org_list():
+    result = logic.get_action('organization_list')({}, {})
+    return result
     
 '''
 def qa_openness_stars_dataset_html(dataset):
