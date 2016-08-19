@@ -35,14 +35,20 @@ def meta_dataset_publish_create(context, package_id):
     package = logic.get_action('package_show')(context, {'id': package_id})
     if package['private'] == True: 
         log.warn('meta response create: private return.')
+        return 'package private.'
+
     metadata = _meta_get_metadata(package)
 
     #將 metadata 資料同步至國發會平台
     json = h.json.dumps(metadata)
+
+    log.warn('meta create:' + json.__repr__())
+
     url = 'http://data.nat.gov.tw/api/v1/rest/dataset'
     _headers = {'Authorization': config.get('ckan.metadata_apikey', '')}
     r = requests.post(url, data=json, headers=_headers)
     log.warn('meta response create:' + r.text)
+    return r.text
 
 def meta_dataset_publish_update(context, package_id):
     package = logic.get_action('package_show')(context, {'id': package_id})
@@ -110,7 +116,8 @@ def _meta_get_metadata(package):
         meta['publisher']=package['organization']['title']
     meta['publisherContactName']=package['maintainer']
     meta['publisherContactPhone']=_meta_get_extras_key(extras, u'提供機關聯絡人電話')
-    meta['publisherContactEmail ']=package['maintainer_email']
+    #meta['publisherContactEmail']=package['maintainer_email']
+    meta['publisherContactEmail']= 'joe@abc.com'
     meta['accrualPeriodicity']=_meta_get_extras_key(extras, u'更新頻率')
     meta['temporalCoverageFrom']=_meta_get_extras_key(extras, u'收錄期間（起）')
     meta['temporalCoverageTo']=_meta_get_extras_key(extras, u'收錄期間（迄）')

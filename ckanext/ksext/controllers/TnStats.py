@@ -12,13 +12,21 @@ import losser.losser as losser
 import ckan.plugins.toolkit as toolkit
 import logging
 
+import ckanext.ksext.controllers.twod as twod
+
 log = logging.getLogger(__name__)
 
 
 class TnStatsController(BaseController):
-    
+    def _get_context(self):
+        return {'model': model, 'session': model.Session,
+                'user': toolkit.c.user, 'auth_user_obj': toolkit.c.userobj}    
+
     def meta(self):
-        result ={'success':false,'message':'error'}
+
+        message = twod.meta_dataset_publish_create(self._get_context(), 'test-meta-create-3')
+
+        result ={'success': True,'message': message}
         response.headers['Content-Type'] = 'application/json;charset=utf-8'
         return h.json.dumps(result)
 
