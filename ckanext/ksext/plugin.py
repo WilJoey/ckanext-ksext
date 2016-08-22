@@ -8,6 +8,7 @@ import constants
 import auth
 import ckanext.ksext.controllers.twod as twod
 
+from ckan.lib.plugins import DefaultTranslation
 from ckanext.ksext import helpers
 #from ckanext.ksext.controllers.twod.metapublish import metapublish as publisher
 
@@ -29,9 +30,9 @@ def ksext_hots(*args):
 
 
 # Joe Ksext Plug setup init #
-class KsextPlugin(plugins.SingletonPlugin):
+class KsextPlugin(plugins.SingletonPlugin, DefaultTranslation):
     '''tnod plugin.'''
-    
+    plugins.implements(plugins.ITranslation)    
     plugins.implements(plugins.IConfigurer)
     plugins.implements(plugins.IRoutes)
     plugins.implements(plugins.IPackageController, inherit=True)
