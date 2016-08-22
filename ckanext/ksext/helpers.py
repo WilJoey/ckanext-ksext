@@ -15,9 +15,10 @@ def get_org_list():
     sql = '''
 SELECT id, name, title FROM "group" 
 WHERE state='active' AND approval_status='approved' 
-    AND is_organization=true;
+    AND is_organization=true
+ORDER BY title;
     '''
-    data = engine.execute(sql, package_id).fetchall()
+    data = engine.execute(sql).fetchall()
     result = []
     for d in data:
         org = {
@@ -26,7 +27,8 @@ WHERE state='active' AND approval_status='approved'
             'title': d[2]
         }
         result.append(org)
-    return result[0][0]
+
+    return result
 
 
 def is_gauth_login():

@@ -29,14 +29,14 @@ then itself be extended to add/remove blocks of functionality. #}
 
 
   {% block offering_orgs %}
-    {% set orgs = h.organizations_available('read') %}
+    {% set orgs = h.get_org_list() %}
     <div class="control-group control-full">
       <label class="control-label" for="field-org_id">建議業務單位</label>
       <div class="controls ">
         <select id="field-org_id" name="org_id">
             <option value="" selected="selected">==無建議業務單位==</option>
             {% for organization in orgs %}
-              <option value="{{ organization.id }}">{{ organization.display_name }}</option>
+              <option value="{{ organization.id }}">{{ organization.title }}</option>
             {% endfor %}
           </select>
       </div>
