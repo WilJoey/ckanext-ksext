@@ -119,10 +119,19 @@ def _meta_get_metadata(package):
     #meta['publisherContactEmail']=package['maintainer_email']
     meta['publisherContactEmail']= 'joe@abc.com'
     meta['accrualPeriodicity']=_meta_get_extras_key(extras, u'更新頻率')
+    
+    '''
     meta['temporalCoverageFrom']=_meta_get_extras_key(extras, u'收錄期間（起）')
     meta['temporalCoverageTo']=_meta_get_extras_key(extras, u'收錄期間（迄）')
     meta['issued']=package['metadata_created']
     meta['modified']=package['metadata_modified']
+    '''
+
+    meta['temporalCoverageFrom']='2015-05-29 11:46:53'
+    meta['temporalCoverageTo']='2015-05-29 11:46:53'
+    meta['issued']='2015-05-29 11:46:53'
+    meta['modified']='2015-05-29 11:46:53'
+
     meta['landingPage'] = site_url + '/dataset/' + package['title']
     meta['keyword'] = [tag['display_name'] for tag in tags]
     meta['numberOfData']=_meta_get_extras_key(extras, u'資料量')
@@ -144,7 +153,11 @@ def _meta_get_resources(package, package_code, site_url):
         data['resourceDescription'] = resource['description']
         data['format'] = resource['format']
         data['characterSetCode'] = resource['extras0']
-        data['resourceModified'] = resource['extras2']
+        
+        #data['resourceModified'] = resource['extras2']
+        
+        data['resourceModified'] = '2015-02-25 17:51:29'
+        
         data['downloadURL'] = "%s/dataset/%s/resource/%s" % (site_url, package['title'], resource['id'])
         data['metadataSourceOfData'] = ''
         distributs.append(data)

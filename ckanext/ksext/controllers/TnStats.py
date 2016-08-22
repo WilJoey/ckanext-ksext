@@ -30,15 +30,9 @@ class TnStatsController(BaseController):
         return h.json.dumps(result)
         
     def meta(self):
-
-        #message = twod.meta_dataset_publish_create(self._get_context(), 'test-meta-create-3')
-        message = 'google user session'
-        meta_status = helpers.is_gauth_login()
-        #meta_status = False
-        #if 'ckanext-google-user' in pylons.session:
-        #    meta_status = True
-
-        result ={'success': meta_status, 'message': message}
+        message = twod.meta_dataset_publish_create(self._get_context(), 'test-meta-create-3')
+        
+        result ={'success': True, 'message': message}
         response.headers['Content-Type'] = 'application/json;charset=utf-8'
         return h.json.dumps(result)
 
