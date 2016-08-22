@@ -1,0 +1,10 @@
+{% ckan_extends %}
+
+{% block primary_content_inner %}
+  {% if not h.is_gauth_login() %}
+    {{ c.form | safe }}
+
+  {% endif %}
+{% endblock %}
+
+

@@ -3,12 +3,21 @@
 import logging
 import ckan.model as model
 import ckan.logic as logic
+import pylons
 
 from ckan.plugins import toolkit as tk
 
 c = tk.c
 engine = model.meta.engine
 log = logging.getLogger(__name__)
+
+
+def is_gauth_login():
+    is_gauth = False
+    if 'ckanext-google-user' in pylons.session:
+        is_gauth = True
+    return is_gauth
+
 
 def rank_dataset_ranking(package_id):
     result = _get_dataset_ranking(package_id)

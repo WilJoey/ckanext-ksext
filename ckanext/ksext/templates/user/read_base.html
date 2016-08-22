@@ -1,0 +1,8 @@
+{% ckan_extends %}
+
+
+{% block content_action %}
+  {% if h.check_access('user_update', user) and not h.is_gauth_login() %}
+    {% link_for _('Manage'), controller='user', action='edit', id=user.name, class_='btn', icon='wrench' %}
+  {% endif %}
+{% endblock %}

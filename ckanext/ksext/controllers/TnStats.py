@@ -11,7 +11,9 @@ import ckan.lib.base as base
 import losser.losser as losser
 import ckan.plugins.toolkit as toolkit
 import logging
+import pylons
 
+from ckanext.ksext import helpers
 import ckanext.ksext.controllers.twod as twod
 
 log = logging.getLogger(__name__)
@@ -24,9 +26,14 @@ class TnStatsController(BaseController):
 
     def meta(self):
 
-        message = twod.meta_dataset_publish_create(self._get_context(), 'test-meta-create-3')
+        #message = twod.meta_dataset_publish_create(self._get_context(), 'test-meta-create-3')
+        message = 'google user session'
+        meta_status = helpers.is_gauth_login()
+        #meta_status = False
+        #if 'ckanext-google-user' in pylons.session:
+        #    meta_status = True
 
-        result ={'success': True,'message': message}
+        result ={'success': meta_status, 'message': message}
         response.headers['Content-Type'] = 'application/json;charset=utf-8'
         return h.json.dumps(result)
 

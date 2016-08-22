@@ -32,3 +32,12 @@
       </ul>
     </nav>
   {% endblock %}
+
+{% block header_account_settings_link %}
+  {% if not h.is_gauth_login() %}
+    {{ super() }}
+  {% endif %}
+{% endblock %}
+
+
+
