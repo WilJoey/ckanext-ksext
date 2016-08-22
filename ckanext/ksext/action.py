@@ -22,8 +22,6 @@ tk = plugins.toolkit
 USERS_CACHE = {}
 
 def tnstats_dataset_count(self, id):
-    c = p.toolkit.c
-
     _ViewCount = collections.namedtuple("ViewCount", "views downloads")
 
     engine = model.meta.engine
