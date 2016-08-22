@@ -91,13 +91,15 @@ def _meta_get_metadata(package):
     meta = {
         'publisherOID': PUBLISHER_OID,
         'publisherOrgCode': PUBLISHER_ORG_CODE, 
-        'organization': '高雄市政府',
-        'organizationContactName': '高雄市政府',
+        #'organization': '高雄市政府',
+        'organization': 'organization',
+        #'organizationContactName': '高雄市政府',
+        'organizationContactName': 'organizationContactName',
         'organizationContactPhone': '07-3368333',
         'organizationContactEmail': 'opendatasys@kcg.gov.tw',
         'costURL': '',
         'publisher': '',
-        'fieldDescription': '',
+        'fieldDescription': 'fieldDescription',
         'spatial': '',
         'language': '',
         'notes': ''
@@ -109,7 +111,8 @@ def _meta_get_metadata(package):
     if (len(resources)>0):
         meta['fieldDescription']=resources[0]['description']
     meta['type']=_meta_get_extras_key(extras, u'資料量')
-    meta['license']=package['license_title']
+    #meta['license']=package['license_title']
+    meta['license']='license_title'
     meta['licenseURL']=package['license_url']
     meta['cost']=_meta_get_extras_key(extras, u'計費方式')
     if 'organization' in package:
@@ -149,7 +152,9 @@ def _meta_get_resources(package, package_code, site_url):
     for resource in package['resources']:
         data = {}
         resource_code = _meta_get_resource_code(rmetas, resource['id'])
-        data['resourceID'] = "%s-%s-%s" % (PUBLISHER_ORG_CODE, package_code, str(resource_code).zfill(3))
+        data['resourceID'] = "%s-%s-%s" % (PUBLISHER_ORG_CODE, package_code, str(resource_code+1).zfill(3))
+
+        '''
         data['resourceDescription'] = resource['description']
         data['format'] = resource['format']
         data['characterSetCode'] = resource['extras0']
@@ -160,6 +165,15 @@ def _meta_get_resources(package, package_code, site_url):
         
         data['downloadURL'] = "%s/dataset/%s/resource/%s" % (site_url, package['title'], resource['id'])
         data['metadataSourceOfData'] = ''
+        '''
+
+        data['resourceDescription'] = 'resourceDescription'
+        data['format'] = 'CSV'
+        data['characterSetCode'] = 'extras0'
+        data['resourceModified'] = '2015-02-25 17:51:29'
+        data['downloadURL'] = 'downloadURL'
+        data['metadataSourceOfData'] = 'metadataSourceOfData'
+
         distributs.append(data)
     return distributs
 
