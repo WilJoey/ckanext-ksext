@@ -24,6 +24,11 @@ class TnStatsController(BaseController):
         return {'model': model, 'session': model.Session,
                 'user': toolkit.c.user, 'auth_user_obj': toolkit.c.userobj}    
 
+    def orgs(self):
+        result = helpers.get_org_list()
+        response.headers['Content-Type'] = 'application/json;charset=utf-8'
+        return h.json.dumps(result)
+        
     def meta(self):
 
         #message = twod.meta_dataset_publish_create(self._get_context(), 'test-meta-create-3')
@@ -36,6 +41,7 @@ class TnStatsController(BaseController):
         result ={'success': meta_status, 'message': message}
         response.headers['Content-Type'] = 'application/json;charset=utf-8'
         return h.json.dumps(result)
+
 
     def ranking(self):
         dataset_id = request.params.get('dataset_id',None)

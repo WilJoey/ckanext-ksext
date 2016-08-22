@@ -11,6 +11,23 @@ c = tk.c
 engine = model.meta.engine
 log = logging.getLogger(__name__)
 
+def get_org_list():
+    sql = '''
+SELECT id, name, title FROM "group" 
+WHERE state='active' AND approval_status='approved' 
+    AND is_organization=true;
+    '''
+    data = engine.execute(sql, package_id).fetchall()
+    result = []
+    for d in data:
+        org = {
+            'id':d[0],
+            'name': d[1],
+            'title': d[2]
+        }
+        result.append(org)
+    return result[0][0]
+
 
 def is_gauth_login():
     is_gauth = False

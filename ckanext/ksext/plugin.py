@@ -208,7 +208,8 @@ class KsextPlugin(plugins.SingletonPlugin, DefaultTranslation):
             'suggest_org_list': helpers.suggest_org_list,
             'rank_user_star': helpers.rank_user_star,
             'rank_dataset_ranking': helpers.rank_dataset_ranking,
-            'is_gauth_login': helpers.is_gauth_login
+            'is_gauth_login': helpers.is_gauth_login,
+            'get_org_list': helpers.get_org_list
         } 
 
 
