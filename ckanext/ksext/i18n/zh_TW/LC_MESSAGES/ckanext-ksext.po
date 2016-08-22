@@ -334,9 +334,28 @@ msgstr[1] "找到 {number} 個應用展示"
 msgid "No showcases found"
 msgstr "查無應用展示"
 
+#: ckanext/showcase/templates/showcase/snippets/helper.html:12
+#, python-format
+msgid ""
+"Sysadmins can manage Showcase Admins from the <a href='%(url)s'>Showcase "
+"configuration page</a>."
+msgstr "<a href='%(url)s'>應用展示管理設定</a>."
+
 
 msgid "Openness"
 msgstr "資料開放星級"
 
 msgid "Explore"
 msgstr "預覽"
+
+#: ckanext/googleauth/templates/user/login.html:10
+#msgid "Log in"
+#msgstr ""
+
+#: ckanext/googleauth/templates/user/login.html:15
+msgid "Log in with Google"
+msgstr "一般使用者/民眾請透過Google帳號進行登入"
+
+#: ckanext/googleauth/templates/user/login.html:26
+msgid "Log in with your {site_title} account"
+msgstr "市府人員請透過平台帳號進行登入"
