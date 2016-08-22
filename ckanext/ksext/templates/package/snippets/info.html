@@ -1,0 +1,24 @@
+{% ckan_extends %}
+
+{% block nums %}
+    <div class="nums">
+        {% set stats = h.get_action('tnstats_dataset_count', pkg.id) %}
+        <dl>
+            <dt>瀏覽次數</dt>
+            <dd>{{ stats.views }}</dd>
+        </dl>
+        <dl>
+            <dt>下載次數</dt>
+            <dd>{{ stats.downloads }}</dd>
+        </dl>
+    </div>
+{% endblock %}
+
+
+{% block follow_button %}
+    {% if not hide_follow_button %}
+    <div class="follow_button">
+        {{ h.follow_button('dataset', pkg.name) }}
+    </div>
+    {% endif %}
+{% endblock %}
