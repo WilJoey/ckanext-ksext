@@ -102,6 +102,7 @@ class KsextPlugin(plugins.SingletonPlugin, DefaultTranslation):
             # constants.SUGGEST_COMMENT_UPDATE: a.suggest_comment_update,
             # constants.SUGGEST_COMMENT_DELETE: a.suggest_comment_delete
             constants.SUGGEST_MAILED: a.suggest_mailed,
+            'tnstats_dataset_count': a.tnstats_dataset_count,
         }
 
     ######################################################################
