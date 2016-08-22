@@ -16,6 +16,63 @@ log = logging.getLogger(__name__)
 PUBLISHER_ORG_CODE = '397000000A'
 PUBLISHER_OID = '2.16.886.101.90029.20002'
 
+
+def meta_dataset_test:
+    metadata = {
+        "categoryCode": "E00",
+        "identifier": "397000000A_000001",
+        "title": "高雄市航空噪音管制區",
+        "description": "高雄市航空噪音管制區範圍",
+        "fieldDescription": "管制區名稱(SHOW_LABEL)、縣市名稱(COUNTYNAME)、鄉鎮市區名稱(TOWNNAME)、村里名稱(VILLAGENAM)、機場名稱(airport)、管制區分類(class)",
+        "type": "rawData",
+        "license": "依政府資料開放平臺使用規範",
+        "licenseURL": "http://data.gov.tw/opendata/principle",
+        "cost": "免費",
+        "costURL": "",
+        "costLaw": "",
+        "organization": "高雄市政府",
+        "organizationContactName": "楊家驊",
+        "organizationContactPhone": "077-351-500#1117",
+        "organizationContactEmail": "chyang@kcg.gov.tw",
+        "publisher": "高雄市政府高雄市政府環保局",
+        "publisherContactName": "王亭鈞 ",
+        "publisherContactPhone": "07-7351500 #2819",
+        "publisherContactEmail": "tcfrank@kcg.gov.tw",
+        "publisherOID": "2.16.886.101.90029.20002.20009",
+        "publisherOrgCode": "397000000A",
+        "accrualPeriodicity": "不定期",
+        "temporalCoverageFrom": "2014-01-01 00:00:00",
+        "temporalCoverageTo": "2014-01-01 00:00:00",
+        "issued": "2016-07-27 00:00:00",
+        "modified": "2016-08-12 16:58:12",
+        "spatial": "臺灣",
+        "language": "",
+        "landingPage": "",
+        "keyword": [],
+        "numberOfData": "",
+        "notes": "",
+        "viewCount": "",
+        "downloadCount": "",
+        "distribution": [{
+            "resourceID": "397000000A_000001-001",
+            "resourceDescription": "高雄市航空噪音管制區-ZIP",
+            "format": "壓縮檔",
+            "resourceModified": "2016-07-22 15:27:59",
+            "downloadURL": "http://opendata.epa.gov.tw/ws/Data/OTH01513/?$format=zip",
+            "metadataSourceOfData": "",
+            "characterSetCode": "UTF-8"
+        }]
+    }
+    json = h.json.dumps(metadata)
+    log.warn('meta create test!:' + json.__repr__())
+    url = 'http://data.nat.gov.tw/api/v1/rest/dataset'
+    _headers = {'Authorization': config.get('ckan.metadata_apikey', '')}
+    r = requests.post(url, data=json, headers=_headers)
+    log.warn('meta response create:' + r.text)
+    return r.text
+
+
+
 '''
 資料新增後，更新 meta_no 序號
 '''
