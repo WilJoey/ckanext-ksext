@@ -1,5 +1,14 @@
 {% ckan_extends %}  
 
+{% block nums %}
+        <div class="nums">
+          <dl>
+            <dt>{{ _('Datasets') }}</dt>
+            <dd>{{ h.SI_number_span(organization.package_count) }}</dd>
+          </dl>
+        </div>
+{% endblock %}
+
 {% block info %}
   {{ super() }}
   
@@ -23,8 +32,5 @@
 {% endblock %}
 
 
-{% block follow %}
-
-{% endblock %}
 
 
