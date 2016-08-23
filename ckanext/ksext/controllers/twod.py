@@ -148,10 +148,8 @@ def _meta_get_metadata(package):
     meta = {
         'publisherOID': PUBLISHER_OID,
         'publisherOrgCode': PUBLISHER_ORG_CODE, 
-        #'organization': '高雄市政府',
-        'organization': 'organization',
-        #'organizationContactName': '高雄市政府',
-        'organizationContactName': 'organizationContactName',
+        'organization': '高雄市政府',
+        'organizationContactName': '高雄市政府',
         'organizationContactPhone': '07-3368333',
         'organizationContactEmail': 'opendatasys@kcg.gov.tw',
         'costURL': '',
@@ -171,29 +169,20 @@ def _meta_get_metadata(package):
     #meta['type']=_meta_get_extras_key(extras, u'資料量')
     meta['type'] = 'rawData'
 
-    #meta['license']=package['license_title']
-    meta['license']='license_title'
+    meta['license']=package['license_title']
     meta['licenseURL']=package['license_url']
     meta['cost']=_meta_get_extras_key(extras, u'計費方式')
     if 'organization' in package:
         meta['publisher']=package['organization']['title']
     meta['publisherContactName']=package['maintainer']
     meta['publisherContactPhone']=_meta_get_extras_key(extras, u'提供機關聯絡人電話')
-    #meta['publisherContactEmail']=package['maintainer_email']
-    meta['publisherContactEmail']= 'joe@abc.com'
+    meta['publisherContactEmail']=package['maintainer_email']
     meta['accrualPeriodicity']=_meta_get_extras_key(extras, u'更新頻率')
     
-    '''
     meta['temporalCoverageFrom']=_meta_get_extras_key(extras, u'收錄期間（起）')
     meta['temporalCoverageTo']=_meta_get_extras_key(extras, u'收錄期間（迄）')
     meta['issued']=package['metadata_created']
     meta['modified']=package['metadata_modified']
-    '''
-
-    meta['temporalCoverageFrom']='2015-05-29 11:46:53'
-    meta['temporalCoverageTo']='2015-05-29 11:46:53'
-    meta['issued']='2015-05-29 11:46:53'
-    meta['modified']='2015-05-29 11:46:53'
 
     meta['landingPage'] = site_url + '/dataset/' + package['title']
     meta['keyword'] = [tag['display_name'] for tag in tags]
@@ -214,25 +203,12 @@ def _meta_get_resources(package, package_code, site_url):
         resource_code = _meta_get_resource_code(rmetas, resource['id'])
         data['resourceID'] = "%s-%s-%s" % (PUBLISHER_ORG_CODE, package_code, str(resource_code+1).zfill(3))
 
-        '''
         data['resourceDescription'] = resource['description']
         data['format'] = resource['format']
         data['characterSetCode'] = resource['extras0']
-        
-        #data['resourceModified'] = resource['extras2']
-        
-        data['resourceModified'] = '2015-02-25 17:51:29'
-        
+        data['resourceModified'] = resource['extras2']
         data['downloadURL'] = "%s/dataset/%s/resource/%s" % (site_url, package['title'], resource['id'])
         data['metadataSourceOfData'] = ''
-        '''
-
-        data['resourceDescription'] = 'resourceDescription'
-        data['format'] = 'CSV'
-        data['characterSetCode'] = 'extras0'
-        data['resourceModified'] = '2015-02-25 17:51:29'
-        data['downloadURL'] = 'downloadURL'
-        data['metadataSourceOfData'] = 'metadataSourceOfData'
 
         distributs.append(data)
     return distributs
