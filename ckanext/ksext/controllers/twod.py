@@ -167,7 +167,10 @@ def _meta_get_metadata(package):
     meta['description']=package['notes']
     if (len(resources)>0):
         meta['fieldDescription']=resources[0]['description']
-    meta['type']=_meta_get_extras_key(extras, u'資料量')
+
+    #meta['type']=_meta_get_extras_key(extras, u'資料量')
+    meta['type'] = 'rawData'
+
     #meta['license']=package['license_title']
     meta['license']='license_title'
     meta['licenseURL']=package['license_url']
