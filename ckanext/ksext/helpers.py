@@ -74,7 +74,27 @@ SELECT stars FROM ranking WHERE package_id=%s AND user_id=%s;
 def suggest_org_list():
     result = logic.get_action('organization_list')({}, {})
     return result
-    
+
+def get_latest_news():
+    sql = '''
+select id, title, content, name, group_id from ckanext_pages where private=false order by publish_date desc limit 2;
+    '''
+    out = engine.execute(sql, package_id, user_id).fetchall()
+    result = []
+    for d in data:
+        org = {
+            'id': out[0],
+            'title': out[1],
+            'content': out[2],
+            'name': out[3],
+            'group_id': out[4]
+        }
+        result.append(org)
+    return result
+
+
+
+
 '''
 def qa_openness_stars_dataset_html(dataset):
     qa = dataset.get('qa')

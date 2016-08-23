@@ -365,3 +365,7 @@ msgstr "維護人員"
 
 msgid "Submitter Email"
 msgstr "維護人員Email"
+
+msgid "Create Showcase"
+msgstr "新增應用展示"
+
