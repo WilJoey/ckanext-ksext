@@ -77,19 +77,22 @@ def suggest_org_list():
 
 def get_latest_news():
     sql = '''
-select id, title, content, name, group_id from ckanext_pages where private=false order by publish_date desc limit 2;
+SELECT id, title, content, name, group_id 
+FROM ckanext_pages 
+WHERE private=false AND page_type='page' 
+ORDER BY publish_date DESC LIMIT 2;
     '''
-    out = engine.execute(sql, package_id, user_id).fetchall()
+    out = engine.execute(sql).fetchall()
     result = []
-    for d in data:
-        org = {
-            'id': out[0],
-            'title': out[1],
-            'content': out[2],
-            'name': out[3],
-            'group_id': out[4]
+    for data in out:
+        pg = {
+            'id': data[0],
+            'title': data[1],
+            'content': data[2],
+            'name': data[3],
+            'group_id': data[4]
         }
-        result.append(org)
+        result.append(pg)
     return result
 
 
