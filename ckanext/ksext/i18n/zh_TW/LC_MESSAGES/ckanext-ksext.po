@@ -359,3 +359,9 @@ msgstr "一般使用者/民眾請透過Google帳號進行登入"
 #: ckanext/googleauth/templates/user/login.html:26
 msgid "Log in with your {site_title} account"
 msgstr "市府人員請透過平台帳號進行登入"
+
+msgid "Submitted By"
+msgstr "維護人員"
+
+msgid "Submitter Email"
+msgstr "維護人員Email"
