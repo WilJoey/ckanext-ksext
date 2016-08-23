@@ -30,8 +30,8 @@ class TnStatsController(BaseController):
         return h.json.dumps(result)
         
     def meta(self):
-        message = twod.meta_dataset_publish_create(self._get_context(), 'test-meta-create-3')
-        
+        #message = twod.meta_dataset_publish_create(self._get_context(), 'test-meta-create-3')
+        message = twod.meta_dataset_test()
         result ={'success': True, 'message': message}
         response.headers['Content-Type'] = 'application/json;charset=utf-8'
         return h.json.dumps(result)
