@@ -15,7 +15,9 @@ c = toolkit.c
 log = logging.getLogger(__name__)
 PUBLISHER_ORG_CODE = '397000000A'
 PUBLISHER_OID = '2.16.886.101.90029.20002'
-
+_MORE_THAN_THREE = [ "N3","SPARQL","RDF","TTL","KML","WCS","NetCDF","TSV","WFS","KMZ",
+    "QGIS","ODS","JSON","ODB","ODF","ODG","XML","WMS","WMTS","SVG",
+    "JPEG","CSV","Atom Feed","XYZ","PNG","RSS","GeoJSON","IATI","ICS" ]
 
 def meta_dataset_test():
     metadata = {
@@ -95,6 +97,8 @@ def meta_dataset_publish_create(context, package_id):
         return 'package private.'
 
     metadata = _meta_get_metadata(package)
+    if metadata is None:
+        return {"success":False, "message":"There is no three stars resource"}
 
     #將 metadata 資料同步至國發會平台
     json = h.json.dumps(metadata)
@@ -118,6 +122,10 @@ def meta_dataset_publish_update(context, package_id):
         return meta_dataset_publish_remove(context, identifier)
     else:
         metadata = _meta_get_metadata(package)
+        if metadata is None:
+            return {"success":False, "message":"There is no three stars resource"}
+
+
         #將 metadata 資料同步至國發會平台
         json = h.json.dumps(metadata)
         url = 'http://data.nat.gov.tw/api/v1/rest/dataset/' + metadata['identifier']
@@ -142,6 +150,17 @@ def meta_dataset_publish_remove(context, identifier):
 將資料集 package_dict 轉換為詮釋資料格式 
 '''
 def _meta_get_metadata(package):
+    three_stars = []
+    for rc in package['resources']:
+        if rc['format'] in _MORE_THAN_THREE:
+            three_stars.append(rc)
+    
+    if len(three_stars) == 0 :
+        log.warn('_meta_get_metadata, There is no three stars resource: ' + package['name'] )
+        return None
+    
+    package['resources'] = three_stars
+
     package_id = package['id']
     site_url = config.get('ckan.site_url', '')
     tags = package['tags']
