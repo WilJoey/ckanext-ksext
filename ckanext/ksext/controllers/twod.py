@@ -113,7 +113,9 @@ def meta_dataset_publish_update(context, package_id):
         log.warn('meta response update: private return.')
 
     if package['state'] == 'deleted':
-        meta_dataset_publish_remove(context, package_id)
+        meta_no = _meta_get_package_meta_no(package_id)
+        identifier = "%s-%s" % (PUBLISHER_ORG_CODE, str(meta_no).zfill(6) )
+        return meta_dataset_publish_remove(context, identifier)
     else:
         metadata = _meta_get_metadata(package)
         #將 metadata 資料同步至國發會平台
@@ -122,16 +124,15 @@ def meta_dataset_publish_update(context, package_id):
         _headers = {'Authorization': config.get('ckan.metadata_apikey', '')}
         r = requests.put(url, data=json, headers=_headers)
         log.warn('meta response update:' + r.text)
+        return r.text
 
-def meta_dataset_publish_remove(context, package_id):
-    meta_no = _meta_get_package_meta_no(package_id)
-    identifier = "%s-%s" % (PUBLISHER_ORG_CODE, str(meta_no).zfill(6) )
-
+def meta_dataset_publish_remove(context, identifier):
     #將 metadata 資料同步至國發會平台
-    url = 'http://data.nat.gov.tw/api/v1/rest/dataset' + identifier
+    url = 'http://data.nat.gov.tw/api/v1/rest/dataset/' + identifier
     _headers = {'Authorization': config.get('ckan.metadata_apikey', '')}
     r = requests.delete(url, headers=_headers)
     log.warn('meta response remove:' + r.text)
+    return r.text
 
 '''
 將資料集 package_dict 轉換為詮釋資料格式 

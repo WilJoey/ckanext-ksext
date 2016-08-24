@@ -4,6 +4,7 @@ import ckan.plugins as p
 from ckan.lib.base import BaseController, config
 import ckan.lib.helpers as h
 import ckan.model as model
+import ckan.logic as logic
 import collections
 import sqlalchemy
 from ckan.common import response, request, json
@@ -24,14 +25,46 @@ class TnStatsController(BaseController):
         return {'model': model, 'session': model.Session,
                 'user': toolkit.c.user, 'auth_user_obj': toolkit.c.userobj}    
 
+    def meta_update_or_create(self):
+        user = logic.get_action('get_site_user')({'model': model, 'ignore_auth': True}, {})
+        context = {'model': model, 'session': model.Session, 'user': user['name']}
+        dataset_names = logic.get_action('package_list')(context, {})
+
+        context = self._get_context()
+        result = []
+        for name in dataset_names:
+            msg = twod.meta_dataset_publish_create(context, name)            
+            result.append(msg)
+        #msg = twod.meta_dataset_publish_create(context, '103-check-result')            
+        #result.append(msg)
+
+        response.headers['Content-Type'] = 'application/json;charset=utf-8'
+        return h.json.dumps(result)
+
+    def meta_remove(self):
+        id = request.params.get('id',None)
+        context = self._get_context()
+        result = twod.meta_dataset_publish_remove(context,id)
+
+        response.headers['Content-Type'] = 'application/json;charset=utf-8'
+        return result
+
+    def dataset_list(self):
+        #context = self._get_context()
+        user = logic.get_action('get_site_user')({'model': model, 'ignore_auth': True}, {})
+        context = {'model': model, 'session': model.Session, 'user': user['name']}
+        result = logic.get_action('package_list')(context, {})
+        response.headers['Content-Type'] = 'application/json;charset=utf-8'
+        return h.json.dumps(result)
+
     def orgs(self):
         result = helpers.get_org_list()
         response.headers['Content-Type'] = 'application/json;charset=utf-8'
         return h.json.dumps(result)
         
-    def meta(self):
-        message = twod.meta_dataset_publish_create(self._get_context(), 'test-meta-create-2')
-        #message = twod.meta_dataset_test()
+    def meta_create(self):
+        id = request.params.get('id',None)
+        message = twod.meta_dataset_publish_create(self._get_context(), id)
         result ={'success': True, 'message': message}
         response.headers['Content-Type'] = 'application/json;charset=utf-8'
         return h.json.dumps(result)
