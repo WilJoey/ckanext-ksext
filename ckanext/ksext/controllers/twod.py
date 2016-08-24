@@ -124,7 +124,11 @@ def meta_dataset_publish_update(context, package_id):
         _headers = {'Authorization': config.get('ckan.metadata_apikey', '')}
         r = requests.put(url, data=json, headers=_headers)
         log.warn('meta response update:' + r.text)
-        return r.text
+        if "ER0050:" in r.text:
+            # 無資料集，新增一個
+            return meta_dataset_publish_create(context, package_id)
+        else:
+            return r.text
 
 def meta_dataset_publish_remove(context, identifier):
     #將 metadata 資料同步至國發會平台
