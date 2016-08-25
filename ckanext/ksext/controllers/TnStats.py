@@ -307,4 +307,44 @@ ORDER BY
             head += csvFormatter.format(item[3],item[1],item[2],item[4],item[5],item[6])
         return head
 
+    def evaluation(self):
+        c = p.toolkit.c
+        data = self._eval_data(None)
+        _ViewCount = collections.namedtuple("ViewCount", "id title name freq org_id org_name open_stars user_stars")
+        c.evaluation =  [_ViewCount(*t) for t in data]
+        return p.toolkit.render('tnstats/evaluation.html')
 
+    def _eval_data(self, id):
+        engine = model.meta.engine
+        sql = '''
+SELECT p.id, p.title, p.name, pe.value AS freq, p.owner_org AS org_id, g.title AS org_name,
+	(SELECT ROUND(AVG(openness_score),2) FROM qa where package_id=p.id ) AS open_stars,
+	(SELECT ROUND(COALESCE(AVG(stars), 0), 2) FROM ranking where package_id=p.id) AS user_stars
+FROM package p 
+	LEFT JOIN package_extra pe ON p.id=pe.package_id AND pe.key='更新頻率'
+	LEFT JOIN "group" g ON p.owner_org=g.id AND g.is_organization=true
+WHERE p.type='dataset' AND p.private=false AND p.state='active' '''
+        if(id):
+            sql += ' and p.owner_org=%s '
+        sql += ''' ORDER BY org_name ASC, title ASC; '''
+        return engine.execute(sql, id).fetchall()
+
+    def evalApi (self):
+        _ViewCount = collections.namedtuple("ViewCount", "id title name freq org_id org_name open_stars user_stars")
+        id = request.params.get('id', None)
+        data = self._eval_data(id)
+        result = [_ViewCount(*t) for t in data]
+        response.headers['Content-Type'] = 'application/json;charset=utf-8'
+        return h.json.dumps(result)
+
+    def evalCsv(self):
+        head = u'\ufeff組織,資料集,資料星等,更新頻率,網友累積評分\r\n'
+        id = request.params.get('id', None)
+        data = self._eval_data()
+        base.response.headers['Content-type'] ='text/csv; charset=utf-8'
+        base.response.headers['Content-disposition'] ='attachment;filename=statistics.csv'
+        
+        csvFormatter = u'"{0}","{1}","{2}",{3},{4}\r\n'
+        for item in data:
+            head += csvFormatter.format(item[5],item[2],item[6],item[3],item[7])
+        return head

@@ -12,46 +12,50 @@
 {% block primary_content %}
   <article class="module">
     
-    {# 
-      <div>joe: {{ c.datasets_count.__repr__() }}</div>
-    #}
+    {#
+      <div>joe: {{ c.evaluation.__repr__() }}</div>
     
-    <section id="stats-most-edited" class="module-content tab-content active">
-      <h2>群組資料集瀏覽與下載統計</h2>
-      <input type="hidden" id="hidConfig" value="group" /> 
+      {% set user_is_sysadmin = h.check_access('sysadmin')%}
+      <h2>joe: {{ user_is_sysadmin.__repr__() }}</h2>
+    #}
 
-      {% set groups = h.groups_available(am_member=False) %}
+    <section id="stats-most-edited" class="module-content tab-content active">
+      <h2>資料集評鑑指標</h2>
+      <input type="hidden" id="hidConfig" value="eval" /> 
+
+      {% set orgs = h.organizations_available('create_dataset') %}
       <div class="control-group">
-        <label for="field-organizations" class="control-label lbl-org">{{ _('Group') }}</label>
-          <select id="selGroup" name="owner_org">
-            <option value="" selected="selected">==所有群組==</option>
-            {% for gp in groups %}
-              <option value="{{ gp.id }}">{{ gp.display_name }}</option>
+        <label for="field-organizations" class="control-label lbl-org">{{ _('Organization') }}</label>
+          <select id="selOrg" name="owner_org">
+            <option value="" selected="selected">==所有組織==</option>
+            {% for organization in orgs %}
+              <option value="{{ organization.id }}">{{ organization.display_name }}</option>
             {% endfor %}
           </select>
           <button onclick="print();" class="btn btn-primary btn-print">列印</button>
           <button id="btnDownload" class="btn btn-primary btn-print">下載</button>
 
       </div>
-      {% if c.datasets_count %}
+
+      {% if c.evaluation %}
         <table id="dtStat" class="table table-chunky table-bordered table-striped">
           <thead>
             <tr>
-              <th class="metric">群組</th>
+              <th class="metric">組織</th>
               <th style="width:200px;">資料集</th>
-              <th class="">資料集瀏覽次數</th>
-              <th class="">資料瀏覽次數</th>
-              <th class="">資料下載次數</th>
+              <th class="">資料星等</th>
+              <th class="">更新頻率</th>
+              <th class="">網友累積評分</th>
             </tr>
           </thead>
           <tbody>
-            {% for package in c.datasets_count %}
-              <tr>
-                <td class="metric">{{ package.group_name }}</td>
+            {% for package in c.evaluation %}
+              <tr >
+                <td class="metric">{{ package.org_name }}</td>
                 <td>{{ h.link_to(package.title or package.name, h.url_for(controller='package', action='read', id=package.name)) }}</td>
-                <td class="metric">{{ package.dataset_views }}</td>
-                <td class="metric">{{ package.resource_views }}</td>
-                <td class="metric">{{ package.resource_downloads }}</td>
+                <td class="metric">{{ package.open_stars }}</td>
+                <td class="metric">{{ package.freq }}</td>
+                <td class="metric">{{ package.user_stars }}</td>
               </tr>
             {% endfor %}
           </tbody>
@@ -71,5 +75,5 @@
 
 {% block scripts %}
   {{ super() }}
-  {% resource 'ksext_jscss/js/tnstats.js' %}
+  {% resource 'ksext_jscss/js/tnstats-evaluation.js' %}
 {% endblock %}
