@@ -1,4 +1,8 @@
 $(document).ready(function (){
+    $('.module-narrow li.nav-item').removeClass('active').filter(function (i,d){ 
+        return i===2;
+    }).addClass('active');
+
     var d= new Date();
     $(".dpicker").datepicker({
         format:'yyyy/mm/dd'}

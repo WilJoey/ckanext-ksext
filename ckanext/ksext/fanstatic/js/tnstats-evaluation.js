@@ -2,6 +2,10 @@ var config = { };
 
 $(document).ready(function (){
     config = getConfig();
+    
+    $('.module-narrow li.nav-item').removeClass('active').filter(function (i,d){ 
+        return i===config.menuIndex;
+    }).addClass('active');
 
     mainColumnMerge();
 
@@ -13,11 +17,12 @@ $(document).ready(function (){
 
 function getConfig(val){
     return {
-            selectId:'#selOrg',
-            title: 'org_name',
-            dataUrl: '/tnstats/evalApi?id=',
-            windowOpenUrl :'/tnstats/evalCsv?id='
-        };
+        menuIndex: 3,
+        selectId: '#selOrg',
+        title: 'org_name',
+        dataUrl: '/tnstats/evalApi?id=',
+        windowOpenUrl :'/tnstats/evalCsv?id='
+    };
 }
 
 function orgChanged(evt){
