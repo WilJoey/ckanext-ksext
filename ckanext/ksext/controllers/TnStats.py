@@ -340,11 +340,11 @@ WHERE p.type='dataset' AND p.private=false AND p.state='active' '''
     def evalCsv(self):
         head = u'\ufeff組織,資料集,資料星等,更新頻率,網友累積評分\r\n'
         id = request.params.get('id', None)
-        data = self._eval_data()
+        data = self._eval_data(id)
         base.response.headers['Content-type'] ='text/csv; charset=utf-8'
         base.response.headers['Content-disposition'] ='attachment;filename=statistics.csv'
         
-        csvFormatter = u'"{0}","{1}","{2}",{3},{4}\r\n'
+        csvFormatter = u'"{0}","{1}",{2},"{3}",{4}\r\n'
         for item in data:
-            head += csvFormatter.format(item[5],item[2],item[6],item[3],item[7])
+            head += csvFormatter.format(item[5],item[1],item[6],item[3],item[7])
         return head
