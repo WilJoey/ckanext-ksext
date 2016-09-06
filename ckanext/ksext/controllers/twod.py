@@ -86,6 +86,7 @@ UPDATE resource set meta_no=(
 ) WHERE id=%s;
 '''
     model.meta.engine.execute(sql, id, package_id)
+    model.Session.commit()
 
 '''
 資料集或資料新增(OR 修改後)，將詮釋資料同步至國發會資料開放平台

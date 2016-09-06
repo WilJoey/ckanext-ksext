@@ -186,8 +186,25 @@ class SuggestsController(base.BaseController):
     def domail(self, id):
         data_dict = {'id': id}
         context = self._get_context()
+        mail_content =self._get_mail_content(id)
+
+        title = '[OD][%s][測試資料-%s]' % (mail_content['id'], mail_content['title'])
+        message = {
+            "org_no": mail_content['org_id'],
+            "org_name": mail_content['org'],
+            "name": mail_content['user_id'],
+            "email": mail_content['email'],
+            "context": mail_content['description']
+        }
+
+        ctx = {
+            "Title": title,
+            "Message": helpers.json.dumps(message)
+        }
+
+
         url = u'http://demo2.geo.com.tw/ksod/api/domail/' + id
-        resp = requests.get(url, stream=True)
+        resp = requests.post(url, data=ctx)
         
         result = helpers.json.loads(resp.text)
         if result['Success']:
@@ -198,6 +215,14 @@ class SuggestsController(base.BaseController):
         response.headers['Content-Type'] = 'application/json;charset=utf-8'
         #return u'domail: ' + str(data_dict['Success'])
         return helpers.json.dumps(result)
+
+
+    def _get_mail_content(self,id):
+        context = self._get_context()
+        data_dict = {'closed': False, 'id': id}
+        mail_content = tk.get_action('get_domail_content')(context, data_dict)
+        return mail_content
+
 
     def suggest_comment(self, id):
         if request.GET:

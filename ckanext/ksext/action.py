@@ -102,7 +102,8 @@ def _dictize_suggest_list(suggest):
         'comments' : db.Comment.get_count_by_suggest(suggest_id=suggest.id),
         'org_id': suggest.org_id ,
         'org': '' if gg is None else gg.title,
-        'send_mail': suggest.send_mail
+        'send_mail': suggest.send_mail,
+        'email': suggest.email
     }
     return data_dict
 
@@ -162,7 +163,8 @@ def _dictize_suggest(suggest):
         'close_time': close_time,
         'closed': suggest.closed,
         'views': suggest.views,
-        'org_id':suggest.org_id
+        'org_id':suggest.org_id,
+        'email': suggest.email
     }
     return data_dict
 
@@ -174,7 +176,8 @@ def _undictize_suggest_basic(suggest, data_dict):
     suggest.user_id = data_dict['user_id']
     suggest.dataset_name = data_dict['dataset_name']
     suggest.suggest_columns = data_dict['suggest_columns']
-    suggest.org_id = data_dict['org_id']
+    suggest.org_id = data_dict['org_id'],
+    suggest.email = data_dict['email']
     
 def suggest_show(context, data_dict):
     model = context['model']
@@ -209,7 +212,24 @@ def suggest_show(context, data_dict):
 
     data_dict['comments'] = comments_list
     return data_dict    
-    
+
+#joe
+def get_domail_content(context, params):
+    model = context['model']
+    suggest_id = params.get('id', '')
+    if not suggest_id:
+        raise tk.ValidationError('Data Request ID has not been included')
+
+    # Call the function
+    db_suggests = db.Suggest.get_ordered_by_date(**params)
+
+    # Dictize the results
+    mail_content = {}
+    if(len(db_suggests) > 0):
+        mail_content = _dictize_suggest_list(db_suggests[0])
+    return mail_content
+
+
 def suggest_views(context, data_dict):
     model = context['model']
     suggest_id = data_dict.get('id', '')

@@ -39,11 +39,11 @@ def init_db(model):
 
             @classmethod
             def suggest_mailed(cls, id):
-                log.warn('joe db: suggest_mailed : ' + id)
+                #log.warn('joe db: suggest_mailed : ' + id)
                 sql = 'UPDATE suggests SET send_mail=1 WHERE id=:id;'
                 model.Session.execute(sql, {'id': id})
                 model.Session.commit()
-                log.warn('joe db: committed : ' + id)
+                #log.warn('joe db: committed : ' + id)
                 return True
 
             @classmethod
@@ -55,19 +55,14 @@ def init_db(model):
 
             @classmethod
             def get_ordered_by_date(cls, **kw):
-                #sql = "SELECT id, user_id, title, open_time, views, org_id, (select count(*) from suggests_comments where suggest_id = id) as comments FROM  suggests WHERE closed=False ORDER BY open_time DESC"
                 sql='''
 SELECT s.id, user_id, s.title, open_time, s.views | 1010 as views1, org_id, g.title as org,
    (select count(*) from suggests_comments where suggest_id = id) as comments 
 FROM  suggests s left join "group" g on s.org_id=g.id
-WHERE closed=False ORDER BY open_time DESC
+WHERE closed=False ORDER BY open_time DESC ;
                 '''
                 query = model.Session.query(cls).autoflush(False)
-                #query = model.Session.query(cls)\
-                #        .outerjoin(model.Group, model.Group.id == cls.org_id)\
-                #        .autoflush(False)
                 return query.filter_by(**kw).order_by(cls.open_time.desc()).all()
-                #return query.order_by(cls.open_time.desc()).all()
 
 
 
@@ -91,7 +86,8 @@ WHERE closed=False ORDER BY open_time DESC
             sa.Column('close_time', sa.types.DateTime, primary_key=False, default=None),
             sa.Column('closed', sa.types.Boolean, primary_key=False, default=False),
             sa.Column('org_id', sa.types.UnicodeText, primary_key=False, default=False),
-            sa.Column('send_mail', sa.types.Integer, primary_key=False, default=0)
+            sa.Column('send_mail', sa.types.Integer, primary_key=False, default=0),
+            sa.Column('email', sa.types.UnicodeText, primary_key=False, default=u'')
         )
         #suggests_table.comments = relationship('suggests_comments', backref='suggests')
 
