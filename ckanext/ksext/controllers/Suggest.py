@@ -200,7 +200,7 @@ class SuggestsController(base.BaseController):
         message = {
             "org_no": mail_content['org_id'],
             "org_name": mail_content['org'],
-            "name": mail_content['user_id'],
+            "name": mail_content['user_name'],
             "email": mail_content['email'],
             "context": mail_content['description']
         }

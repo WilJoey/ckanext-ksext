@@ -71,8 +71,6 @@ def suggest_index(context, data_dict):
     suggests = []
     for data_req in db_suggests[offset:offset + limit]:
         suggests.append(_dictize_suggest_list(data_req))
-    
-    
 
     result = {
         'count': len(db_suggests),
@@ -88,10 +86,8 @@ def _dictize_suggest_list(suggest):
     close_time = suggest.close_time
     close_time = str(close_time) if close_time else close_time
     
-    gg = model.Session.query(model.Group) \
-        .filter(model.Group.id == suggest.org_id).first()
-    if(gg != None):
-        log.warn(gg.title.encode('utf8'))
+    gg = model.Session.query(model.Group).filter(model.Group.id == suggest.org_id).first()
+
 
     data_dict = {
         'id': suggest.id,
@@ -101,7 +97,7 @@ def _dictize_suggest_list(suggest):
         'views': suggest.views,
         'comments' : db.Comment.get_count_by_suggest(suggest_id=suggest.id),
         'org_id': suggest.org_id ,
-        'org': '', # if gg is None else gg.title,
+        'org': '' if gg is None else gg.title,
         'send_mail': suggest.send_mail,
         'email': suggest.email
     }
@@ -164,6 +160,7 @@ def _dictize_suggest(suggest):
         'closed': suggest.closed,
         'views': suggest.views,
         'org_id':suggest.org_id,
+        'send_mail': suggest.send_mail,
         'email': suggest.email
     }
     return data_dict
@@ -197,10 +194,7 @@ def suggest_show(context, data_dict):
     if not result:
         raise tk.ObjectNotFound('Data Request %s not found in the data base' % suggest_id)
 
-    
-
     data_req = result[0]
-
     data_dict = _dictize_suggest(data_req)
 
     # Get comments
@@ -223,13 +217,27 @@ def get_domail_content(context, params):
     if not suggest_id:
         raise tk.ValidationError('Data Request ID has not been included')
 
-    # Call the function
-    db_suggests = db.Suggest.get_ordered_by_date(**params)
+    # Get the data request
+    db_suggests = db.Suggest.get(id=suggest_id)
+    if not db_suggests:
+        raise tk.ObjectNotFound('Data Request %s not found in the data base' % suggest_id)
+    mail_content = _dictize_suggest(db_suggests[0])
 
-    # Dictize the results
-    mail_content = {}
-    if(len(db_suggests) > 0):
-        mail_content = _dictize_suggest_list(db_suggests[0])
+    gg = model.Session.query(model.Group).filter(model.Group.id == suggest.org_id).first()
+
+    # Convert the data request into a dict
+    mail_content = {
+        'id': suggest.id,
+        'user_name': suggest.user_id,
+        'title': suggest.title,
+        'description': suggest.description,
+        'dataset_name': suggest.dataset_name,
+        'suggest_columns': suggest.suggest_columns,
+        'org_id':suggest.org_id,
+        'org': '' if gg is None else gg.title,
+        'send_mail': suggest.send_mail,
+        'email': suggest.email
+    }
     return mail_content
 
 
