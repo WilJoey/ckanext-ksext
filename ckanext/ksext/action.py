@@ -92,7 +92,7 @@ def _dictize_suggest_list(suggest):
         .filter(model.Group.id == suggest.org_id).first()
     if(gg != None):
         log.warn(gg.title.encode('utf8'))
-    
+
     data_dict = {
         'id': suggest.id,
         'title': suggest.title,
@@ -101,7 +101,7 @@ def _dictize_suggest_list(suggest):
         'views': suggest.views,
         'comments' : db.Comment.get_count_by_suggest(suggest_id=suggest.id),
         'org_id': suggest.org_id ,
-        'org': '' if gg is None else gg.title,
+        'org': '', # if gg is None else gg.title,
         'send_mail': suggest.send_mail,
         'email': suggest.email
     }
@@ -216,6 +216,9 @@ def suggest_show(context, data_dict):
 #joe
 def get_domail_content(context, params):
     model = context['model']
+    # Init the data base
+    db.init_db(model)
+
     suggest_id = params.get('id', '')
     if not suggest_id:
         raise tk.ValidationError('Data Request ID has not been included')

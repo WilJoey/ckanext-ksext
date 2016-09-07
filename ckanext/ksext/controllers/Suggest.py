@@ -184,11 +184,19 @@ class SuggestsController(base.BaseController):
         return 'abc'
         
     def domail(self, id):
+        log.warn("domail start: " + id)
+
         data_dict = {'id': id}
         context = self._get_context()
         mail_content =self._get_mail_content(id)
 
-        title = '[OD][%s][測試資料-%s]' % (mail_content['id'], mail_content['title'])
+        log.warn("domail start: 1 ")
+        log.warn(mail_content['id'])
+        log.warn(mail_content['title'])
+
+
+        title = u'[OD][%s][測試資料-%s]' % (mail_content['id'], mail_content['title'])
+        log.warn("domail start: 2 ")
         message = {
             "org_no": mail_content['org_id'],
             "org_name": mail_content['org'],
@@ -197,23 +205,30 @@ class SuggestsController(base.BaseController):
             "context": mail_content['description']
         }
 
+        log.warn("domail start: 3 ")
         ctx = {
             "Title": title,
             "Message": helpers.json.dumps(message)
         }
 
 
+        log.warn("domail start: 4 ")
         url = u'http://demo2.geo.com.tw/ksod/api/domail/' + id
+        log.warn("domail start: 5 ")
         resp = requests.post(url, data=ctx)
+        log.warn("domail start: 6 ")
         
         result = helpers.json.loads(resp.text)
+        log.warn("domail start: 7 ")
         if result['Success']:
             sql = 'UPDATE suggests SET send_mail=1 WHERE id= :id;'
             model.meta.engine.execute(text(sql), id=id)
             model.Session.commit()
 
+        log.warn("domail start: 8 ")
         response.headers['Content-Type'] = 'application/json;charset=utf-8'
         #return u'domail: ' + str(data_dict['Success'])
+        log.warn("domail start: 8 ")
         return helpers.json.dumps(result)
 
 
