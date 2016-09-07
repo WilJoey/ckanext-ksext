@@ -210,8 +210,6 @@ def suggest_show(context, data_dict):
 #joe
 def get_domail_content(context, params):
     model = context['model']
-    # Init the data base
-    db.init_db(model)
 
     suggest_id = params.get('id', '')
     if not suggest_id:
@@ -221,7 +219,7 @@ def get_domail_content(context, params):
     db_suggests = db.Suggest.get(id=suggest_id)
     if not db_suggests:
         raise tk.ObjectNotFound('Data Request %s not found in the data base' % suggest_id)
-    mail_content = _dictize_suggest(db_suggests[0])
+    suggest = db_suggests[0]
 
     gg = model.Session.query(model.Group).filter(model.Group.id == suggest.org_id).first()
 
