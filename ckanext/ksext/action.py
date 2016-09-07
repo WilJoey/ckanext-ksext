@@ -143,7 +143,7 @@ def _dictize_suggest(suggest):
     # fields contains a valid date
     close_time = suggest.close_time
     close_time = str(close_time) if close_time else close_time
-
+    gg = model.Session.query(model.Group).filter(model.Group.id == suggest.org_id).first()
     # Convert the data request into a dict
     data_dict = {
         'id': suggest.id,
@@ -160,6 +160,7 @@ def _dictize_suggest(suggest):
         'closed': suggest.closed,
         'views': suggest.views,
         'org_id':suggest.org_id,
+        'org': '' if gg is None else gg.title,
         'send_mail': suggest.send_mail,
         'email': suggest.email
     }
