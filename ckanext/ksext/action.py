@@ -210,11 +210,12 @@ def suggest_show(context, data_dict):
 #joe
 def get_domail_content(context, params):
     model = context['model']
-
     suggest_id = params.get('id', '')
     if not suggest_id:
         raise tk.ValidationError('Data Request ID has not been included')
 
+    # Init the data base
+    db.init_db(model)
     # Get the data request
     db_suggests = db.Suggest.get(id=suggest_id)
     if not db_suggests:
