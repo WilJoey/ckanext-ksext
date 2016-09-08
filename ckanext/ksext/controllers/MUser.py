@@ -124,8 +124,6 @@ class MUserController(base.BaseController):
                    'user': c.user, 'auth_user_obj': c.userobj
                    }
 
-        log.warn('muser edit: 1')
-
         if id is None:
             base.abort(400, _('No user specified'))
 
@@ -134,8 +132,6 @@ class MUserController(base.BaseController):
 
         data_dict = {'id': id}
         
-        log.warn('muser edit: 2')
-
         try:
             logic.check_access('user_update', context, data_dict)
         except logic.NotAuthorized:
@@ -144,12 +140,8 @@ class MUserController(base.BaseController):
         if (context['save']) and not data:
             return self._save_edit(id, context)
 
-        log.warn('muser edit: 3')
-
         try:
             old_data = logic.get_action('user_show')(context, data_dict)
-
-            log.warn('muser edit: 4')
 
             schema = self._db_to_edit_form_schema()
             if schema:
@@ -157,8 +149,6 @@ class MUserController(base.BaseController):
 
             c.display_name = old_data.get('display_name')
             c.user_name = old_data.get('name')
-
-            log.warn('muser edit: 5')
 
             data = data or old_data
 
@@ -169,8 +159,6 @@ class MUserController(base.BaseController):
 
         user_obj = context.get('user_obj')
 
-        log.warn('muser edit: 6')
-
         errors = errors or {}
         vars = {'data': data, 'errors': errors, 'error_summary': error_summary}
 
@@ -179,13 +167,14 @@ class MUserController(base.BaseController):
                                         'user': c.user or c.author},
                                        data_dict)
 
-        log.warn('muser edit: 7')
+        log.warn('muser edit: 1')
 
         c.is_myself = True
         c.show_email_notifications = h.asbool(
             config.get('ckan.activity_streams_email_notifications'))
+        log.warn('muser edit: 2')
         c.form = base.render('muser/edit_user_form.html', extra_vars=vars)
-        log.warn('muser edit: 8')
+        log.warn('muser edit: 3')
         return base.render('muser/edit.html')
 
     def _save_edit(self, id, context):
