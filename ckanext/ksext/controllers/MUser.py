@@ -10,12 +10,13 @@ import ckan.logic.schema as schema
 import ckan.new_authz as new_authz
 import ckan.lib.captcha as captcha
 import ckan.lib.navl.dictization_functions as dictization_functions
+import logging
 from pylons import config
 from ckan.common import _, c, g, request
 
 c = base.c
 request = base.request
-
+log = logging.getLogger(__name__)
 
 class MUserController(base.BaseController):
     
@@ -122,6 +123,9 @@ class MUserController(base.BaseController):
                    'model': model, 'session': model.Session,
                    'user': c.user, 'auth_user_obj': c.userobj
                    }
+
+        log.warn('muser edit: 1')
+
         if id is None:
             base.abort(400, _('No user specified'))
 
@@ -129,6 +133,8 @@ class MUserController(base.BaseController):
             base.abort(401, _('User %s not authorized to edit %s') % (str(c.user), id))
 
         data_dict = {'id': id}
+        
+        log.warn('muser edit: 2')
 
         try:
             logic.check_access('user_update', context, data_dict)
@@ -138,8 +144,12 @@ class MUserController(base.BaseController):
         if (context['save']) and not data:
             return self._save_edit(id, context)
 
+        log.warn('muser edit: 3')
+
         try:
             old_data = logic.get_action('user_show')(context, data_dict)
+
+            log.warn('muser edit: 4')
 
             schema = self._db_to_edit_form_schema()
             if schema:
@@ -147,6 +157,8 @@ class MUserController(base.BaseController):
 
             c.display_name = old_data.get('display_name')
             c.user_name = old_data.get('name')
+
+            log.warn('muser edit: 5')
 
             data = data or old_data
 
@@ -157,6 +169,8 @@ class MUserController(base.BaseController):
 
         user_obj = context.get('user_obj')
 
+        log.warn('muser edit: 6')
+
         errors = errors or {}
         vars = {'data': data, 'errors': errors, 'error_summary': error_summary}
 
@@ -165,11 +179,13 @@ class MUserController(base.BaseController):
                                         'user': c.user or c.author},
                                        data_dict)
 
+        log.warn('muser edit: 7')
+
         c.is_myself = True
         c.show_email_notifications = h.asbool(
             config.get('ckan.activity_streams_email_notifications'))
         c.form = base.render('muser/edit_user_form.html', extra_vars=vars)
-
+        log.warn('muser edit: 8')
         return base.render('muser/edit.html')
 
     def _save_edit(self, id, context):
