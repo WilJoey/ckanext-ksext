@@ -167,6 +167,8 @@ class MUserController(base.BaseController):
                                         'user': c.user or c.author},
                                        data_dict)
 
+        log.warn(vars.__repr__())
+
         log.warn('muser edit: 1')
 
         c.is_myself = True

@@ -16,12 +16,15 @@
 
     {% if c.show_email_notifications %}
       {% call form.checkbox('activity_streams_email_notifications', label=_('Subscribe to notification emails'), id='field-activity-streams-email-notifications', value=True, checked=c.userobj.activity_streams_email_notifications) %}
-      {{ form.info(_("You will receive notification emails from {site_title}, e.g. when you have new activities on your dashboard.".format(site_title=g.site_title)), classes=['info-help-tight']) }}
+          {% set helper_text = _("You will receive notification emails from {site_title}, e.g. when you have new activities on your dashboard."|string) %}
+          {{ form.info(helper_text.format(site_title=g.site_title), classes=['info-help-tight']) }}
       {% endcall %}
     {% endif %}
 
   </fieldset>
 
+
+{#
   <fieldset>
     <legend>{{ _('Change password') }}</legend>
 
@@ -29,7 +32,10 @@
 
     {{ form.input('password2', type='password', label=_('Confirm Password'), id='field-password-confirm', value=data.password2, error=errors.password2, classes=['control-medium'], attrs={'autocomplete': 'off'}) }}
   </fieldset>
+#}
 
+
+{#
   <div class="form-actions">
     {% block delete_button %}
       {% if h.check_access('user_delete', {'id': data.id})  %}
@@ -40,4 +46,6 @@
     {{ form.required_message() }}
     <button class="btn btn-primary" type="submit" name="save">{{ _('Update Profile') }}</button>
   </div>
+#}
+
 </form>
