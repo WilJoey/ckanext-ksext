@@ -79,14 +79,14 @@ def meta_dataset_test():
 資料新增後，更新 meta_no 序號
 '''
 def meta_resouce_serial_update(id, package_id):
-    #log.warn('twod: meta_resource_serial_update')
+    log.warn('twod: meta_resource_serial_update')
     sql = '''
 UPDATE resource set meta_no=(
   SELECT MAX(meta_no)+1 FROM resource WHERE package_id=%s 
 ) WHERE id=%s;
 '''
     model.meta.engine.execute(sql, id, package_id)
-    model.Session.commit()
+    #model.Session.commit()
 
 '''
 資料集或資料新增(OR 修改後)，將詮釋資料同步至國發會資料開放平台

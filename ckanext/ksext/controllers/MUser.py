@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import ckan.plugins as p
 #from ckan.lib.base import BaseController, config
 import ckan.lib.base as base
