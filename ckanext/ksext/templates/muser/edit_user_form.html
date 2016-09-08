@@ -24,7 +24,6 @@
   </fieldset>
 
 
-{#
   <fieldset>
     <legend>{{ _('Change password') }}</legend>
 
@@ -32,10 +31,8 @@
 
     {{ form.input('password2', type='password', label=_('Confirm Password'), id='field-password-confirm', value=data.password2, error=errors.password2, classes=['control-medium'], attrs={'autocomplete': 'off'}) }}
   </fieldset>
-#}
 
 
-{#
   <div class="form-actions">
     {% block delete_button %}
       {% if h.check_access('user_delete', {'id': data.id})  %}
@@ -46,6 +43,5 @@
     {{ form.required_message() }}
     <button class="btn btn-primary" type="submit" name="save">{{ _('Update Profile') }}</button>
   </div>
-#}
 
 </form>
