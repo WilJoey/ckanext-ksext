@@ -29,6 +29,8 @@ setup(
         ckan = ckan.lib.extract:extract_ckan
         [ckan.celery_task]
         tasks=ckanext.ksext.celery_import:task_imports
+        [paste.paster_command]
+        ksext=ckanext.ksext.commands:KsextCommand
     ''',
 
     message_extractors={
