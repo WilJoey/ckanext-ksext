@@ -14,6 +14,9 @@ class CkanApiError(Exception):
 
 
 class KsextCommand(p.toolkit.CkanCommand):
+    '''
+    ksext doc content.
+    '''
 
     summary = __doc__.split('\n')[0]
     usage = __doc__
@@ -41,11 +44,26 @@ class KsextCommand(p.toolkit.CkanCommand):
         # won't get disabled
         self.log = logging.getLogger('ckanext.ksext')
 
-        if cmd == 'test':
-            self.test()
+        if cmd == 'ckidle':
+            self.ckidle()
         else:
             self.log.error('Command "%s" not recognized' % (cmd,))
 
-    def test(self):
-        print 'Before test:'
-        print 'After test:'
+    def ckidle(self):
+        from ckan import model
+        #print 'Before test:'
+        sql = '''
+SELECT pg_terminate_backend(pg_stat_activity.pid)
+FROM pg_stat_activity
+WHERE pg_stat_activity.datname in ('ckan_default','datastore_default')
+    AND pid <> pg_backend_pid()
+    AND state in ('idle', 'idle in transaction', 'idle in transaction (aborted)', 'disabled')
+    AND current_timestamp - state_change > interval '5 minutes';
+        '''
+        model.meta.engine.execute(sql)
+        model.Session.commit()
+
+        print 'Remove PostgreSQL idels.'
+
+
+
