@@ -27,7 +27,7 @@ ORDER BY p.metadata_modified DESC ; '''
         _ViewCount = collections.namedtuple("ViewCount", "id name title url notes maintainer maintainer_email license extra0 extra1 extra3 org_id org_name org_title modified")
         engine = model.meta.engine
         result = [_ViewCount(*t) for t in engine.execute(sql).fetchall()]
-        model.meta.engine.execute(sql)
+        # model.meta.engine.execute(sql)
 
         limit = int(request.params.get('limit', 0))
         if limit != 0: 
