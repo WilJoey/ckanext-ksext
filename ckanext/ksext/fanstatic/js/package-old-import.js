@@ -2,7 +2,7 @@ $(function(){
 
     $('#field-organizations').change(function (){
     
-        var url = '/api/3/action/organization_show?id=' + $('#field-organizations').val();
+        var url = '/api/3/action/organization_show?&include_datasets=True&include_users=False&include_followers=False&id=' + $('#field-organizations').val();
         $.post(url, function (res){
             var ds = $('#selDatasets');
             ds.empty();
