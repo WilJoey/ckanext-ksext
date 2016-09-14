@@ -83,6 +83,7 @@ class KsextPlugin(plugins.SingletonPlugin, DefaultTranslation):
     '''
     只有dataset需要REMOVE
     '''
+    '''
     def after_delete(self, context, data_dict):
         try:
             if 'type' in data_dict and data_dict['type']== 'dataset':
@@ -93,6 +94,7 @@ class KsextPlugin(plugins.SingletonPlugin, DefaultTranslation):
         except Exception as e:
             log.warn("KSEXT EXCEPTION: after_create")
             log.warn(e)
+    '''
 
 
     ######################################################################
