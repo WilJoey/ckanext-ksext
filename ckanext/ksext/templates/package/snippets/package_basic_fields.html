@@ -161,8 +161,9 @@
 
 <div class="control-group">
   {% set error = errors.license_id %}
-  <label class="control-label" for="field-license">授權方式#</label>
+  <label class="control-label" for="field-license">授權方式</label>
   <div class="controls">
+    {#<select id="field-license" name="license_id" data-module="autocomplete">#}
     <select id="field-license" name="license_id" data-module="autocomplete">
       {% for license_desc, license_id in licenses|sort if license_desc  %}
         <option value="{{ license_id }}" {% if data.get('license_id', 'notspecified') == license_id %}selected="selected"{% endif %}>{{ license_desc }}</option>
