@@ -8,9 +8,16 @@
   <article class="module">
     {# <h3>使用者列表</h3> #}
     <div class="module-content">
-      <div class="content_action" style="margin-bottom:10px;">
+      <div class="content_action" style="margin-bottom:10px; float:right;">
         <a class="btn btn-primary" href="/muser/new"><i class="icon-wrench">  新增使用者</i></a>
       </div>
+      <form class="section simple-input" method="get">
+        <div class="field" style="width: 400px;">
+          <label for="field-sitewide-search">搜尋使用者</label>
+          <input id="field-sitewide-search" type="text" name="q" placeholder="搜尋使用者">
+          <button class="btn-search" type="submit"><i class="icon-search"></i></button>
+        </div>
+      </form>
       {% block users_list %}
         <table class="table table-chunky table-bordered table-striped">
           <thead>

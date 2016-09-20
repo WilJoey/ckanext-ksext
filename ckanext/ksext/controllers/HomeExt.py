@@ -45,19 +45,19 @@ class HomeExtController(BaseController):
         license['url']='http://data.gov.tw/principle'
         result.append(license)
 
-        license={}
-        license['domain_content']=False
-        license['domain_data']=True
-        license['domain_software']=False
-        license['family']=''
-        license['id']='ODC-PDDL-1.0'
-        license['maintainer']=''
-        license['od_conformance']='approved'
-        license['osd_conformance']='not reviewed'
-        license['status']='active'
-        license['title']='Open Data Commons Public Domain Dedication and Licence 1.0'
-        license['url']='http://www.opendefinition.org/licenses/odc-pddl'
-        result.append(license)
+        #license={}
+        #license['domain_content']=False
+        #license['domain_data']=True
+        #license['domain_software']=False
+        #license['family']=''
+        #license['id']='ODC-PDDL-1.0'
+        #license['maintainer']=''
+        #license['od_conformance']='approved'
+        #license['osd_conformance']='not reviewed'
+        #license['status']='active'
+        #license['title']='Open Data Commons Public Domain Dedication and Licence 1.0'
+        #license['url']='http://www.opendefinition.org/licenses/odc-pddl'
+        #result.append(license)
 
         return h.json.dumps(result)
 

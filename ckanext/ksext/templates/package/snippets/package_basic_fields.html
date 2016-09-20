@@ -143,7 +143,7 @@
   {% for extra in extras if extra['key']=='資料集類型' %}
     {{ form_tn.custom_meta('extras__0__', id='field-extras-0', key=extra.key, value=extra.value, is_required=true) }}
   {% else %}
-    {{ form_tn.custom_meta('extras__0__', id='field-extras-0', key='資料集類型', value=' ', is_required=true) }}
+    {{ form_tn.custom_meta('extras__0__', id='field-extras-0', key='資料集類型', value='rawData', is_required=true) }}
   {% endfor %}
 {% endblock %}
 
@@ -182,13 +182,13 @@
   {% for extra in extras if extra['key']=='授權說明網址' %}
     {{ form_tn.custom_meta('extras__2__', id='field-extras-2', key=extra.key, value=extra.value, classes=['control-full'], is_required=true)}}
   {% else %}
-    {{ form_tn.custom_meta('extras__2__', id='field-extras-2', key='授權說明網址', value=' ', is_required=true) }}
+    {{ form_tn.custom_meta('extras__2__', id='field-extras-2', key='授權說明網址', value='http://data.gov.tw/license', is_required=true) }}
   {% endfor %}
 
   {% for extra in extras if extra['key']=='計費方式' %}
     {{ form_tn.custom_meta('extras__3__', id='field-extras-3', key=extra.key, value=extra.value, is_required=true)}}
   {% else %}
-    {{ form_tn.custom_meta('extras__3__', id='field-extras-3', key='計費方式', value=' ', is_required=true) }}
+    {{ form_tn.custom_meta('extras__3__', id='field-extras-3', key='計費方式', value='免費', is_required=true) }}
   {% endfor %}
 {% endblock %}
 
