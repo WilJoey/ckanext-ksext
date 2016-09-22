@@ -43,6 +43,11 @@ def init_db(model):
                 sql = 'UPDATE suggests SET send_mail=1 WHERE id=:id;'
                 model.Session.execute(sql, {'id': id})
                 model.Session.commit()
+
+                sql = 'UPDATE suggests SET mail_time=CURRENT_TIMESTAMP WHERE id=:id AND mail_time is null AND send_mail=1;'
+                model.Session.execute(sql, {'id': id})
+                model.Session.commit()
+                
                 #log.warn('joe db: committed : ' + id)
                 return True
 
@@ -87,6 +92,7 @@ WHERE closed=False ORDER BY open_time DESC ;
             sa.Column('closed', sa.types.Boolean, primary_key=False, default=False),
             sa.Column('org_id', sa.types.UnicodeText, primary_key=False, default=False),
             sa.Column('send_mail', sa.types.Integer, primary_key=False, default=0),
+            sa.Column('mail_time', sa.types.DateTime, primary_key=False, default=None),
             sa.Column('email', sa.types.UnicodeText, primary_key=False, default=u'')
         )
         #suggests_table.comments = relationship('suggests_comments', backref='suggests')

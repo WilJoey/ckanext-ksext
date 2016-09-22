@@ -7,18 +7,13 @@
   <tr>
     <td>{{ suggest.open_time[:10]}}</td>
     <td><a href="/suggest/{{ suggest.id }}" onclick="views_plus('{{ suggest.id }}')" >{{ title }}</a></td>
-    <td>{{ suggest.user_id }}</td>
+    {# <td>{{ suggest.user_id }}</td> #}
     <td style="text-align:right;">{{ suggest.views }}</td>
-    <td style="text-align:right;">{{ suggest.comments }}</td>
+    {# <td style="text-align:right;">{{ suggest.comments }}</td> #}
     <td >{{ suggest.org }}</td>
     {% if has_right %}
         <td>
-            {% if suggest.send_mail==1 %}
-                <span>已寄送</span>
-            {% else %}
-                <button class="btn btn-info domail" data-suggest_id="{{ suggest.id}}" >發送</button>
-            {% endif %}
-            
+            <button class="btn btn-info domail" data-suggest_id="{{ suggest.id}}" >發送</button>
         </td>
     {% endif %}
   </tr>

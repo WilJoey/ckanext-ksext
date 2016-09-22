@@ -16,6 +16,8 @@ CREATE TABLE suggests
   closed boolean,
   org_id text,
   send_mail integer DEFAULT 0,
+  mail_time timestamp without time zone,
+  email text,
   CONSTRAINT suggests_pkey PRIMARY KEY (id , title )
 )
 WITH (

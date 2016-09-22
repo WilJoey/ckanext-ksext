@@ -143,6 +143,9 @@ def _dictize_suggest(suggest):
     # fields contains a valid date
     close_time = suggest.close_time
     close_time = str(close_time) if close_time else close_time
+    mail_time = suggest.mail_time
+    mail_time = str(mail_time) if mail_time else mail_time
+
     gg = model.Session.query(model.Group).filter(model.Group.id == suggest.org_id).first()
     # Convert the data request into a dict
     data_dict = {
@@ -162,7 +165,8 @@ def _dictize_suggest(suggest):
         'org_id':suggest.org_id,
         'org': '' if gg is None else gg.title,
         'send_mail': suggest.send_mail,
-        'email': suggest.email
+        'email': suggest.email,
+        'mail_time':mail_time
     }
     return data_dict
 
@@ -174,8 +178,9 @@ def _undictize_suggest_basic(suggest, data_dict):
     suggest.user_id = data_dict['user_id']
     suggest.dataset_name = data_dict['dataset_name']
     suggest.suggest_columns = data_dict['suggest_columns']
-    suggest.org_id = data_dict['org_id'],
+    suggest.org_id = data_dict['org_id']
     suggest.email = data_dict['email']
+    #suggest.mail_time = data_tict['mail_time']
     
 def suggest_show(context, data_dict):
     model = context['model']
