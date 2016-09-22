@@ -39,15 +39,7 @@ def init_db(model):
 
             @classmethod
             def suggest_mailed(cls, id):
-                #log.warn('joe db: suggest_mailed : ' + id)
-                sql = 'UPDATE suggests SET send_mail=1 WHERE id=:id;'
-                model.Session.execute(sql, {'id': id})
-                model.Session.commit()
-
-                sql = 'UPDATE suggests SET mail_time=CURRENT_TIMESTAMP WHERE id=:id AND mail_time is null AND send_mail=1;'
-                model.Session.execute(sql, {'id': id})
-                model.Session.commit()
-                
+                ''' test only'''
                 #log.warn('joe db: committed : ' + id)
                 return True
 
