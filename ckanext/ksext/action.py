@@ -85,7 +85,8 @@ def _dictize_suggest_list(suggest):
     open_time = str(suggest.open_time)
     close_time = suggest.close_time
     close_time = str(close_time) if close_time else close_time
-    
+    #mail_time = suggest.mail_time
+    #mail_time = str(mail_time) if mail_time else mail_time
     gg = model.Session.query(model.Group).filter(model.Group.id == suggest.org_id).first()
 
 
@@ -99,7 +100,8 @@ def _dictize_suggest_list(suggest):
         'org_id': suggest.org_id ,
         'org': '' if gg is None else gg.title,
         'send_mail': suggest.send_mail,
-        'email': suggest.email
+        'email': suggest.email,
+        'mail_time': suggest.mail_time
     }
     return data_dict
 
