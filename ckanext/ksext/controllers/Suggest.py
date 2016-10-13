@@ -216,6 +216,9 @@ class SuggestsController(base.BaseController):
             sql = 'UPDATE suggests SET send_mail=1 WHERE id= :id;'
             model.meta.engine.execute(text(sql), id=id)
             model.Session.commit()
+            sql = 'UPDATE suggests SET mail_time=CURRENT_TIMESTAMP WHERE id=:id AND mail_time is null AND send_mail=1;'
+            model.Session.execute(sql, {'id': id})
+            model.Session.commit()
 
         response.headers['Content-Type'] = 'application/json;charset=utf-8'
         return helpers.json.dumps(result)

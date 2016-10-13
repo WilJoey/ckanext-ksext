@@ -102,8 +102,9 @@ def _dictize_suggest_list(suggest):
         'org': '' if gg is None else gg.title,
         'send_mail': suggest.send_mail,
         'email': suggest.email,
-        'mail_time': suggest.mail_time,
+        'mail_time': suggest.mail_time.strftime("%Y-%m-%d %H:%M") if suggest.mail_time else ''
         'mail_id': suggest.mail_id
+        'mail_time': suggest.mail_time.strftime("%Y-%m-%d %H:%M") if suggest.mail_time else ''
     }
     return data_dict
 
