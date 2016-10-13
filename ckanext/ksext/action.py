@@ -11,6 +11,7 @@ import datetime
 import cgi
 import logging
 import validator
+import uuid
 
 from ckan.common import response, request, json
 
@@ -101,7 +102,8 @@ def _dictize_suggest_list(suggest):
         'org': '' if gg is None else gg.title,
         'send_mail': suggest.send_mail,
         'email': suggest.email,
-        'mail_time': suggest.mail_time
+        'mail_time': suggest.mail_time,
+        'mail_id': suggest.mail_id
     }
     return data_dict
 
@@ -168,11 +170,21 @@ def _dictize_suggest(suggest):
         'org': '' if gg is None else gg.title,
         'send_mail': suggest.send_mail,
         'email': suggest.email,
-        'mail_time':mail_time
+        'mail_time':mail_time,
+        'mail_id': suggest.mail_id
     }
     return data_dict
 
 
+def md5(str):
+    import hashlib
+    import types
+    if type(str) is types.StringType:
+        m = hashlib.md5()   
+        m.update(str)
+        return m.hexdigest()
+    else:
+        return ''
 
 def _undictize_suggest_basic(suggest, data_dict):
     suggest.title = data_dict['title']
@@ -183,7 +195,11 @@ def _undictize_suggest_basic(suggest, data_dict):
     suggest.org_id = data_dict['org_id']
     suggest.email = data_dict['email']
     #suggest.mail_time = data_tict['mail_time']
-    
+    # JOE add id and mail_id
+    suggest.id = str(uuid.uuid4())
+    suggest.mail_id = md5(suggest.id)
+
+
 def suggest_show(context, data_dict):
     model = context['model']
     suggest_id = data_dict.get('id', '')
@@ -243,7 +259,8 @@ def get_domail_content(context, params):
         'org_id':suggest.org_id,
         'org': '' if gg is None else gg.title,
         'send_mail': suggest.send_mail,
-        'email': suggest.email
+        'email': suggest.email,
+        'mail_id': suggest.mail_id
     }
     return mail_content
 

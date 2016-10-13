@@ -61,7 +61,7 @@ def init_db(model):
             @classmethod
             def get_ordered_by_date(cls, **kw):
                 sql='''
-SELECT s.id, user_id, s.title, open_time, s.views | 1010 as views1, org_id, g.title as org, g.mail_time,
+SELECT s.id, user_id, s.title, open_time, s.views | 1 as views1, org_id, g.title as org, g.mail_time, s.mail_id,
    (select count(*) from suggests_comments where suggest_id = id) as comments 
 FROM  suggests s left join "group" g on s.org_id=g.id
 WHERE closed=False ORDER BY open_time DESC ;
@@ -93,7 +93,8 @@ WHERE closed=False ORDER BY open_time DESC ;
             sa.Column('org_id', sa.types.UnicodeText, primary_key=False, default=False),
             sa.Column('send_mail', sa.types.Integer, primary_key=False, default=0),
             sa.Column('mail_time', sa.types.DateTime, primary_key=False, default=None),
-            sa.Column('email', sa.types.UnicodeText, primary_key=False, default=u'')
+            sa.Column('email', sa.types.UnicodeText, primary_key=False, default=u''),
+            sa.Column('mail_id', sa.types.UnicodeText, primary_key=False, default=None)
         )
         #suggests_table.comments = relationship('suggests_comments', backref='suggests')
 

@@ -18,6 +18,7 @@ CREATE TABLE suggests
   send_mail integer DEFAULT 0,
   mail_time timestamp without time zone,
   email text,
+  mail_id text,
   CONSTRAINT suggests_pkey PRIMARY KEY (id , title )
 )
 WITH (
