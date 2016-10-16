@@ -185,13 +185,15 @@ class SuggestsController(base.BaseController):
         return 'abc'
         
     def domail(self, id):
-        log.warn("domail start: " + id)
+        #log.warn("domail start: " + id)
 
         data_dict = {'id': id}
         context = self._get_context()
         mail_content =self._get_mail_content(id)
 
-        title = u'[OD][%s][測試資料-%s]' % (mail_content['id'], mail_content['title'])
+        #log.warn("domail_content: " + mail_content.__repr__())
+
+        title = u'[OD][%s][%s]' % (mail_content['mail_id'], mail_content['title'])
         '''
         message = {
             "org_no": mail_content['org_id'],
@@ -203,12 +205,15 @@ class SuggestsController(base.BaseController):
         '''
         ctx = {
             "Title": title,
-            "org_no": mail_content['org_id'],
+            "org_no": mail_content['org_no'],
             "org_name": mail_content['org'],
             "name": mail_content['user_name'],
             "email": mail_content['email'],
-            "context": mail_content['description']
+            "description": mail_content['description'],
+            "dataset_name": mail_content['dataset_name'],
+            "suggest_columns": mail_content['suggest_columns']
         }
+        
         url = u'http://demo2.geo.com.tw/ksod/api/domail/' + id
         resp = requests.post(url, data=ctx)
         
@@ -223,7 +228,7 @@ class SuggestsController(base.BaseController):
 
         response.headers['Content-Type'] = 'application/json;charset=utf-8'
         return helpers.json.dumps(result)
-
+        
     #remove
     def suggest_remove(self, id):
         log.warn("remove start: " + id)

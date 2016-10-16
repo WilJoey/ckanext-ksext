@@ -250,6 +250,9 @@ def get_domail_content(context, params):
     suggest = db_suggests[0]
 
     gg = model.Session.query(model.Group).filter(model.Group.id == suggest.org_id).first()
+    extras = gg.extras
+
+    #log.warn("gg:" + gg.extras.__repr__())
 
     # Convert the data request into a dict
     mail_content = {
@@ -261,6 +264,7 @@ def get_domail_content(context, params):
         'suggest_columns': suggest.suggest_columns,
         'org_id':suggest.org_id,
         'org': '' if gg is None else gg.title,
+        'org_no': '' if extras is None else extras['org_no'],
         'send_mail': suggest.send_mail,
         'email': suggest.email,
         'mail_id': suggest.mail_id
