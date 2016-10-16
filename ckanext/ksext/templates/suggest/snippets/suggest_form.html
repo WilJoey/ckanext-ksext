@@ -8,15 +8,18 @@
 
 
 
-{# This provides a full page that renders a form for publishing a dataset. It can
+{# This prmvider a full page that renders a form for publishing a dataset. It can
 then itself be extended to add/remove blocks of functionality. #}
 <form class="dataset-form form-horizontal" method="post" data-module="basic-form" action enctype="multipart/form-data">
   <input type="hidden" id="id" name="id" value="{{ data.get('id', '') }}" />
+ {{ form.errors(error_summary) }}
 
   
   {% block offering_user_id %}
     {{ form.input('user_id', id='field-user_id', label='建議人', placeholder='', value=user_id, error=errors['UserId'], classes=['control-full'], is_required=true) }}
   {% endblock %}
+
+{{ form.input('email', label=_('Email'), id='field-email', type='email', value=data.email, error=errors['Email'], placeholder=_('eg. joe@example.com'), classes=['control-medium'], is_required=true) }}
 
   {% block offering_title %}
     {{ form.input('title', id='field-title', label=_('Title'), placeholder='', value=title, error=errors['Title'], classes=['control-full', 'control-large'], is_required=true) }}

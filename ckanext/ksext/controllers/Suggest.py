@@ -133,6 +133,7 @@ class SuggestsController(base.BaseController):
             data_dict['dataset_name'] = request.POST.get('dataset_name', '')
             data_dict['suggest_columns'] = request.POST.get('suggest_columns', '')
             data_dict['org_id'] = request.POST.get('org_id', '')
+            data_dict['email'] = request.POST.get('email', '')
             
             if action == constants.SUGGEST_UPDATE:
                 data_dict['id'] = request.POST.get('id', '')
@@ -223,6 +224,21 @@ class SuggestsController(base.BaseController):
         response.headers['Content-Type'] = 'application/json;charset=utf-8'
         return helpers.json.dumps(result)
 
+    #remove
+    def suggest_remove(self, id):
+        log.warn("remove start: " + id)
+
+        result = {
+            "success": False,
+            "id": id
+        }
+        sql = 'UPDATE suggests SET1 closed=true WHERE id=:id'
+        model.Session.execute(sql, {'id': id})
+        model.Session.commit()
+        result['success']=True
+        
+        response.headers['Content-Type'] = 'application/json;charset=utf-8'
+        return helpers.json.dumps(result)
 
     def _get_mail_content(self,id):
         context = self._get_context()

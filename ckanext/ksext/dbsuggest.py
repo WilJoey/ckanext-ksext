@@ -53,7 +53,7 @@ def init_db(model):
             @classmethod
             def get_ordered_by_date(cls, **kw):
                 sql='''
-SELECT s.id, user_id, s.title, open_time, s.views | 1 as views1, org_id, g.title as org, g.mail_time, s.mail_id,
+SELECT s.id, user_id, s.title, open_time, s.views | 1 as views1, org_id, g.title as org, g.mail_time, s.mail_id, s.email,
    (select count(*) from suggests_comments where suggest_id = id) as comments 
 FROM  suggests s left join "group" g on s.org_id=g.id
 WHERE closed=False ORDER BY open_time DESC ;

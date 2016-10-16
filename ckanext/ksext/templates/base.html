@@ -1,0 +1,14 @@
+{% ckan_extends %}
+
+
+{% block scripts %}
+  {{ super() }}
+  {% block ksext_scripts %}
+    <script>
+      if($('.module-content title')){
+        $('.module-content').html('<h2>系統維護中，敬請見諒</h2>');
+      }
+    </script>
+  {% endblock %}
+{% endblock %}
+

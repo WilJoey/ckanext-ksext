@@ -11,16 +11,20 @@ def validate_suggest(context, request_data):
 
     # Check user_id
     if not request_data['user_id']:
-        errors['UserId'] = [tk._('User name cannot be empty')]
+        errors['UserId'] = [u'建議人不能空白!']
     if len(request_data['user_id']) > constants.NAME_MAX_LENGTH:
-        errors['UserId'] = [tk._('User name must be a maximum of %d characters long') % constants.NAME_MAX_LENGTH]
+        errors['UserId'] = [u'建議人資料長度過長( %d )!' % constants.NAME_MAX_LENGTH]
+
+    # Check email
+    if not request_data['email']:
+        errors['Email'] = [u'電子郵件不能空白!']
 
     # Check name
     if len(request_data['title']) > constants.NAME_MAX_LENGTH:
-        errors['Title'] = [tk._('Title must be a maximum of %d characters long') % constants.NAME_MAX_LENGTH]
+        errors['Title'] = ['Title must be a maximum of characters long']
 
     if not request_data['title']:
-        errors['Title'] = [tk._('Title cannot be empty')]
+        errors['Title'] = [u'標題不能空白!']
 
     # Title is only checked in the database when it's correct
     avoid_existing_title_check = context['avoid_existing_title_check'] if 'avoid_existing_title_check' in context else False

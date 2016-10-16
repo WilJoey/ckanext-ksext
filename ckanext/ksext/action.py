@@ -188,6 +188,8 @@ def md5(str):
         return ''
 
 def _undictize_suggest_basic(suggest, data_dict):
+    log.warn(data_dict)
+
     suggest.title = data_dict['title']
     suggest.description = data_dict['description']
     suggest.user_id = data_dict['user_id']

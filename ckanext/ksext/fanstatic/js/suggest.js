@@ -13,6 +13,20 @@ $(document).ready(function (){
             }
         });
     });
+    $('.sugremove').click(function (evt){
+        var target = $(evt.target);
+        var id = target.data('suggest_id');
+        if(!(confirm('確認要刪除此筆建議資料?'))){
+            return;
+        }
+        $.post('/suggest/rm/'+id, function(data){
+            if(!data.success){
+                alert('資料刪除失敗！')
+            } else{
+                location.reload();
+            }
+        });
+    });
 });
 
 function views_plus(id){

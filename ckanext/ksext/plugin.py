@@ -211,6 +211,10 @@ class KsextPlugin(plugins.SingletonPlugin, DefaultTranslation):
                   controller='ckanext.ksext.controllers.Suggest:SuggestsController',
                   action='domail', conditions=dict(method=['GET','POST']), ckan_icon='question-sign')
 
+        map.connect('suggest_remove', '/%s/rm/{id}' % constants.SUGGESTS_MAIN_PATH,
+                  controller='ckanext.ksext.controllers.Suggest:SuggestsController',
+                  action='suggest_remove', conditions=dict(method=['GET','POST']), ckan_icon='question-sign')
+
     	return map
 
     def before_map(self, map):
