@@ -164,6 +164,10 @@ class KsextPlugin(plugins.SingletonPlugin, DefaultTranslation):
         map.connect('muser_delete', '/muser/delete/{id}', 
             controller = 'ckanext.ksext.controllers.MUser:MUserController',
             action='delete')
+        # org admin
+        map.connect('org_admin', '/orgadmin',
+                  controller='ckanext.ksext.controllers.MUser:MUserController',
+                  action='org_admin', conditions=dict(method=['GET','POST']))
 
         map.connect('datasetlist','/datasetlist', 
             controller = 'ckanext.ksext.controllers.Datasets:DatasetsController',

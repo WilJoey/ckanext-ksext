@@ -19,6 +19,13 @@ request = base.request
 log = logging.getLogger(__name__)
 
 class MUserController(base.BaseController):
+
+    def org_admin(self):
+        req = {
+            "org_id":request.GET.get('org', ''),
+            "dataset_id": request.GET.get('ds','')
+        }
+        return h.json.dumps(req)
     
     def index (self):
         LIMIT = 20
