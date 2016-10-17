@@ -237,7 +237,7 @@ class SuggestsController(base.BaseController):
             "success": False,
             "id": id
         }
-        sql = 'UPDATE suggests SET1 closed=true WHERE id=:id'
+        sql = 'UPDATE suggests SET closed=true WHERE id=:id'
         model.Session.execute(sql, {'id': id})
         model.Session.commit()
         result['success']=True

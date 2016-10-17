@@ -168,6 +168,9 @@ class KsextPlugin(plugins.SingletonPlugin, DefaultTranslation):
         map.connect('org_admin', '/orgadmin',
                   controller='ckanext.ksext.controllers.MUser:MUserController',
                   action='org_admin', conditions=dict(method=['GET','POST']))
+        map.connect('org_admin_update', '/orgadmin/update',
+                  controller='ckanext.ksext.controllers.MUser:MUserController',
+                  action='org_admin_update', conditions=dict(method=['POST']))
 
         map.connect('datasetlist','/datasetlist', 
             controller = 'ckanext.ksext.controllers.Datasets:DatasetsController',

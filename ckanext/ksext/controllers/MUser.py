@@ -10,23 +10,66 @@ import ckan.logic.schema as schema
 import ckan.new_authz as new_authz
 import ckan.lib.captcha as captcha
 import ckan.lib.navl.dictization_functions as dictization_functions
+import functools
+import requests
+from sqlalchemy import text
+
 import logging
 from pylons import config
-from ckan.common import _, c, g, request
-
+from ckan.common import _, c, g, request, response
 c = base.c
 request = base.request
 log = logging.getLogger(__name__)
 
 class MUserController(base.BaseController):
 
+    def org_admin_update(self):
+        result = { "success": False }
+        user_id = request.POST.get('user', '')
+        dataset_id = request.POST.get('ds','')
+        self._update_org_admin(user_id, dataset_id)
+
+        result["success"]=True
+        response.headers['Content-Type'] = 'application/json;charset=utf-8'
+        return h.json.dumps(result)
+        
+    def _update_org_admin(self, user_id, dataset_id):
+        sql = "update package set creator_user_id=%s where id=%s ;"
+        model.meta.engine.execute(sql, user_id, dataset_id)
+        model.Session.commit()
+
+
+
     def org_admin(self):
-        req = {
-            "org_id":request.GET.get('org', ''),
-            "dataset_id": request.GET.get('ds','')
-        }
-        return h.json.dumps(req)
-    
+        
+        org_id = request.GET.get('org', '')
+        dataset_id = request.GET.get('ds','')
+        
+        result = {
+            "org_users" : self._get_org_users(org_id),
+            "manager" : self._get_dataset_manager(dataset_id)
+        }       
+        response.headers['Content-Type'] = 'application/json;charset=utf-8'
+        return h.json.dumps(result)
+
+    def _get_org_users(self, org_id):
+        sql = '''
+select u.id, u.fullname as name from member m left join "user" u on u.id=m.table_id where m.group_id=:org_id and m.state='active' and m.table_name='user' and u.state='active';
+        '''
+        dt = model.Session.execute(sql, {'org_id': org_id}).fetchall()
+        result = [dict(row) for row in dt]
+        return result
+
+    def _get_dataset_manager(self, dataset_id):
+        sql ='''
+select u.fullname as name, u.id from package p left join "user" u on p.creator_user_id=u.id where p.id=:dataset_id;
+        '''
+        dt = model.Session.execute(sql, {'dataset_id': dataset_id}).fetchall()
+        if (len(dt) == 0 ) :
+            return None 
+        else :
+            return [dict(row) for row in dt]
+
     def index (self):
         LIMIT = 20
 

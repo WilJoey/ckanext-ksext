@@ -23,6 +23,7 @@
       </h3>
       {% block form %}
         <input type="hidden" id="hidOrgId" value="{{ c.group_dict.id }}"/>
+        <input type="hidden" id="hidCurrentPackage" value=""/>
         {% if c.page.item_count %}
           <form method="POST" data-module="basic-form">
             <table class="table table-bordered table-header table-hover table-bulk-edit table-edit-hover" data-module="table-selectable-rows">
@@ -65,7 +66,7 @@
                       <a href="{% url_for controller='package', action='edit', id=package.name %}" class="edit pull-right">
                         {{ _('Edit') }}
                       </a>
-                      <a href="#" class="edit pull-right org-admin " style="margin:0 5px;" data-package_id="{{ package.id }}" >
+                      <a href="javascript://" class="edit pull-right org-admin " style="margin:0 5px;" data-package_id="{{ package.id }}" >
                         管理者
                       </a>
                       <h3 class="dataset-heading">
@@ -97,11 +98,26 @@
         <h4 class="modal-title" id="myModalLabel">變更管理者</h4>
       </div>
       <div class="modal-body">
-        ...
+
+<div class="info">
+    <dl class="dl-horizontal" style="">
+        <dt>管理者</dt>
+        <dd><span id="lblAdminUser"></span>&nbsp;</dd>
+        <dt>變更管理者</dt>
+        <dd>
+            <select id="selOrgUsers" >
+            </select> 
+        </dd>
+        <dt>&nbsp;</dt>
+        <dd>
+            <button type="button" class="btn btn-primary" id="btnModalUpdate">儲存</button>
+        </dd>
+    </dl>
+</div>
+
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">關閉</button>
-        <!--<button type="button" class="btn btn-primary">Save changes</button>-->
       </div>
     </div>
   </div>
