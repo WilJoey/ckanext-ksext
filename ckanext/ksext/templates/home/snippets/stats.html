@@ -24,7 +24,7 @@
       </li>
       <li>
         <a href="{{ h.url_for(controller='package', action='search') }}">
-          <b>{{ h.SI_number_span(stats.resource_count) }}</b>
+          <b><span>{{ stats.resource_count }}</span></b>
           {{ ungettext('resource', '資料', stats.resource_count) }}
         </a>
       </li>
