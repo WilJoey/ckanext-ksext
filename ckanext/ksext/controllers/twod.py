@@ -209,7 +209,7 @@ def _meta_get_metadata(package):
     meta['issued']=package['metadata_created']
     meta['modified']=package['metadata_modified']
 
-    meta['landingPage'] = site_url + '/dataset/' + package['title']
+    meta['landingPage'] = site_url + '/dataset/' + package['name']
     meta['keyword'] = [tag['display_name'] for tag in tags]
     meta['numberOfData']=_meta_get_extras_key(extras, u'資料量')
     meta['distribution'] = _meta_get_resources(package, package_code, site_url)
