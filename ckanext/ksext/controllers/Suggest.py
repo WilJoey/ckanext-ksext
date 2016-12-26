@@ -50,7 +50,8 @@ class SuggestsController(base.BaseController):
     def index(self):
         return self._show_index( search_url, 'suggest/index.html')
 
-    
+    def twod(self):
+        return self._show_index( search_url, 'suggest/index.html')
 
     def _get_context(self):
         return {'model': model, 'session': model.Session,
@@ -183,6 +184,11 @@ class SuggestsController(base.BaseController):
         #if request.POST:
         tk.get_action('suggest_views')(context, data_dict)
         return 'abc'
+    
+    def twodtest(self, id):
+        result = {'id': id}
+        response.headers['Content-Type'] = 'application/json;charset=utf-8'
+        return helpers.json.dumps(result)
         
     def domail(self, id):
         #log.warn("domail start: " + id)

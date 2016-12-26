@@ -221,7 +221,24 @@ class KsextPlugin(plugins.SingletonPlugin, DefaultTranslation):
         map.connect('suggest_remove', '/%s/rm/{id}' % constants.SUGGESTS_MAIN_PATH,
                   controller='ckanext.ksext.controllers.Suggest:SuggestsController',
                   action='suggest_remove', conditions=dict(method=['GET','POST']), ckan_icon='question-sign')
+        
+        map.connect('suggest_twod', '/%s/twod/{id}' % constants.SUGGESTS_MAIN_PATH,
+                  controller='ckanext.ksext.controllers.Suggest:SuggestsController',
+                  action='twodtest', conditions=dict(method=['GET']), ckan_icon='question-sign')
+        
+        map.connect('twod_test', '/twod/test/{id}' ,
+                  controller='ckanext.ksext.controllers.twod:twodController',
+                  action='test', conditions=dict(method=['GET']), ckan_icon='question-sign')
 
+        map.connect('twod_create', '/twod/create/{id}' ,
+                  controller='ckanext.ksext.controllers.twod:twodController',
+                  action='create', conditions=dict(method=['GET','POST']), ckan_icon='question-sign')
+        map.connect('twod_update', '/twod/update/{id}' ,
+                  controller='ckanext.ksext.controllers.twod:twodController',
+                  action='update', conditions=dict(method=['GET','POST']), ckan_icon='question-sign')
+        map.connect('twod_remove', '/twod/remove/{id}' ,
+                  controller='ckanext.ksext.controllers.twod:twodController',
+                  action='remove', conditions=dict(method=['GET','POST']), ckan_icon='question-sign')
     	return map
 
     def before_map(self, map):

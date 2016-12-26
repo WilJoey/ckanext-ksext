@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
 
 import logging
+import ckan.lib.base as base
 import ckan.model as model
 import ckan.logic as logic
+import ckan.plugins as plugins
 import ckan.lib.helpers as h
 import requests
 import pylons.config as config
 
-#from ckan.common import response, request
+from ckan.common import response, request, json
 from pylons import config
 from ckan.plugins import toolkit as toolkit
 
@@ -18,6 +20,38 @@ PUBLISHER_OID = '2.16.886.101.90029.20002'
 _MORE_THAN_THREE = [ "N3","SPARQL","RDF","TTL","KML","WCS","NetCDF","TSV","WFS","KMZ",
     "QGIS","ODS","JSON","ODB","ODF","ODG","XML","WMS","WMTS","SVG",
     "JPEG","CSV","Atom Feed","XYZ","PNG","RSS","GeoJSON","IATI","ICS" ]
+
+class twodController(base.BaseController):
+
+    def _get_context(self):
+        return {'model': model, 'session': model.Session,
+                'user': c.user, 'auth_user_obj': c.userobj}
+
+    def test(self, id):
+        result = {'id': id}
+        response.headers['Content-Type'] = 'application/json;charset=utf-8'
+        return h.json.dumps(result)
+
+    def create(self, id):
+        result = meta_dataset_publish_create(self._get_context(), id)
+        response.headers['Content-Type'] = 'application/json;charset=utf-8'
+        return result
+
+    def update(self, id):
+        result = meta_dataset_publish_update(self._get_context(), id)
+        response.headers['Content-Type'] = 'application/json;charset=utf-8'
+        return result
+
+    def remove(self, id):
+        context = self._get_context()
+        package = logic.get_action('package_show')(context, {'id': id})
+        meta_no = _meta_get_package_meta_no(package['id'])
+        identifier = "%s-%s" % (PUBLISHER_ORG_CODE, str(meta_no).zfill(6) )
+
+        result = meta_dataset_publish_remove(context, identifier)
+        response.headers['Content-Type'] = 'application/json;charset=utf-8'
+        return result
+
 
 def meta_dataset_test():
     metadata = {
