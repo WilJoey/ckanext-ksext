@@ -101,7 +101,7 @@ def meta_dataset_test():
     }
     json = h.json.dumps(metadata)
     log.warn('meta create test!:' + json.__repr__())
-    url = 'http://data.nat.gov.tw/api/v1/rest/dataset'
+    url = 'http://data.gov.tw/api/v1/rest/dataset'
     _headers = {'Authorization': config.get('ckan.metadata_apikey', '')}
     r = requests.post(url, data=json, headers=_headers)
     log.warn('meta response create:' + r.text)
@@ -140,7 +140,7 @@ def meta_dataset_publish_create(context, package_id):
 
     log.warn('meta create:' + json.__repr__())
 
-    url = 'http://data.nat.gov.tw/api/v1/rest/dataset'
+    url = 'http://data.gov.tw/api/v1/rest/dataset'
     _headers = {'Authorization': config.get('ckan.metadata_apikey', '')}
     r = requests.post(url, data=json, headers=_headers)
     log.warn('meta response create:' + r.text)
@@ -163,7 +163,7 @@ def meta_dataset_publish_update(context, package_id):
 
         #將 metadata 資料同步至國發會平台
         json = h.json.dumps(metadata)
-        url = 'http://data.nat.gov.tw/api/v1/rest/dataset/' + metadata['identifier']
+        url = 'http://data.gov.tw/api/v1/rest/dataset/' + metadata['identifier']
         _headers = {'Authorization': config.get('ckan.metadata_apikey', '')}
         r = requests.put(url, data=json, headers=_headers)
         log.warn('meta response update:' + r.text)
@@ -175,7 +175,7 @@ def meta_dataset_publish_update(context, package_id):
 
 def meta_dataset_publish_remove(context, identifier):
     #將 metadata 資料同步至國發會平台
-    url = 'http://data.nat.gov.tw/api/v1/rest/dataset/' + identifier
+    url = 'http://data.gov.tw/api/v1/rest/dataset/' + identifier
     _headers = {'Authorization': config.get('ckan.metadata_apikey', '')}
     r = requests.delete(url, headers=_headers)
     log.warn('meta response remove:' + r.text)
