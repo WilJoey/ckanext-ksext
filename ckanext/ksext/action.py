@@ -13,6 +13,8 @@ import logging
 import validator
 import uuid
 
+from sqlalchemy.sql import text
+
 from ckan.common import response, request, json
 
 c = plugins.toolkit.c
@@ -248,9 +250,14 @@ def get_domail_content(context, params):
     if not db_suggests:
         raise tk.ObjectNotFound('Data Request %s not found in the data base' % suggest_id)
     suggest = db_suggests[0]
-
-    gg = model.Session.query(model.Group).filter(model.Group.id == suggest.org_id).first()
-    extras = gg.extras
+    log.info('get_domail_content: %s' % type(suggest.org_id))
+    log.info('get_domail_content2: %s' % suggest.org_id)
+    gg=None
+    extras=None
+    if suggest.org_id:
+        log.warn("get_domail_content3")
+        gg = model.Session.query(model.Group).filter(model.Group.id == suggest.org_id).first()
+        extras = gg.extras
 
     #log.warn("gg:" + gg.extras.__repr__())
 
@@ -317,9 +324,63 @@ def suggest_comment(context, data_dict):
 
     return _dictize_comment(comment)
 
+def suggest_comment_update(context, data_dict):
+    model = context['model']
+    session = context['session']
+    suggest_id = data_dict.get('suggest_id', '')
+    comment_id = data_dict.get('id', '')
+    suggest_comment = data_dict.get('comment', '')
+    log.info('suggest_comment_update1: %s' % comment_id)
+    log.info('suggest_comment_update2: %s' % suggest_id)
+
+    # Check id
+    if not suggest_id:
+        raise tk.ValidationError(['Data Request ID(suggest) has not been included'])
+
+
+
+    
+
+
+        # Init the data base
+    db.init_db(model)
+
+    # Check access
+    tk.check_access(constants.SUGGEST_COMMENT, context, data_dict)
+
+    # Validate comment
+    validator.validate_comment(context, data_dict)
+
+    engine = model.meta.engine
+    sql = "UPDATE suggests_comments set comment='%s',time='%s' where id='%s' " % (suggest_comment,datetime.datetime.now(),comment_id)
+    log.info('suggest_comment_update3: %s' % text(sql))
+    engine.execute(text(sql).execution_options(autocommit=True))
+    # Store the data
+    result = db.Comment.get(id=comment_id)
+    comment = db.Comment()
+
+        
+    
+    
+    _undictize_comment_basic(comment, data_dict)
+    comment.user_id = context['auth_user_obj'].id
+    comment.time = datetime.datetime.now()
+    comment.id = comment_id
+    #log.info('suggest_comment_update3: %s' % type(comment))
+    log.info('suggest_comment_update4: %s' % comment.id)
+
+    #session.query(comment).filter(comment.id=='71c29998-8b1c-4ff5-9f97-15f5da2c5ff4').update({comment.comment:suggest_comment})
+    #comment_record=session.query(comment).filter(comment.id=='71c29998-8b1c-4ff5-9f97-15f5da2c5ff4')
+    #log.info('suggest_comment_update3: %s' % comment_record.id)
+    #session.commit()
+
+    return _dictize_comment(comment)
+
+    
 def _undictize_comment_basic(comment, data_dict):
     comment.comment = cgi.escape(data_dict.get('comment', ''))
     comment.suggest_id = data_dict.get('suggest_id', '')
+    #comment.id = data_dict.get('comment_id', '')
 
 
 def _dictize_comment(comment):

@@ -3,32 +3,34 @@
 <div class="box stats">
   <div class="inner">
     <h3>{{ _('{site_title} 統計資訊').format(site_title=g.site_title) }}</h3>
-    <ul>
-      <li>
+    <ul style="margin:20px 30px;">
+      <li style="width:120px;">
         <a href="{{ h.url_for(controller='package', action='search') }}">
-          <b>{{ h.SI_number_span(stats.dataset_count) }}</b>
+          <b>{{ stats.dataset_count }}</b>
           {{ ungettext('dataset', '資料集', stats.dataset_count) }}
         </a>
       </li>
-      <li>
+      <li style="width:100px;">
         <a href="{{ h.url_for(controller='organization', action='index') }}">
           <b>{{ h.SI_number_span(stats.organization_count) }}</b>
           {{ ungettext('organization', '組織', stats.organization_count) }}
         </a>
       </li>
-      <li>
+      <li style="width:100px;">
         <a href="{{ h.url_for(controller='group', action='index') }}">
           <b>{{ h.SI_number_span(stats.group_count) }}</b>
           {{ ungettext('group', '群組', stats.group_count) }}
         </a>
       </li>
-      <li>
+    </ul>
+    <ul style="margin:20px 30px;">
+      <li style="width:120px;">
         <a href="{{ h.url_for(controller='package', action='search') }}">
           <b><span>{{ stats.resource_count }}</span></b>
           {{ ungettext('resource', '資料', stats.resource_count) }}
         </a>
       </li>
-      <li>
+      <li style="width:100px;">
         <a href="/showcase">
           <b>{{ h.SI_number_span(stats.showcase_count) }}</b>
           {{ ungettext('應用展示', '應用展示', stats.showcase_count) }}

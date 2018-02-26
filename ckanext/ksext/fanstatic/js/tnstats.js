@@ -11,7 +11,9 @@ $(document).ready(function (){
 
     $(config.selectId).change(orgChanged);
     $('#btnDownload').click(function (){
-        window.open(config.windowOpenUrl + $(config.selectId).val());
+        if(!$(config.selectId).val())
+            window.open(config.windowOpenUrl);
+        else window.open(config.windowOpenUrl + $(config.selectId).val());
     });
 });
 
@@ -24,13 +26,21 @@ function getConfig(val){
             dataUrl: '/tnstats/orgApi?id=',
             windowOpenUrl :'/tnstats/orgCsv?id='
         }
-    }else{
+    }else if(val === 'group'){
         return {
             menuIndex: 1,
             selectId:'#selGroup',
             title: 'group_name',
             dataUrl: '/tnstats/groupApi?id=',
             windowOpenUrl :'/tnstats/groupCsv?id='
+        }
+    }else{
+        return {
+            menuIndex: 4,
+            selectId:'#selDataset',
+            title: 'dataset_name',
+            dataUrl: '/tnstats/datasetApi',
+            windowOpenUrl :'/tnstats/datasetCsv'
         }
     }
 }

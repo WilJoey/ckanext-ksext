@@ -112,7 +112,7 @@ class KsextPlugin(plugins.SingletonPlugin, DefaultTranslation):
             constants.SUGGEST_COMMENT: a.suggest_comment,
             # constants.SUGGEST_COMMENT_LIST: a.suggest_comment_list,
             # constants.SUGGEST_COMMENT_SHOW: a.suggest_comment_show,
-            # constants.SUGGEST_COMMENT_UPDATE: a.suggest_comment_update,
+            constants.SUGGEST_COMMENT_UPDATE: a.suggest_comment_update,
             # constants.SUGGEST_COMMENT_DELETE: a.suggest_comment_delete
             constants.SUGGEST_MAILED: a.suggest_mailed,
             'tnstats_dataset_count': a.tnstats_dataset_count,
@@ -218,6 +218,10 @@ class KsextPlugin(plugins.SingletonPlugin, DefaultTranslation):
                   controller='ckanext.ksext.controllers.Suggest:SuggestsController',
                   action='domail', conditions=dict(method=['GET','POST']), ckan_icon='question-sign')
 
+        map.connect('suggest_domailcomment', '/%s/domail_comment/{id}' % constants.SUGGESTS_MAIN_PATH,
+                  controller='ckanext.ksext.controllers.Suggest:SuggestsController',
+                  action='domail_comment', conditions=dict(method=['GET','POST']), ckan_icon='question-sign')                  
+                  
         map.connect('suggest_remove', '/%s/rm/{id}' % constants.SUGGESTS_MAIN_PATH,
                   controller='ckanext.ksext.controllers.Suggest:SuggestsController',
                   action='suggest_remove', conditions=dict(method=['GET','POST']), ckan_icon='question-sign')

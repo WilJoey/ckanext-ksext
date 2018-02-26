@@ -8,6 +8,9 @@ import ckan.lib.helpers as helpers
 import ckanext.ksext.constants as constants
 import functools
 import requests
+import smtplib
+
+import pylons.config as config
 
 from ckan.common import response, request, json
 from urllib import urlencode
@@ -191,13 +194,13 @@ class SuggestsController(base.BaseController):
         return helpers.json.dumps(result)
         
     def domail(self, id):
-        #log.warn("domail start: " + id)
+        log.warn("domail start: " + id)
 
         data_dict = {'id': id}
         context = self._get_context()
         mail_content =self._get_mail_content(id)
 
-        #log.warn("domail_content: " + mail_content.__repr__())
+        log.warn("domail_content: " + mail_content.__repr__())
 
         title = u'[OD][%s][%s]' % (mail_content['mail_id'], mail_content['title'])
         '''
@@ -271,13 +274,19 @@ class SuggestsController(base.BaseController):
             
 
             comment = request.POST.get('comment', '')
+            
             comment_id = request.POST.get('comment-id', '')
+            log.warn("suggest_comment(suggest_id): " + id)
+            log.warn("suggest_comment(comment): " + comment)
+            log.warn("suggest_comment(comment_id): " + comment_id)
 
             if request.POST:
                 try:
                     comment_data_dict = {'suggest_id': id, 'comment': comment, 'id': comment_id}
-                    #action = constants.SUGGEST_COMMENT if not comment_id else constants.SUGGEST_COMMENT_UPDATE
-                    comment = tk.get_action(constants.SUGGEST_COMMENT)(context, comment_data_dict)
+                    action = constants.SUGGEST_COMMENT if not comment_id else constants.SUGGEST_COMMENT_UPDATE
+                    log.warn("suggest_comment(action): " + action)
+                    comment = tk.get_action(action)(context, comment_data_dict)
+				
                 except tk.NotAuthorized as e:
                     log.warn(e)
                     tk.abort(403, tk._('You are not authorized to create/edit the comment'))
@@ -298,7 +307,76 @@ class SuggestsController(base.BaseController):
             log.warn(e)
             tk.abort(403, tk._('You are not authorized to comment the Data Request %s'
                                % id))
-
+        log.warn("suggest_comment: " + id)
+        mail_content =self._get_mail_content(id)  
+        smtp_user=config.get('smtp.user', '')
+        smtp_password=config.get('smtp.password', '')
+        log.warn("suggest_comment2: " + smtp_user)
+        log.info('suggest_comment3: %s' % comment.get('comment'))
+        log.warn("suggest_comment4: " + mail_content['description'].encode('utf-8'))
+        mail_recipient=[]
+        mail_recipient.append(mail_content['email'])
+        mail_recipient.append("opendatasys@kcg.gov.tw")
+        mail_recipient.append("jet@geo.com.tw")
+        mail_recipient.append("jungchang71@gmail.com")
+        TO = mail_recipient
+        log.info('suggest_comment5: %s' % TO)
+        FROM = 'opendatasys@kcg.gov.tw'
+        #TO = 'jungchang71@gmail.com'
+        SUBJECT = '[資料集建議回覆通知]'
+        #TEXT = mail_content['description'].encode('utf-8')
+        TEXT = comment.get('comment').encode('utf-8')
+        message = """Subject: %s\n\n%s""" % (SUBJECT, TEXT)
+        server = smtplib.SMTP("smtp.kcg.gov.tw:25")
+        server.set_debuglevel(1)
+        server.ehlo()
+        server.login(smtp_user, smtp_password)
+        server.sendmail(FROM, TO, message.decode('utf-8').encode('big5'))
+        server.close()
         #return tk.render('suggests/comment.html')
         return self.show(id)
+        
+    def domail_comment(self, id):
+        log.warn("domail_comment start: " + id)
+
+        result = {
+            "success": False,
+            "id": id
+        }
+        context = self._get_context()
+        comment_data_dict = {'suggest_id': ' ', 'comment': ' ', 'id': id}
+        comment = tk.get_action(constants.SUGGEST_COMMENT)(context, comment_data_dict)
+        log.warn("suggest_comment0: " + comment.get('comment'))
+        log.warn("suggest_comment00: " + comment.get('id'))
+        mail_content =self._get_mail_content(id)  
+        log.warn("domail_comment_content: " + mail_content.__repr__())
+        smtp_user=config.get('smtp.user', '')
+        smtp_password=config.get('smtp.password', '')
+        log.warn("suggest_comment2: " + smtp_user)
+        #log.info('suggest_comment3: %s' % comment.get('comment'))
+        log.warn("suggest_comment4: " + mail_content['description'].encode('utf-8'))
+        mail_recipient=[]
+        mail_recipient.append(mail_content['email'])
+        mail_recipient.append("opendatasys@kcg.gov.tw")
+        mail_recipient.append("jet@geo.com.tw")
+        mail_recipient.append("odjungchang@gmail.com")
+        TO = mail_recipient
+        log.info('suggest_comment5: %s' % TO)
+        FROM = 'opendatasys@kcg.gov.tw'
+        #TO = 'jungchang71@gmail.com'
+        SUBJECT = '[資料集建議回覆通知]'
+        #TEXT = mail_content['description'].encode('utf-8')
+        TEXT ='[資料集建議回覆通知]'
+        #TEXT = comment.get('comment').encode('utf-8')
+        message = """Subject: %s\n\n%s""" % (SUBJECT, TEXT)
+        server = smtplib.SMTP("smtp.kcg.gov.tw:25")
+        server.set_debuglevel(1)
+        server.ehlo()
+        server.login(smtp_user, smtp_password)
+        server.sendmail(FROM, TO, message.decode('utf-8').encode('big5'))
+        server.close()
+        result['success']=True
+        
+        response.headers['Content-Type'] = 'application/json;charset=utf-8'
+        return helpers.json.dumps(result)
       

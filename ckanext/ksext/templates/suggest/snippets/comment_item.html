@@ -1,3 +1,4 @@
+
 <li class="item comment">
   <!--<i class="icon icon-comment"></i>-->
   <p>
@@ -8,21 +9,26 @@
 
     <span class="date" title="{{ comment.time }}"> {{ h.time_ago_from_timestamp(comment.time) }}</span>
 
-{#}
+{# #}
+    {% if h.check_access('suggest_comment') %}
     <span class="pull-right">
-      {% if h.check_access('datarequest_comment_delete', {'id':comment.id }) %}
-        <a class="btn btn-mini" id="update-comment-{{ comment.id }}" href="#form"><i class="icon-edit"></i>Edit</a>
-      {% endif %}
+
+        {#<a class="btn btn-mini" id="update-comment-{{ comment.id }}" href="#form"><i class="icon-edit"></i>Edit</a>#}
+		<button class="btn btn-info update-comment" data-comment_id="{{ comment.id}}" >編輯</button>
+        <button class="btn btn-info domailcomment" data-comment_id="{{ comment.id}}" >手動發送</button>
       
-      {% if h.check_access('datarequest_comment_update', {'id':comment.id }) %}
+      {#
         {% set locale = h.dump_json({'content': _('Are you sure you want to delete this comment?')}) %}
-        <a class="btn btn-mini btn-danger" id="delete-comment-{{ comment.id }}" href="{% url_for controller='ckanext.datarequests.controllers.ui_controller:DataRequestsUI', action='delete_comment', datarequest_id=datarequest.id, comment_id=comment.id %}" data-module="confirm-action" data-module-i18n="{{ locale }}"><i class="icon-remove"></i>Delete</a>
-      {% endif %}
+      
+	    <a class="btn btn-mini btn-danger" id="delete-comment-{{ comment.id }}" href="{% url_for controller='ckanext.datarequests.controllers.ui_controller:DataRequestsUI', action='delete_comment', datarequest_id=datarequest.id, comment_id=comment.id %}" data-module="confirm-action" data-module-i18n="{{ locale }}"><i class="icon-remove"></i>Delete</a>
+      #}
     </span>
-#}
+	{% endif %}
+
     <br/>
 
     <span id="comment-{{ comment.id }}">
+      {# h.render_markdown(comment.comment) #}
       {{ comment.comment|safe }}
     </span>
 

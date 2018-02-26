@@ -20,8 +20,8 @@
     #}
 
     <section id="stats-most-edited" class="module-content tab-content active">
-      <h2>組織資料集瀏覽與下載統計</h2>
-      <input type="hidden" id="hidConfig" value="org" /> 
+      <h2>OpenData開放清單</h2>
+      <input type="hidden" id="hidConfig" value="dataset" /> 
 
       {% set orgs = h.organizations_available('create_dataset') %}
       <div class="control-group">
@@ -32,32 +32,33 @@
               <option value="{{ organization.id }}">{{ organization.display_name }}</option>
             {% endfor %}
           </select>
-          <button onclick="print();" class="btn btn-primary btn-print">列印</button>
-          <button id="btnDownload" class="btn btn-primary btn-print">下載</button>
+	  <button id="btnDownload" class="btn btn-primary btn-print">下載</button>
 
       </div>
 
-      {% if c.datasets_count %}
+      {% if c.datasets_list %}
         <table id="dtStat" class="table table-chunky table-bordered table-striped">
           <thead>
             <tr>
-              <th class="metric">組織</th>
-              <th style="width:200px;">資料集</th>
-              <th class="">資料集瀏覽次數</th>
-              <th class="">資料瀏覽次數</th>
-              <th class="">資料下載次數</th>
-              <th class="">API存取次數</th>
+              <th style="width:50px;">資料集編號</th>
+              <th style="width:50px;">資料集名稱英文縮寫</th>
+              <th style="width:80px;">資料集名稱</th>
+              <th style="width:100px;">資料集說明</th>
+              <th style="width:40px;">維護者姓名</th>
+              <th style="width:50px;">維護者電子郵件</th>
+              <th style="width:40px;">維護者電話</th>
             </tr>
           </thead>
           <tbody>
-            {% for package in c.datasets_count %}
+            {% for package in c.datasets_list %}
               <tr >
-                <td class="metric">{{ package.org_name }}</td>
-                <td>{{ h.link_to(package.title or package.name, h.url_for(controller='package', action='read', id=package.name)) }}</td>
-                <td class="metric">{{ package.dataset_views }}</td>
-                <td class="metric">{{ package.resource_views }}</td>
-                <td class="metric">{{ package.resource_downloads }}</td>
-                <td class="metric">{{ package.api_views }}</td>
+                <td class="metric">{{ package.package_id }}</td>
+                <td class="metric">{{ package.name }}</td>
+                <td class="metric">{{ package.title }}</td>
+                <td class="metric">{{ package.notes }}</td>
+                <td class="metric">{{ package.maintainer }}</td>
+                <td class="metric">{{ package.maintainer_email }}</td>
+                <td class="metric">{{ package.maintainer_tel }}</td>
               </tr>
             {% endfor %}
           </tbody>

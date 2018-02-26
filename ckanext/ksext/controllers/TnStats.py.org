@@ -214,25 +214,6 @@ GROUP BY content ORDER BY count DESC, content ASC; '''
         response.headers['Content-Type'] = 'application/json;charset=utf-8'
         return h.json.dumps(result)
 
-    def dataset (self):
-        c = p.toolkit.c
-
-        ## Used by the Tracking class
-        _ViewCount = collections.namedtuple("ViewCount", "package_id name title notes maintainer maintainer_email maintainer_tel")
-
-        engine = model.meta.engine
-        sql = '''
-SELECT p.id, p.name, p.title, p.notes,
-    p.maintainer,p.maintainer_email,
-    (select value from package_extra where package_id=p.id and key='提供機關聯絡人電話') AS maintainer_tel
-FROM package AS p
-WHERE p.state='active' and p.private='f'; '''
-        log.error('dataset start'+sql)
-        c.datasets_list =  [_ViewCount(*t) for t in engine.execute(sql).fetchall()]
-
-        return p.toolkit.render('tnstats/dataset.html')
-        
-        
     def _orgApiResult(self):
         engine = model.meta.engine
         sql = '''
@@ -241,7 +222,7 @@ SELECT p.id, p.title, p.name,
     COALESCE(SUM(s.count), 0) AS dataset_views, 
     COALESCE((SELECT SUM(resource_count) FROM v_dataset_count WHERE dataset_id=p.id), 0) AS resource_views,
     COALESCE((SELECT SUM(resource_count) FROM v_dataset_download WHERE dataset_id=p.id), 0) AS resource_downloads,
-    (SELECT 0 ) AS api_views
+    (SELECT 0 ) AS api_viewsv
 FROM package AS p 
 LEFT OUTER JOIN tracking_summary AS s ON s.package_id = p.id
 WHERE p.state='active' '''
@@ -284,21 +265,8 @@ ORDER BY
         result = engine.execute(sql, pid).fetchall()
         return result
 
-    def _datasetApiResult(self):
-        engine = model.meta.engine
-        sql = '''
-SELECT p.id, p.name, p.title, p.notes,
-    p.maintainer,p.maintainer_email,
-    (select value from package_extra where package_id=p.id and key='提供機關聯絡人電話') AS maintainer_tel
-FROM package AS p
-WHERE p.state='active' and p.private='f'; '''
-        log.error('_datasetApiResult start'+sql)
-        result = engine.execute(sql).fetchall()
-        log.error('_datasetApiResult end')
-        return result
-        
     def orgApi (self):
-        _ViewCount = collections.namedtuple("ViewCount", "id title name org_name dataset_views resource_views resource_downloads api_views")
+        _ViewCount = collections.namedtuple("ViewCount", "id title name org_name dataset_views resource_views resource_downloads")
         data = self._orgApiResult()
         result = [_ViewCount(*t) for t in data]
         response.headers['Content-Type'] = 'application/json;charset=utf-8'
@@ -312,23 +280,6 @@ WHERE p.state='active' and p.private='f'; '''
         response.headers['Content-Type'] = 'application/json;charset=utf-8'
         return h.json.dumps(result)
 
-    def datasetApi (self):
-        _ViewCount = collections.namedtuple("ViewCount", "package_id name title notes maintainer maintainer_email maintainer_tel")
-        #data = self._datasetApiResult()
-        log.error('datasetApi start2')
-        engine = model.meta.engine
-        sql = '''
-SELECT p.id, p.name, p.title, p.notes,
-    p.maintainer,p.maintainer_email,
-    (select value from package_extra where package_id=p.id and key='提供機關聯絡人電話') AS maintainer_tel
-FROM package AS p
-WHERE p.state='active' and p.private='f'; '''
-        result =  [_ViewCount(*t) for t in engine.execute(sql).fetchall()]
-        #result =  [_ViewCount(*t) for t in data]
-
-        response.headers['Content-Type'] = 'application/json;charset=utf-8'
-        return h.json.dumps(result)        
-        
     def csvTest(self):
         result = self._groupApiResult()
         data = u'\ufeff群組,資料集,資料集編碼,資料集瀏覽次數,資料瀏覽次數,資料下載次數\r\n'
@@ -348,19 +299,6 @@ WHERE p.state='active' and p.private='f'; '''
         data = self._groupApiResult()
         return self._csv(head, data)
 
-    def datasetCsv(self):
-        log.error('datasetCsv start')
-        data = self._datasetApiResult()
-        log.error('datasetCsv end')
-        head = u'\ufeff資料集編號,資料集名稱英文縮寫,資料集名稱,資料集說明,維護者姓名,維護者電子郵件,維護者電話\r\n'
-        base.response.headers['Content-type'] ='text/csv; charset=utf-8'
-        base.response.headers['Content-disposition'] ='attachment;filename=statistics.csv'        
-        csvFormatter = u'"{0}","{1}","{2}",{3},{4},{5},{6}\r\n'
-        for item in data:
-            head += csvFormatter.format(item[0],item[1],item[2],item[3],item[4],item[5],item[6])
-        
-        return head        
-        
     def _csv(self, head, data):
         base.response.headers['Content-type'] ='text/csv; charset=utf-8'
         base.response.headers['Content-disposition'] ='attachment;filename=statistics.csv'
